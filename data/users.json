@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Admin",
+    "hash": "adminHash",
+    "coins": 1,
+    "crypto": [
+      {
+        "name": "BTC",
+        "amount": "0.1"
+      }
+    ],
+    "upgrades": [
+      {
+        "name": "multitap",
+        "level": 1
+      }, {
+        "name": "storage",
+        "level": 1
+      }
+    ]
+  }
+]
