@@ -1,0 +1,17 @@
+
+    {
+      "name": "NAMETXT",
+      "hash": "HASHTXT",
+      "tgId": "TGIDTXT",
+      "coins": 0,
+      "usdt": 0,
+      "villageId": null,
+      "crypto": [],
+      "upgrades": [
+        { "name": "multitap", "level": 1 },
+        { "name": "storage", "level": 1 }
+      ],
+      "friends": [],
+      "completedTasks": [],
+      "transactionsHistory": []
+    }
