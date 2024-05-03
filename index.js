@@ -1,12 +1,12 @@
 import { WebSocketServer } from 'ws';
 import * as fs from 'fs';
-const wss = new WebSocketServer({ port: 8080,  });
+const wss = new WebSocketServer({ port: 8081 });
 console.log('Listening on ws://localhost:8080/connection');
 let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
-let usersTemplate = JSON.stringify(fs.readFileSync('./data/users.template.json', 'utf8'));
+let usersTemplate = fs.readFileSync('./data/users.template.json', 'utf8');
 let saveInterval = setInterval(() => {
   fs.writeFileSync('./data/users.json', JSON.stringify(users));
-}, 60000);
+}, 900000);
 wss.on('connection', function connection(ws) {
   ws.on('message', function message(data) {
     let parsed = JSON.parse(data);
@@ -17,14 +17,21 @@ wss.on('connection', function connection(ws) {
           console.log('Users exists, logging in');
         } else {
           console.log('User does not exist, creating new user');
-          if ((parsed.name != null || parsed.name.trim() != '') && (parsed.hash != null || parsed.hash.trim() != '')) {
+          if ((parsed.name != null && parsed.name != '') && (parsed.hash != null && parsed.hash != '')) {
             let newUser = JSON.parse(usersTemplate);
-            
-            /*newUser.name = parsed.name;
+            /*let newUser = {
+              name: 'g',
+              hash: 's',
+              tgId: 'g'
+            }*/
+            console.log(newUser);
+            newUser.name = parsed.name;
             newUser.hash = parsed.hash;
             newUser.tgId = parsed.tgId;
-            users.push(newUser);*/
+            users.push(newUser);
             ws.send('{ "action" : "createAccount", "result" : "successful" }');
+          } else {
+            ws.send('{"action" : "createAccount", "result" : "failed"}');
           }
           console.log(users);
         }
@@ -43,7 +50,7 @@ const interval = setInterval(function ping() {
     ws.isAlive = false;
     ws.ping();
   });
-}, 30000);
+}, 60000);
 
 wss.on('close', function close() {
   clearInterval(interval);

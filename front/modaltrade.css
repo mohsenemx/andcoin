@@ -1,0 +1,262 @@
+/*   TRADE MODAL   */
+/*   modal header   */
+
+#modalTrade {
+  width: 100%;
+  height: 100%;
+  background-color: #37393a;
+  z-index: 20;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+#modalTrade > .header {
+  /*border: 1px solid red;*/
+  height: 70px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+#modalTrade > .header > .wallet {
+  /*border: 1px solid #ccc;*/
+  width: 55px;
+  height: 55px;
+  cursor: pointer;
+}
+
+#modalTrade > .header > .wallet > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#modalTrade > .header > .trade {
+  /*border: 1px solid #ccc;*/
+  width: 100px;
+  height: 100%;
+  text-align: center;
+  line-height: 55px;
+  font-size: 33px;
+  color: #56a6e9;
+  font-family: bol;
+  margin-right: 20px;
+}
+
+#modalTrade > .header > .profile {
+  /*border: 1px solid #ccc;*/
+  width: 55px;
+  height: 55px;
+}
+
+#modalTrade > .header > .profile > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+/*   modal bitcoin   */
+
+#modalTrade > .bitCoin {
+  /* border: 1px solid red; */
+  border-radius: 7px;
+  width: 330px;
+  height: 70px;
+  margin: auto;
+  margin-top: 500px;
+  background-color: #e5e1e1;
+  display: flex;
+  position: relative;
+}
+
+#modalTrade > .bitCoin > .logo {
+  /* border: 1px solid red; */
+  width: 53px;
+  height: 53px;
+  background: url("img/bitcoin-64.png") no-repeat;
+  background-size: 100% 100%;
+  margin-top: 8px;
+  margin-left: 10px;
+}
+
+#modalTrade > .bitCoin > .bit {
+  /* border: 1px solid red; */
+  width: 60px;
+  height: 20px;
+  font-family: bol;
+  text-align: center;
+  line-height: 20px;
+  margin-top: 15px;
+  margin-left: 5px;
+}
+
+#modalTrade > .bitCoin > .BTC {
+  /* border: 1px solid red; */
+  width: 60px;
+  height: 20px;
+  font-family: bol;
+  text-align: center;
+  line-height: 20px;
+  font-size: 10px;
+  color: #524f4f;
+  position: absolute;
+  top: 33px;
+  left: 70px;
+}
+
+#modalTrade > .bitCoin > .price {
+  /* border: 1px solid red; */
+  width: 70px;
+  height: 20px;
+  font-family: bol;
+  text-align: center;
+  line-height: 20px;
+  font-size: 10px;
+  color: #393939;
+  position: absolute;
+  top: -65px;
+  left: 250px;
+}
+
+#modalTrade > .bitCoin > .darsad {
+  /* border: 1px solid red; */
+  width: 70px;
+  height: 20px;
+  font-family: bol;
+  text-align: center;
+  line-height: 20px;
+  font-size: 10px;
+  color: #524f4f;
+  position: absolute;
+  top: 33px;
+  left: 260px;
+}
+
+/*   buyORsell   */
+
+#modalTrade > .buyORsell {
+  /* border: 1px solid red; */
+  border-radius: 7px;
+  width: 330px;
+  height: 50px;
+  margin: auto;
+  margin-top: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#modalTrade > .buyORsell > .all {
+  /* border: 1px solid red; */
+  width: 157px;
+  height: 100%;
+  border-radius: 7px;
+  background-color: #217ac3;
+  font-family: bol;
+  font-size: 20px;
+  text-align: center;
+  line-height: 48px;
+  color: white;
+  margin-top: 40px;
+}
+
+/*   modalfooter   */
+
+#modalTrade > .footer {
+  /*border: 1px solid red;*/
+  border-radius: 30px 30px 0px 0px;
+  width: 100%;
+  height: 114px;
+  margin-top: 103px;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+}
+
+#modalTrade > .footer > .items {
+  /* border: 1px solid red; */
+  width: 70px;
+  height: 65px;
+  margin-top: 20px;
+  cursor: pointer;
+
+  color: #eeeaea;
+  text-align: center;
+  font-family: bol;
+  line-height: 30px;
+}
+#modalTrade > .footer > .items:hover {
+  color: #56a6e9;
+  font-size: 20px;
+  text-align: center;
+}
+
+#modalTrade > .footer > .items > .all {
+  /* border: 1px solid red; */
+  width: 35px;
+  height: 35px;
+  margin: auto;
+  margin-top: 3px;
+}
+
+#modalTrade > .footer > .it1 > .tasks {
+  background: url("img/edit1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalTrade > .footer > .it1 > .imgtasks {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Tasks1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalTrade > .footer > .it2 > .home {
+  background: url("img/Category1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalTrade > .footer > .it2 > .imghome {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Home1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalTrade > .footer > .it3 > .trade {
+  background: url("img/Group1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalTrade > .footer > .it3 > .imgtrade {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Trade1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+/*   responsiv   */
+
+@media screen and (max-height: 900px) {
+  #modalTrade > .bitCoin {
+    margin-top: 450px;
+  }
+}
+
+@media screen and (max-height: 860px) {
+  #modalTrade > .bitCoin {
+    margin-top: 400px;
+  }
+}

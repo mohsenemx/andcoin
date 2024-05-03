@@ -1,0 +1,287 @@
+#modalWalet {
+  width: 100%;
+  height: 100%;
+  background-color: #37393a;
+  z-index: 150;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+/*   header   */
+
+#modalWalet > .header {
+  /*border: 1px solid red;*/
+  height: 70px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+#modalWalet > .header > .back {
+  /*border: 1px solid #ccc;*/
+  width: 55px;
+  height: 55px;
+  cursor: pointer;
+}
+
+#modalWalet > .header > .back > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#modalWalet > .header > .wallet {
+  /*border: 1px solid #ccc;*/
+  width: 100px;
+  height: 100%;
+  text-align: center;
+  line-height: 55px;
+  font-size: 33px;
+  color: #56a6e9;
+  font-family: bol;
+  margin-right: 50px;
+}
+
+#modalWalet > .header > .zangole {
+  /* border: 1px solid #ccc; */
+  width: 55px;
+  height: 55px;
+  background: url("img/Group 1129.png") no-repeat;
+  background-size: 90% 100%;
+}
+
+/*   blue box   */
+
+#modalWalet > .blueBox {
+  /* border: 1px solid red; */
+  width: 330px;
+  height: 190px;
+  margin: auto;
+  margin-top: 20px;
+  background: url("img/Rectangle 37.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalWalet > .blueBox > .items {
+  /* border: 1px solid red; */
+  margin: auto;
+}
+
+#modalWalet > .blueBox > .it0 {
+  width: 1px;
+  height: 1px;
+}
+
+#modalWalet > .blueBox > .it1 {
+  width: 200px;
+  height: 13px;
+  background: url("img/Current Wallet Balance.png") no-repeat;
+  background-size: 100% 100%;
+  margin-top: 25px;
+}
+
+#modalWalet > .blueBox > .it2 {
+  width: 230px;
+  height: 50px;
+  background: url("img/$ 5,323.00.png") no-repeat;
+  background-size: 100% 100%;
+  margin-top: 15px;
+}
+
+#modalWalet > .blueBox > .it3 {
+  width: 270px;
+  height: 28px;
+  background: url("img/Frame 8.png") no-repeat;
+  background-size: 100% 100%;
+  margin-top: 10px;
+}
+
+/*   box   */
+
+#modalWalet > .box {
+  /* border: 1px solid red; */
+  width: 320px;
+  height: 100px;
+  margin: auto;
+  margin-top: 20px;
+}
+
+#modalWalet > .box > .items {
+  /* border: 1px solid red; */
+  width: 70px;
+  height: 70px;
+  float: left;
+  font-family: bol;
+  text-align: center;
+  line-height: 170px;
+  color: #e8e8e8;
+}
+
+#modalWalet > .box > .it1 {
+  background: url("img/Group 15.png") no-repeat;
+  background-size: 100% 100%;
+  margin-left: 28px;
+}
+#modalWalet > .box > .it2 {
+  background: url("img/Group 1131.png") no-repeat;
+  background-size: 100% 100%;
+  margin-left: 27px;
+}
+#modalWalet > .box > .it3 {
+  background: url("img/Group 1130.png") no-repeat;
+  background-size: 100% 100%;
+  margin-left: 27px;
+}
+
+/*   your coin   */
+
+#modalWalet > .yourCoin {
+  /* border: 1px solid red; */
+  width: 320px;
+  height: 380px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+#modalWalet > .yourCoin > .ycoin {
+  /* border: 2px solid red; */
+  width: 150px;
+  height: 20px;
+  font-family: bol;
+  color: #56a6e9;
+  font-size: 20px;
+  line-height: 18px;
+  margin-left: 5px;
+  margin-top: 25px;
+}
+
+#modalWalet > .yourCoin > .allcoin {
+  /* border: 1px solid red; */
+  width: 100%;
+  height: 300px;
+  margin-top: 20px;
+  background: url("img/Group 33.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+/*   footer   */
+
+#modalWalet > .footer {
+  /*border: 1px solid red;*/
+  border-radius: 30px 30px 0px 0px;
+  width: 100%;
+  height: 114px;
+  /*margin-top: 64px;*/
+
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+}
+
+#modalWalet > .footer > .items {
+  /* border: 1px solid red; */
+  width: 70px;
+  height: 65px;
+  margin-top: 20px;
+  cursor: pointer;
+
+  color: #eeeaea;
+  text-align: center;
+  font-family: bol;
+  line-height: 30px;
+}
+#modalWalet > .footer > .items:hover {
+  color: #56a6e9;
+  font-size: 20px;
+  text-align: center;
+}
+
+#modalWalet > .footer > .items > .all {
+  /* border: 1px solid red; */
+  width: 35px;
+  height: 35px;
+  margin: auto;
+  margin-top: 3px;
+}
+
+#modalWalet > .footer > .it1 > .tasks {
+  background: url("img/edit1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalWalet > .footer > .it1 > .imgtasks {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Tasks1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalWalet > .footer > .it2 > .home {
+  background: url("img/Category1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalWalet > .footer > .it2 > .imghome {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Home1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalWalet > .footer > .it3 > .trade {
+  background: url("img/Group1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#modalWalet > .footer > .it3 > .imgtrade {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Trade1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+/*   responsiv   */
+
+@media screen and (max-height: 900px) {
+  #modalWalet > .blueBox {
+    margin-top: 5px;
+  }
+  #modalWalet > .box {
+    margin-top: 10px;
+  }
+  #modalWalet > .yourCoin > .ycoin {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-height: 860px) {
+  #modalWalet > .blueBox {
+    margin-top: 0px;
+  }
+  #modalWalet > .box {
+    margin-top: 3px;
+  }
+  #modalWalet > .yourCoin > .ycoin {
+    margin-top: 0px;
+  }
+  #modalWalet > .yourCoin > .ycoin {
+    display: none;
+  }
+  #modalWalet > .yourCoin > .allcoin {
+    margin-top: 0;
+    height: 265px;
+  }
+}

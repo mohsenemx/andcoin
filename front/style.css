@@ -1,0 +1,273 @@
+/*   MINE   */
+
+@font-face {
+  src: url("font/Laro-Bold.ttf");
+  font-family: bol;
+}
+body {
+  margin: 0;
+  direction: ltr;
+  background-color: #37393a;
+}
+
+#content {
+  width: 100%;
+  height: 100%;
+}
+
+#content > .header {
+  /*border: 1px solid red;*/
+  height: 70px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+#content > .header > .wallet {
+  /*border: 1px solid #ccc;*/
+  width: 55px;
+  height: 55px;
+}
+
+#content > .header > .wallet > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#content > .header > .mine {
+  /*border: 1px solid #ccc;*/
+  width: 100px;
+  height: 100%;
+  text-align: center;
+  line-height: 55px;
+  font-size: 33px;
+  color: #56a6e9;
+  font-family: bol;
+}
+
+#content > .header > .profile {
+  /*border: 1px solid #ccc;*/
+  width: 55px;
+  height: 55px;
+}
+
+#content > .header > .profile > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#content > .price {
+  /* border: 1px solid red; */
+  width: 320px;
+  height: 50px;
+  margin: auto;
+  margin-top: 80px;
+}
+
+#content > .price > .items {
+  /* border: 1px solid red; */
+  float: left;
+}
+
+#content > .price > .it1 {
+  width: 50px;
+  height: 100%;
+  background: url("img/Group 1124.png") no-repeat;
+  background-size: 100% 100%;
+}
+#content > .price > .it2 {
+  width: 250px;
+  height: 100%;
+  background: url("img/000.png") no-repeat;
+  background-size: 100% 100%;
+  margin-left: 15px;
+}
+
+#content > .legendry {
+  /*border: 1px solid red;*/
+  width: 90px;
+  height: 18px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+#content > .legendry > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#content > .Coin {
+  /*border: 1px solid red;*/
+  max-width: 270px;
+  height: 330px;
+  margin: auto;
+  margin-left: 89px;
+  margin-right: 89px;
+  margin-top: 70px;
+  position: fixed;
+}
+
+#content > .Coin > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#content > .Energy {
+  /*border: 1px solid red;*/
+  width: 370px;
+  height: 50px;
+  margin: auto;
+  margin-top: 50px;
+  display: flex;
+  position: relative;
+  margin-top: 450px;
+}
+
+#content > .Energy > .whiteFilter {
+  /*border: 1px solid red;*/
+  width: 270px;
+  height: 12px;
+  margin-top: 20px;
+  margin-left: 1px;
+}
+
+#content > .Energy > .whiteFilter > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#content > .Energy > .blueFilter {
+  /*border: 1px solid red;*/
+  width: 220px;
+  height: 12px;
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+
+#content > .Energy > .blueFilter > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#content > .Energy > .numberEnergy {
+  /*border: 1px solid red;*/
+  width: 80px;
+  height: 15px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+#content > .Energy > .numberEnergy > img {
+  background: no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#content > .footer {
+  /*border: 1px solid red;*/
+  border-radius: 30px 30px 0px 0px;
+  width: 100%;
+  height: 114px;
+  /*margin-top: 64px;*/
+
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+}
+
+#content > .footer > .items {
+  /* border: 1px solid red; */
+  width: 70px;
+  height: 65px;
+  margin-top: 20px;
+  cursor: pointer;
+
+  color: #eeeaea;
+  text-align: center;
+  font-family: bol;
+  line-height: 30px;
+}
+#content > .footer > .items:hover {
+  color: #56a6e9;
+  font-size: 20px;
+  text-align: center;
+}
+
+#content > .footer > .items > .all {
+  /* border: 1px solid red; */
+  width: 35px;
+  height: 35px;
+  margin: auto;
+  margin-top: 3px;
+}
+
+#content > .footer > .it1 > .tasks {
+  background: url("img/edit1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#content > .footer > .it1 > .imgtasks {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Tasks1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#content > .footer > .it2 > .home {
+  background: url("img/Category1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#content > .footer > .it2 > .imghome {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Home1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#content > .footer > .it3 > .trade {
+  background: url("img/Group1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+#content > .footer > .it3 > .imgtrade {
+  /* border: 1px solid red; */
+  width: 95%;
+  height: 16px;
+  margin: auto;
+  margin-top: 8px;
+  background: url("img/Trade1.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+/*   responsiv   */
+
+@media screen and (max-height: 900px) {
+  #content > .Energy {
+    margin-top: 430px;
+  }
+}
+
+@media screen and (max-height: 860px) {
+  #content > .Energy {
+    margin-top: 370px;
+  }
+  #content > .Coin {
+    margin-top: 45px;
+  }
+}
