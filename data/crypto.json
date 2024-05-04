@@ -1,7 +1,1 @@
-[
-    {
-        "name": "Bitcoin",
-        "id": "BTC",
-        "usdtPrice": 64000
-    }
-]
+[{"name":"Bitcoin","id":"BTC","usdtPrice":64000,"growthRate":0}]
