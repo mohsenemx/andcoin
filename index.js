@@ -82,13 +82,17 @@ wss.on("connection", function connection(ws) {
         }
       });
     } else if (parsed.action == "buyCrpto") {
-      // TO BE ADDED IN FUTURE
+      
       for (const obj of users) {
         if (obj.hash == parsed.hash) {
           if (parsed.cointobuy == "btc") {
             let btctobuy = Number(parsed.btctobuy);
             obj.usdt -= btctobuy * cryptos[0].usdtPrice;
             obj.crypto[0].amount += btctobuy;
+          } else if (parsed.cointobuy == "eth") {
+            let ethtobuy = Number(parsed.ethtobuy);
+            obj.usdt -= ethtobuy * cryptos[1].usdtPrice;
+            obj.crypto[1].amount += ethtobuy;
           }
           break;
         }
@@ -127,9 +131,6 @@ wss.on("close", function close() {
   clearInterval(interval);
   console.log("Closing server");
 });
-/*
-{"action" : "getObject", "object": "{"name":"Mohsen","hash":"6584d5007f7f1b632dd8cf7e864484f8666b982442e555d109eac287bec371b1","tgId":"5540738710","coins":0,"usdt":0,"villageId":null,"crypto":[{"name":"BTC","amount":0.0001}],"upgrades":[{"name":"multitap","level":1},{"name":"storage","level":1}],"friends":[],"completedTasks":[],"transactionsHistory":[]}"}
-*/
 let cryptoSave = setInterval(() => {
   fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
 }, 900000);

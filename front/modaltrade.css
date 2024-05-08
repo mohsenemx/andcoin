@@ -59,7 +59,7 @@
 
 /*   modal bitcoin   */
 
-#modalTrade > .bitCoin {
+#modalTrade > .crypto {
   /* border: 1px solid red; */
   border-radius: 7px;
   width: 330px;
@@ -71,7 +71,7 @@
   position: relative;
 }
 
-#modalTrade > .bitCoin > .logo {
+#modalTrade > .crypto > .logo {
   /* border: 1px solid red; */
   width: 53px;
   height: 53px;
@@ -81,7 +81,7 @@
   margin-left: 10px;
 }
 
-#modalTrade > .bitCoin > .bit {
+#modalTrade > .crypto > .bit {
   /* border: 1px solid red; */
   width: 60px;
   height: 20px;
@@ -92,7 +92,7 @@
   margin-left: 5px;
 }
 
-#modalTrade > .bitCoin > .BTC {
+#modalTrade > .crypto > .BTC {
   /* border: 1px solid red; */
   width: 60px;
   height: 20px;
@@ -106,7 +106,7 @@
   left: 70px;
 }
 
-#modalTrade > .bitCoin > .price {
+#modalTrade > .crypto > .price {
   /* border: 1px solid red; */
   width: 70px;
   height: 20px;
@@ -120,7 +120,7 @@
   left: 250px;
 }
 
-#modalTrade > .bitCoin > .darsad {
+#modalTrade > .crypto > .darsad {
   /* border: 1px solid red; */
   width: 70px;
   height: 20px;

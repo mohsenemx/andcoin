@@ -1,7 +1,10 @@
 function parseTGvalues(tgWebAppData) {
     // The data string provided
 //var tgWebAppData = "#tgWebAppData=query_id=AAGW9kBKAgAAAJb2QErvmfk6&user={\"id\":5540738710,\"first_name\":\"Mohsen\",\"last_name\":\"\",\"username\":\"MohsenEMX\",\"language_code\":\"en\",\"allows_write_to_pm\":true}&auth_date=1714326902&hash=6584d5007f7f1b632dd8cf7e864484f8666b982442e555d109eac287bec371b1&tgWebAppVersion=7.2&tgWebAppPlatform=tdesktop&tgWebAppThemeParams={\"accent_text_color\":\"#6ab3f2\",\"bg_color\":\"#17212b\",\"button_color\":\"#5289c1\",\"button_text_color\":\"#ffffff\",\"destructive_text_color\":\"#ec3942\",\"header_bg_color\":\"#17212b\",\"hint_color\":\"#708599\",\"link_color\":\"#6ab3f3\",\"secondary_bg_color\":\"#232e3c\",\"section_bg_color\":\"#17212b\",\"section_header_text_color\":\"#6ab3f3\",\"subtitle_text_color\":\"#708599\",\"text_color\":\"#f5f5f5\"}";
-
+let a = tgWebAppData;
+if (!tgWebAppData.includes('#tgWebAppData')) {
+  return false;
+}
 // Splitting the string by '&' to get individual key-value pairs
 var dataPairs = tgWebAppData.split('&');
 

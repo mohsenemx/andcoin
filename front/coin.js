@@ -6,7 +6,13 @@ let coinsSinceLastSync = 0;
 let coins = 0;
 let upgrades = [];
 let coinsDisplay = document.getElementById("coinsDisplay");
+alert(JSON.stringify(parsedTGdata));
 const socket = new WebSocket("ws://localhost:8081");
+setTimeout(() => {
+  if (parsedTGdata == false) {
+    alert("Required data is missing, please reload the page");
+  }
+},1000);
 socket.onopen = function (event) {
     // Alert the user that they are 
     // connected to the WebSocket server
@@ -101,9 +107,13 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 function coinClicked() {
+  try {
     coins += upgrades[0].level;
     coinsSinceLastSync += upgrades[0].level;
     coinsDisplay.innerHTML = numberWithCommas(coins);
+  } catch (e) {
+    console.log(e);
+  }
 }
 function updateRank() {
     document.getElementById("userRank").innerHTML = globalAndObject.rank;
