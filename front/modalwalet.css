@@ -257,13 +257,13 @@
 
 @media screen and (max-height: 900px) {
   #modalWalet > .blueBox {
-    margin-top: 5px;
+    margin-top: 3px;
   }
   #modalWalet > .box {
-    margin-top: 10px;
+    margin-top: 3px;
   }
   #modalWalet > .yourCoin > .ycoin {
-    margin-top: 10px;
+    margin-top: 3px;
   }
 }
 
@@ -282,6 +282,8 @@
   }
   #modalWalet > .yourCoin > .allcoin {
     margin-top: 0;
-    height: 265px;
+    height: 200px;
+    width: 80%;
+    margin: auto;
   }
 }

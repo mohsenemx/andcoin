@@ -1,1 +1,20 @@
-[{"name":"Mohsen","hash":"6584d5007f7f1b632dd8cf7e864484f8666b982442e555d109eac287bec371b1","tgId":"5540738710","coins":0,"usdt":0,"villageId":null,"crypto":[{"name":"BTC","amount":0.0001}],"upgrades":[{"name":"multitap","level":1},{"name":"storage","level":1}],"friends":[6050490358],"completedTasks":[],"transactionsHistory":[]},{"name":"therealjesus1","hash":"TOBEFILLED","tgId":6050490358,"coins":0,"usdt":0,"villageId":null,"crypto":[],"upgrades":[{"name":"multitap","level":1},{"name":"storage","level":1}],"friends":[],"completedTasks":[],"transactionsHistory":[]}]
+[
+  {
+    "name": "Mohsen",
+    "hash": "6584d5007f7f1b632dd8cf7e864484f8666b982442e555d109eac287bec371b1",
+    "tgId": "5540738710",
+    "coins": 475556543,
+    "usdt": 0,
+    "rank": "Poor",
+    "villageId": null,
+    "energy": 2000,
+    "crypto": [{ "name": "BTC", "amount": 0.0001 }],
+    "upgrades": [
+      { "name": "multitap", "level": 1 },
+      { "name": "storage", "level": 1 }
+    ],
+    "friends": [6050490358],
+    "completedTasks": [],
+    "transactionsHistory": []
+  }
+]

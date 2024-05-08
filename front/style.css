@@ -2,7 +2,7 @@
 
 @font-face {
   src: url("font/Laro-Bold.ttf");
-  font-family: bol;
+  font-family: 'laro';
 }
 body {
   margin: 0;
@@ -73,24 +73,27 @@ body {
 
 #content > .price > .it1 {
   width: 50px;
-  height: 100%;
+  height: 50px;
   background: url("img/Group 1124.png") no-repeat;
   background-size: 100% 100%;
 }
-#content > .price > .it2 {
-  width: 250px;
-  height: 100%;
-  background: url("img/000.png") no-repeat;
-  background-size: 100% 100%;
+#content > .price .it2 {
+  font-size: 30px;
+  font-family: 'laro';
+  color: white;
   margin-left: 15px;
 }
 
-#content > .legendry {
+#content > .userRank {
   /*border: 1px solid red;*/
-  width: 90px;
-  height: 18px;
+  font-family: 'laro';
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  padding: 10px;
   margin: auto;
   margin-top: 10px;
+  
 }
 
 #content > .legendry > img {
@@ -101,17 +104,15 @@ body {
 
 #content > .Coin {
   /*border: 1px solid red;*/
-  max-width: 270px;
-  height: 330px;
+  
+  width: 220px;
+  height: 270px;
   margin: auto;
-  margin-left: 89px;
-  margin-right: 89px;
-  margin-top: 70px;
-  position: fixed;
+  margin-top: 40px;
 }
 
 #content > .Coin > img {
-  background: no-repeat;
+
   width: 100%;
   height: 100%;
 }
@@ -265,9 +266,15 @@ body {
 
 @media screen and (max-height: 860px) {
   #content > .Energy {
-    margin-top: 370px;
+    margin-top: 10px;
   }
   #content > .Coin {
-    margin-top: 45px;
+    margin-top: 40px;
   }
+  #content > .price {
+    margin-top: 25px;
+  }
+}
+#contect > .pagetitle {
+  font-family: 'laro';
 }

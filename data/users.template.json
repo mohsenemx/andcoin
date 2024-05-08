@@ -6,6 +6,7 @@
       "coins": 0,
       "usdt": 0,
       "villageId": null,
+      "rank": "Poor",
       "crypto": [],
       "upgrades": [
         { "name": "multitap", "level": 1 },
