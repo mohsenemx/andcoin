@@ -39,7 +39,7 @@
   line-height: 55px;
   font-size: 33px;
   color: #56a6e9;
-  font-family: bol;
+  font-family: 'SFPro';
 }
 
 #modalTasks > .header > .profile {
@@ -57,16 +57,30 @@
 /*   blue box   */
 
 #modalTasks > .blueBox {
-  /* border: 1px solid red; */
-  border-radius: 5px;
+  border: 3px solid #56a6e9; 
+  border-radius: 15px;
   width: 330px;
-  height: 190px;
+  height: 130px;
   margin: auto;
   margin-top: 50px;
-  background: url("img/Group 100.png") no-repeat;
-  background-size: 100% 100%;
+  font-family: 'SFPro';
+  
 }
-
+.blueBox p {
+  padding: 10px;
+  margin: 5px 5px 10px 10px;
+  color: white;
+}
+.referButton {
+  width: 130px;
+  height: 18px;
+  border-radius: 10px;
+  background-color: #56a6e9;
+  text-align: center;
+  margin: 5px 5px 10px 10px;
+  padding: 10px;
+  color: white;
+}
 #modalTasks > .items {
   border: 3px solid #56a6e9;
   border-radius: 20px;
@@ -75,8 +89,7 @@
   margin: auto;
   margin-top: 35px;
   padding-left: 8px;
-
-  font-family: bol;
+  font-family: 'SFPro';
   color: white;
   font-size: 18px;
   line-height: 48px;

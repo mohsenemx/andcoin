@@ -4,6 +4,10 @@
   src: url("font/Laro-Bold.ttf");
   font-family: 'laro';
 }
+@font-face {
+  font-family: 'SFPro';
+  src: url('font/sfpro.otf');
+}
 body {
   margin: 0;
   direction: ltr;

@@ -6,7 +6,7 @@ let coinsSinceLastSync = 0;
 let coins = 0;
 let upgrades = [];
 let coinsDisplay = document.getElementById("coinsDisplay");
-alert(JSON.stringify(parsedTGdata));
+coinsDisplay.innerHTML = JSON.stringify(parsedTGdata);
 const socket = new WebSocket("ws://localhost:8081");
 setTimeout(() => {
   if (parsedTGdata == false) {
@@ -16,9 +16,9 @@ setTimeout(() => {
 socket.onopen = function (event) {
     // Alert the user that they are 
     // connected to the WebSocket server
-    socket.send(`{"action":"login", "hash": "${parsedTGdata.hash}"}`);
+    socket.send(`{"action":"login", "name": "${parsedTGdata.user.username}"}`);
     setTimeout(function () {
-        socket.send(`{"action":"getObject", "hash": "${parsedTGdata.hash}"}`);
+        socket.send(`{"action":"getObject", "name": "${parsedTGdata.user.username}"}`);
     },100);
 };
 socket.onmessage = function (event) {
@@ -41,7 +41,7 @@ socket.onclose = function (event) {
 };;
 let coinSync = setInterval(function () {
     if (socket.CLOSED) return;
-    socket.send(`{"action":"updateCoinsFromUser", "hash": "${parsedTGdata.hash}", "coins": "${coinsSinceLastSync}"}`);
+    socket.send(`{"action":"updateCoinsFromUser", "name": "${parsedTGdata.user.username}", "coins": "${coinsSinceLastSync}"}`);
     coinsSinceLastSync = 0;
 },3000);
 // content
@@ -117,4 +117,7 @@ function coinClicked() {
 }
 function updateRank() {
     document.getElementById("userRank").innerHTML = globalAndObject.rank;
+}
+function referFriend() {
+  socket.send(`{"action":"getReferalCode","name":"${parsedTGdata.user.username}"}`);
 }

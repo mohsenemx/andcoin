@@ -29,6 +29,9 @@ dataPairs.forEach(function(pair) {
     parsedData[key] = value;
   }
 });
-
+var userDataString = parsedData["#tgWebAppData"].split("&")[1].split("=")[1];
+var userData = decodeURIComponent(userDataString);
+var user = JSON.parse(userData);
+parsedData.user = user;
 return parsedData;
 }

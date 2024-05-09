@@ -1,6 +1,7 @@
 import { WebSocketServer } from "ws";
 import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
+import { log } from "console";
 const wss = new WebSocketServer({ port: 8081 });
 const token = "6876418179:AAGJmGY6dbAV7YYj9ldJor8tg5NyL7KHWBI";
 
@@ -28,21 +29,13 @@ wss.on("connection", function connection(ws) {
     if (parsed.action == "login") {
       users.forEach((element) => {
         //console.log(parsed);
-        if (element.hash == parsed.hash) {
+        if (element.name == parsed.name) {
           console.log("Users exists, logging in");
-        } else if (
-          element.hash == "TOBEFILLED" &&
-          element.name == parsed.name
-        ) {
-          console.log("Users exists, but has no hash, logging in");
-          element.hash = parsed.hash;
         } else {
           console.log("User does not exist, creating new user");
           if (
             parsed.name != null &&
-            parsed.name != "" &&
-            parsed.hash != null &&
-            parsed.hash != ""
+            parsed.name != ""
           ) {
             let newUser = JSON.parse(usersTemplate);
             console.log(newUser);
@@ -59,7 +52,7 @@ wss.on("connection", function connection(ws) {
       });
     } else if (parsed.action == "getObject") {
       users.forEach((e) => {
-        if (e.hash == parsed.hash) {
+        if (e.name == parsed.name) {
           ws.send(`{"action" : "getObject", "object": ${JSON.stringify(e)}}`);
         }
       });
@@ -69,7 +62,7 @@ wss.on("connection", function connection(ws) {
       );
     } else if (parsed.action == "updateCoinsFromUser") {
       users.forEach((e) => {
-        if (e.hash == parsed.hash) {
+        if (e.name == parsed.name) {
           e.coins += Number(parsed.coins);
           console.log(`User @${e.name} now has ${e.coins} coins`);
         }
@@ -77,14 +70,14 @@ wss.on("connection", function connection(ws) {
       ws.send('{"action" : "updateCoinsFromUser", "result" : "success"}');
     } else if (parsed.action == "getReferalCode") {
       users.forEach((e) => {
-        if (e.hash == parsed.hash) {
+        if (e.name == parsed.name) {
           sendReferalCodeTG(e.tgId);
         }
       });
     } else if (parsed.action == "buyCrpto") {
       
       for (const obj of users) {
-        if (obj.hash == parsed.hash) {
+        if (obj.name == parsed.name) {
           if (parsed.cointobuy == "btc") {
             let btctobuy = Number(parsed.btctobuy);
             obj.usdt -= btctobuy * cryptos[0].usdtPrice;
@@ -103,7 +96,7 @@ wss.on("connection", function connection(ws) {
       let usdttobuy = Number(parsed.usdttobuy);
       
       for (const obj of users) {
-        if (obj.hash == parsed.hash) {
+        if (obj.name == parsed.name) {
           let coinstouse = usddttobuy * 100000;
           obj.coins -= coinstouse;
           obj.usdt += usdttobuy;
@@ -153,6 +146,14 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
     if (obj.tgId == match[1]) {
       obj.coins += 5000;
       obj.friends.push(msg.chat.id);
+      bot.sendMessage(
+        msg.chat.id,
+        `You were invited by @${obj.name}, and you both recieved 5000 coins.`
+      );
+      bot.sendMessage(
+        obj.tgId,
+        `@${msg.chat.username} accepted your invite and you both recieved 5000 coins!`
+      );
       break;
     }
   }
@@ -162,8 +163,9 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
     newUser.name = msg.chat.username;
     newUser.hash = "TOBEFILLED";
     newUser.tgId = msg.chat.id;
-    newUser.coins = 2500;
+    newUser.coins = 5000;
     users.push(newUser);
+    console.log(users);
   }
 });
 bot.on("message", (msg) => {

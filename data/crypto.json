@@ -1,1 +1,1 @@
-[{ "name": "Bitcoin", "id": "BTC", "usdtPrice": 64000, "growthRate": 0 }, {"name":"Etherum", "id": "ETH", "usdtPrice": 2800, "growthRate":0}]
+[{"name":"Bitcoin","id":"BTC","usdtPrice":64000,"growthRate":0},{"name":"Etherum","id":"ETH","usdtPrice":2800,"growthRate":0}]
