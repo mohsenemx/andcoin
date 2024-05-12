@@ -1,0 +1,20 @@
+[
+    {
+        "id": 0,
+        "expireDate": 0,
+        "name": "Join our official channel",
+        "description": "You can get latest news and some coins by join our channel",
+        "task": "joinChannel",
+        "link": "https://t.me/andcoino",
+        "reward": 5000
+    },
+    {
+        "id": 1,
+        "expireDate": 0,
+        "name": "Join our community group",
+        "description": "You can share your problems and discuss with other people in our conmmunity group",
+        "task": "joinChannel",
+        "link": "https://t.me/andcoin_community",
+        "reward": 5000
+    }
+]

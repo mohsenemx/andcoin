@@ -72,14 +72,18 @@
   color: white;
 }
 .referButton {
-  width: 130px;
-  height: 18px;
-  border-radius: 10px;
   background-color: #56a6e9;
-  text-align: center;
-  margin: 5px 5px 10px 10px;
+  outline: none;
+  border: none;
+  margin: 10px;
+  border-radius: 10px;
   padding: 10px;
+
   color: white;
+}
+.referButton button {
+  outline: none;
+  border: none;
 }
 #modalTasks > .items {
   border: 3px solid #56a6e9;
@@ -201,4 +205,37 @@
   #modalTasks > .items {
     margin-top: 7px;
   }
+}
+.taskItem {
+  text-align: center;
+  border-radius: 10px;
+  border: 3px solid #56a6e9;
+  width: 330px;
+  height: 130px;
+  margin: auto;
+  margin-top: 15px;
+  max-height: 40px;
+  display: block;
+  padding: 0;
+}
+.taskItem {
+  font-family: 'SFPro';
+  font-size: 13px;
+  color: white;
+}
+.taskItem p {
+  float: left;
+  margin: 10px;
+}
+.taskButton button {
+  border-radius: 5px;
+  background-color: #56a6e9;
+  color: white;
+  outline: none;
+  border: none;
+  width: 80px;
+  height: 25px;
+  margin: 7px;
+  float: right;
+  
 }

@@ -6,7 +6,8 @@ let coinsSinceLastSync = 0;
 let coins = 0;
 let upgrades = [];
 let coinsDisplay = document.getElementById("coinsDisplay");
-coinsDisplay.innerHTML = JSON.stringify(parsedTGdata);
+let atasks = [];
+
 const socket = new WebSocket("ws://localhost:8081");
 setTimeout(() => {
   if (parsedTGdata == false) {
@@ -20,6 +21,9 @@ socket.onopen = function (event) {
     setTimeout(function () {
         socket.send(`{"action":"getObject", "name": "${parsedTGdata.user.username}"}`);
     },100);
+    setTimeout(function () {
+      socket.send(`{"action":"getTasks"}`);
+    }, 200);
 };
 socket.onmessage = function (event) {
   // Handle received message
@@ -32,6 +36,10 @@ socket.onmessage = function (event) {
     coinsDisplay.innerHTML = numberWithCommas(coins);
     updateRank();
     console.log(globalAndObject);
+  } else if (pjson.action == 'getTasks') {
+    
+    atasks = pjson.tasks;
+    loadTasks();
   }
 };
 socket.onclose = function (event) {
@@ -120,4 +128,14 @@ function updateRank() {
 }
 function referFriend() {
   socket.send(`{"action":"getReferalCode","name":"${parsedTGdata.user.username}"}`);
+}
+function loadTasks() {
+  let tasksDiv = document.getElementById("tasksdiv");
+  tasksDiv.innerHTML = "";
+  for (const task of atasks) {
+    tasksDiv.innerHTML += `<div class="taskItem"><p>${task.name}</p><div class="taskButton"><button onclick="doTasks(this)" data-id="${task.id}">${(task.task == "joinChannel") ? "Join" : "Go" }</button></div></div>`;
+  }
+}
+function doTasks(div) {
+  console.log(div.getAttribute("data-id"));
 }

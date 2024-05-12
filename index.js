@@ -18,7 +18,7 @@ let users = JSON.parse(fs.readFileSync("./data/users.json", "utf8"));
 let usersTemplate = fs.readFileSync("./data/users.template.json", "utf8");
 let cryptos = JSON.parse(fs.readFileSync("./data/crypto.json", "utf8"));
 let stats = JSON.parse(fs.readFileSync("./data/stats.json", "utf8"));
-
+let tasks = JSON.parse(fs.readFileSync("./data/atasks.json", "utf8"));
 wss.on("connection", function connection(ws) {
   console.log("New client connected");
   ws.on("message", function message(data) {
@@ -104,6 +104,8 @@ wss.on("connection", function connection(ws) {
           break;
         }
       }
+    } else if (parsed.action == 'getTasks') {
+      ws.send(`{"action":"getTasks", "tasks": ${JSON.stringify(tasks)}}`);
     }
   });
 
@@ -187,4 +189,7 @@ function sendReferalCodeTG(chatId) {
     chatId,
     `You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${chatId}`
   );
+}
+function checkUserJoinedMainTG(userId) {
+  
 }
