@@ -236,6 +236,16 @@
   width: 80px;
   height: 25px;
   margin: 7px;
-  float: right;
-  
+  float: right;  
+}
+
+.taskButton button:disabled {
+  background-color: #1b619a;
+}
+#taskNotice {
+  padding: 10px;
+  text-align: center;
+  font-family: 'SFPro';
+  font-size: 10px;
+  color: white;
 }

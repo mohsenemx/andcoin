@@ -14,7 +14,7 @@
       { "name": "storage", "level": 1 }
     ],
     "friends": [6050490358],
-    "completedTasks": [],
+    "completedTasks": [0 , 1],
     "transactionsHistory": []
   }
 ]

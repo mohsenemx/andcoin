@@ -33,10 +33,7 @@ wss.on("connection", function connection(ws) {
           console.log("Users exists, logging in");
         } else {
           console.log("User does not exist, creating new user");
-          if (
-            parsed.name != null &&
-            parsed.name != ""
-          ) {
+          if (parsed.name != null && parsed.name != "") {
             let newUser = JSON.parse(usersTemplate);
             console.log(newUser);
             newUser.name = parsed.name;
@@ -47,12 +44,12 @@ wss.on("connection", function connection(ws) {
           } else {
             ws.send('{"action" : "createAccount", "result" : "fail"}');
           }
-          //console.log(users);
         }
       });
     } else if (parsed.action == "getObject") {
       users.forEach((e) => {
         if (e.name == parsed.name) {
+          checkIfUserDoneTask(parsed, true);
           ws.send(`{"action" : "getObject", "object": ${JSON.stringify(e)}}`);
         }
       });
@@ -75,7 +72,6 @@ wss.on("connection", function connection(ws) {
         }
       });
     } else if (parsed.action == "buyCrpto") {
-      
       for (const obj of users) {
         if (obj.name == parsed.name) {
           if (parsed.cointobuy == "btc") {
@@ -94,7 +90,7 @@ wss.on("connection", function connection(ws) {
       console.log(users);
     } else if (parsed.action == "buyUsdt") {
       let usdttobuy = Number(parsed.usdttobuy);
-      
+
       for (const obj of users) {
         if (obj.name == parsed.name) {
           let coinstouse = usddttobuy * 100000;
@@ -104,8 +100,10 @@ wss.on("connection", function connection(ws) {
           break;
         }
       }
-    } else if (parsed.action == 'getTasks') {
+    } else if (parsed.action == "getTasks") {
       ws.send(`{"action":"getTasks", "tasks": ${JSON.stringify(tasks)}}`);
+    } else if (parsed.action == "getTaskStatus") {
+      checkIfUserDoneTask(parsed);
     }
   });
 
@@ -172,10 +170,6 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
 });
 bot.on("message", (msg) => {
   const chatId = msg.chat.id;
-
-  // send a message to the chat acknowledging receipt of their message
-  sendDefaultTGmessage(chatId);
-  //bot.sendMessage(chatId, 'Got your message!');
 });
 
 function sendDefaultTGmessage(chatId) {
@@ -190,6 +184,80 @@ function sendReferalCodeTG(chatId) {
     `You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${chatId}`
   );
 }
-function checkUserJoinedMainTG(userId) {
-  
+async function checkUserJoinedMainTG(userId) {
+  let doesUserExit = false;
+  bot
+    .getChatMember("@andcoino", userId)
+    .then((chat) => {
+      if (
+        chat.status === "member" ||
+        chat.status === "administrator" ||
+        chat.status === "creator"
+      ) {
+        console.log(`${chat.user.username} is a member of the channel`);
+        doesUserExit = true;
+      }
+    })
+    .catch((e) => {
+      doesUserExit = false;
+    });
+  return doesUserExit;
+}
+function checkUserJoinedMainGC(userId) {
+  let doesUserExit = false;
+  bot
+    .getChatMember("@andcoin_community", userId)
+    .then((chat) => {
+      if (
+        chat.status === "member" ||
+        chat.status === "administrator" ||
+        chat.status === "creator"
+      ) {
+        console.log(`${chat.user.username} is a member of the group`);
+        doesUserExit = true;
+      }
+    })
+    .catch((e) => {
+      doesUserExit = false;
+    });
+  return doesUserExit;
+}
+function checkIfUserDoneTask(parsed, loop) {
+  let loop1 = loop ? true : false;
+  if (loop1) {
+    for (const user of users) {
+      if (user.name == parsed.name) {
+        for (const task of tasks) {
+          let taskId = task.taskId;
+          if (taskId == 0) {
+            if (checkUserJoinedMainTG(user.tgId)) {
+              user.completedTasks.push(taskId);
+            }
+          } else if (taskId == 1) {
+            if (checkUserJoinedMainGC(user.tgId)) {
+              user.completedTasks.push(taskId);
+            }
+          }
+        }
+
+        break;
+      }
+    }
+  } else {
+    for (const user of users) {
+      if (user.name == parsed.name) {
+        if (parsed.taskId == 0) {
+          if (checkUserJoinedMainTG(user.tgId)) {
+            user.completedTasks.push(parsed.taskId);
+          }
+        } else if (parsed.taskId == 1) {
+          if (checkUserJoinedMainGC(user.tgId)) {
+            user.completedTasks.push(parsed.taskId);
+          }
+        }
+
+        break;
+      }
+    }
+  }
 }

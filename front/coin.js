@@ -17,7 +17,7 @@ setTimeout(() => {
 socket.onopen = function (event) {
     // Alert the user that they are 
     // connected to the WebSocket server
-    socket.send(`{"action":"login", "name": "${parsedTGdata.user.username}"}`);
+    socket.send(`{"action":"login", "name": "${parsedTGdata.user.username}", "tgId": "${parsedTGdata.user.id}"}`);
     setTimeout(function () {
         socket.send(`{"action":"getObject", "name": "${parsedTGdata.user.username}"}`);
     },100);
@@ -25,6 +25,9 @@ socket.onopen = function (event) {
       socket.send(`{"action":"getTasks"}`);
     }, 200);
 };
+let objectSync = setInterval(() => {
+  socket.send(`{"action":"getObject", "name": "${parsedTGdata.user.username}"}`);
+},5000);
 socket.onmessage = function (event) {
   // Handle received message
   let pjson = JSON.parse(event.data);
@@ -133,9 +136,16 @@ function loadTasks() {
   let tasksDiv = document.getElementById("tasksdiv");
   tasksDiv.innerHTML = "";
   for (const task of atasks) {
-    tasksDiv.innerHTML += `<div class="taskItem"><p>${task.name}</p><div class="taskButton"><button onclick="doTasks(this)" data-id="${task.id}">${(task.task == "joinChannel") ? "Join" : "Go" }</button></div></div>`;
+    let doneTask = false;
+    if (globalAndObject.completedTasks.includes(task.id)) {
+      doneTask = true;
+    }
+    tasksDiv.innerHTML += `<div class="taskItem"><p>${task.name}</p><div class="taskButton"><button onclick="doTasks(this)" data-id="${task.id}" ${(doneTask) ? "disabled" : "notDone"}>${(doneTask) ? "Done" : (task.task == "joinChannel") ? "Join" : "Go" }</button></div></div>`;
   }
 }
 function doTasks(div) {
   console.log(div.getAttribute("data-id"));
+  let taskId = div.getAttribute("data-id");
+    socket.send(`{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`);
+
 }
