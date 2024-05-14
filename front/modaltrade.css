@@ -57,110 +57,6 @@
   height: 100%;
 }
 
-/*   modal bitcoin   */
-
-#modalTrade > .crypto {
-  /* border: 1px solid red; */
-  border-radius: 7px;
-  width: 330px;
-  height: 70px;
-  margin: auto;
-  margin-top: 500px;
-  background-color: #e5e1e1;
-  display: flex;
-  position: relative;
-}
-
-#modalTrade > .crypto > .logo {
-  /* border: 1px solid red; */
-  width: 53px;
-  height: 53px;
-  background: url("img/bitcoin-64.png") no-repeat;
-  background-size: 100% 100%;
-  margin-top: 8px;
-  margin-left: 10px;
-}
-
-#modalTrade > .crypto > .bit {
-  /* border: 1px solid red; */
-  width: 60px;
-  height: 20px;
-  font-family: bol;
-  text-align: center;
-  line-height: 20px;
-  margin-top: 15px;
-  margin-left: 5px;
-}
-
-#modalTrade > .crypto > .BTC {
-  /* border: 1px solid red; */
-  width: 60px;
-  height: 20px;
-  font-family: bol;
-  text-align: center;
-  line-height: 20px;
-  font-size: 10px;
-  color: #524f4f;
-  position: absolute;
-  top: 33px;
-  left: 70px;
-}
-
-#modalTrade > .crypto > .price {
-  /* border: 1px solid red; */
-  width: 70px;
-  height: 20px;
-  font-family: bol;
-  text-align: center;
-  line-height: 20px;
-  font-size: 10px;
-  color: #393939;
-  position: absolute;
-  top: 15px;
-  left: 250px;
-}
-
-#modalTrade > .crypto > .darsad {
-  /* border: 1px solid red; */
-  width: 70px;
-  height: 20px;
-  font-family: bol;
-  text-align: center;
-  line-height: 20px;
-  font-size: 10px;
-  color: #524f4f;
-  position: absolute;
-  top: 33px;
-  left: 260px;
-}
-
-/*   buyORsell   */
-
-#modalTrade > .buyORsell {
-  /* border: 1px solid red; */
-  border-radius: 7px;
-  width: 330px;
-  height: 50px;
-  margin: auto;
-  margin-top: 0px;
-  display: flex;
-  justify-content: space-between;
-}
-
-#modalTrade > .buyORsell > .all {
-  /* border: 1px solid red; */
-  width: 157px;
-  height: 100%;
-  border-radius: 7px;
-  background-color: #217ac3;
-  font-family: bol;
-  font-size: 20px;
-  text-align: center;
-  line-height: 48px;
-  color: white;
-  margin-top: 40px;
-}
-
 /*   modalfooter   */
 
 #modalTrade > .footer {
@@ -259,4 +155,9 @@
   #modalTrade > .bitCoin {
     margin-top: 320px;
   }
+}
+
+.cryptos {
+  width: 100%;
+  
 }

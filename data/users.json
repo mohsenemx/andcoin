@@ -8,13 +8,20 @@
     "rank": "Poor",
     "villageId": null,
     "energy": 2000,
-    "crypto": [{ "name": "BTC", "amount": 0.0001 }],
+    "crypto": [
+      { "id": "BTC", "amount": 0 },
+      { "id": "ETH", "amount": 0 },
+      { "id": "TON", "amount": 0 },
+      { "id": "TRX", "amount": 0 },
+      { "id": "DOGE", "amount": 0 }
+    ],
     "upgrades": [
       { "name": "multitap", "level": 1 },
-      { "name": "storage", "level": 1 }
+      { "name": "storage", "level": 1 },
+      { "name": "recharge", "level": 1 }
     ],
     "friends": [6050490358],
-    "completedTasks": [0 , 1],
+    "completedTasks": [0, 1],
     "transactionsHistory": []
   }
 ]

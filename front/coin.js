@@ -7,6 +7,7 @@ let coins = 0;
 let upgrades = [];
 let coinsDisplay = document.getElementById("coinsDisplay");
 let atasks = [];
+let cryptos = [];
 
 const socket = new WebSocket("ws://localhost:8081");
 setTimeout(() => {
@@ -24,6 +25,9 @@ socket.onopen = function (event) {
     setTimeout(function () {
       socket.send(`{"action":"getTasks"}`);
     }, 200);
+    setTimeout(function () {
+      socket.send(`{"action":"getCrypto"}`);
+    }, 300);  
 };
 let objectSync = setInterval(() => {
   socket.send(`{"action":"getObject", "name": "${parsedTGdata.user.username}"}`);
@@ -38,11 +42,12 @@ socket.onmessage = function (event) {
     coins = globalAndObject.coins;
     coinsDisplay.innerHTML = numberWithCommas(coins);
     updateRank();
-    console.log(globalAndObject);
   } else if (pjson.action == 'getTasks') {
     
     atasks = pjson.tasks;
     loadTasks();
+  } else if (pjson.action == 'getCrypto') {
+    console.log(pjson.cryptos);
   }
 };
 socket.onclose = function (event) {
@@ -147,5 +152,7 @@ function doTasks(div) {
   console.log(div.getAttribute("data-id"));
   let taskId = div.getAttribute("data-id");
     socket.send(`{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`);
-
+}
+function loadCryptos() {
+  
 }

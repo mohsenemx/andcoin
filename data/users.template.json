@@ -1,18 +1,24 @@
-
-    {
-      "name": "NAMETXT",
-      "hash": "HASHTXT",
-      "tgId": "TGIDTXT",
-      "coins": 0,
-      "usdt": 0,
-      "villageId": null,
-      "rank": "Poor",
-      "crypto": [],
-      "upgrades": [
-        { "name": "multitap", "level": 1 },
-        { "name": "storage", "level": 1 }
-      ],
-      "friends": [],
-      "completedTasks": [],
-      "transactionsHistory": []
-    }
+{
+  "name": "NAMETXT",
+  "hash": "HASHTXT",
+  "tgId": "TGIDTXT",
+  "coins": 0,
+  "usdt": 0,
+  "villageId": null,
+  "rank": "Poor",
+  "crypto": [
+    { "id": "BTC", "amount": 0 },
+    { "id": "ETH", "amount": 0 },
+    { "id": "TON", "amount": 0 },
+    { "id": "TRX", "amount": 0 },
+    { "id": "DOGE", "amount": 0 }
+  ],
+  "upgrades": [
+    { "name": "multitap", "level": 1 },
+    { "name": "storage", "level": 1 },
+    { "name": "recharge", "level": 1 }
+  ],
+  "friends": [],
+  "completedTasks": [],
+  "transactionsHistory": []
+}

@@ -1,7 +1,7 @@
 import { WebSocketServer } from "ws";
 import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
-import { log } from "console";
+import axios from "axios";
 const wss = new WebSocketServer({ port: 8081 });
 const token = "6876418179:AAGJmGY6dbAV7YYj9ldJor8tg5NyL7KHWBI";
 
@@ -14,13 +14,14 @@ const bot = new TelegramBot(token, {
 });
 console.log("Telegram bot running...");
 console.log("API server running...");
+//updateCryptoPrice();
 let users = JSON.parse(fs.readFileSync("./data/users.json", "utf8"));
 let usersTemplate = fs.readFileSync("./data/users.template.json", "utf8");
 let cryptos = JSON.parse(fs.readFileSync("./data/crypto.json", "utf8"));
 let stats = JSON.parse(fs.readFileSync("./data/stats.json", "utf8"));
 let tasks = JSON.parse(fs.readFileSync("./data/atasks.json", "utf8"));
 wss.on("connection", function connection(ws) {
-  console.log("New client connected");
+  stats.online += 1;
   ws.on("message", function message(data) {
     let parsed = JSON.parse(data);
     /*if (parsed.name == undefined || parsed.name =='') {
@@ -53,9 +54,9 @@ wss.on("connection", function connection(ws) {
           ws.send(`{"action" : "getObject", "object": ${JSON.stringify(e)}}`);
         }
       });
-    } else if (parsed.action == "getCryptoPrice") {
+    } else if (parsed.action == "getCrypto") {
       ws.send(
-        `{"action" : "getCryptoPrice", "prices" : "${JSON.stringify(cryptos)}"}`
+        `{"action" : "getCrypto", "cryptos" : ${JSON.stringify(cryptos)}}`
       );
     } else if (parsed.action == "updateCoinsFromUser") {
       users.forEach((e) => {
@@ -104,6 +105,25 @@ wss.on("connection", function connection(ws) {
       ws.send(`{"action":"getTasks", "tasks": ${JSON.stringify(tasks)}}`);
     } else if (parsed.action == "getTaskStatus") {
       checkIfUserDoneTask(parsed);
+    } else if (parsed.action == 'sellCrypto') {
+      for (const obj of users) {
+        if (obj.name == parsed.name) {
+          for (const coin of cryptos) {
+            if (coin.id == parsed.cointosell) {
+              let amount = Number(parsed.amounttosell);
+              let usdtPrice = amount * coin.usdtPrice;
+              for (const fc of obj.crypto) {
+                if (fc.id == coin.id) {
+                  fc.amount -= amount;
+                  obj.usdt += usdtPrice;
+                }
+              }
+            }
+            
+          }
+          break;
+        }
+      }
     }
   });
 
@@ -117,6 +137,7 @@ const interval = setInterval(function ping() {
 
     ws.isAlive = false;
     ws.ping();
+    stats.online -= 1;
   });
 }, 60000);
 
@@ -133,7 +154,11 @@ let saveInterval = setInterval(() => {
 let statsSave = setInterval(() => {
   fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
 }, 400000);
+let updateCrypto =  setInterval(() => {
+  updateCryptoPrice();
+}, 900000);
 bot.onText(/\/start (\w+)/, function (msg, match) {
+  sendDefaultTGmessage(msg.chat.id);
   let isPresent = false;
   for (const obj of users) {
     if (obj.tgId == msg.chat.id) {
@@ -232,10 +257,14 @@ function checkIfUserDoneTask(parsed, loop) {
           if (taskId == 0) {
             if (checkUserJoinedMainTG(user.tgId)) {
               user.completedTasks.push(taskId);
+              user.coins += task.reward;
+              return true;
             }
           } else if (taskId == 1) {
             if (checkUserJoinedMainGC(user.tgId)) {
               user.completedTasks.push(taskId);
+              user.coins += task.reward;
+              return true;
             }
           }
         }
@@ -249,10 +278,14 @@ function checkIfUserDoneTask(parsed, loop) {
         if (parsed.taskId == 0) {
           if (checkUserJoinedMainTG(user.tgId)) {
             user.completedTasks.push(parsed.taskId);
+            user.coins += tasks[0].reward;
+            return true;
           }
         } else if (parsed.taskId == 1) {
           if (checkUserJoinedMainGC(user.tgId)) {
             user.completedTasks.push(parsed.taskId);
+            user.coins += tasks[1].reward;
+            return true;
           }
         }
 
@@ -260,4 +293,45 @@ function checkIfUserDoneTask(parsed, loop) {
       }
     }
   }
+  return false;
+}
+async function updateCryptoPrice() {
+  let config = {
+    method: "get",
+    url: "https://api.coinlore.net/api/tickers/",
+    headers: {},
+  };
+  let data = {};
+  axios
+    .request(config)
+    .then(async (response) => {
+      data = response.data;
+      
+      for (const coin of data.data) {
+        
+        if (coin.symbol == 'BTC') {
+          cryptos[0].growthRate = calculateGrowthRate(cryptos[0].usdtPrice, Math.floor(Number(coin.price_usd)));
+          cryptos[0].usdtPrice = Math.floor(Number(coin.price_usd));
+        } else if (coin.symbol == 'ETH') {
+          cryptos[1].growthRate = calculateGrowthRate(cryptos[1].usdtPrice, Math.floor(Number(coin.price_usd)));
+          cryptos[1].usdtPrice = Math.floor(Number(coin.price_usd));
+        } else if (coin.symbol == 'TON') {
+          cryptos[2].growthRate = calculateGrowthRate(cryptos[2].usdtPrice, Math.floor(Number(coin.price_usd)));
+          cryptos[2].usdtPrice = Math.floor(Number(coin.price_usd));
+        } else if (coin.symbol == 'TRX') {
+          cryptos[3].growthRate = calculateGrowthRate(cryptos[3].usdtPrice, Number(coin.price_usd));
+          cryptos[3].usdtPrice = Number(coin.price_usd);
+        } else if (coin.symbol == 'DOGE') {
+          cryptos[4].growthRate = calculateGrowthRate(cryptos[4].usdtPrice, Number(coin.price_usd));
+          cryptos[4].usdtPrice = Number(coin.price_usd);
+        }
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+function calculateGrowthRate(oldPrice, newPrice) {
+  var growthRate = ((newPrice - oldPrice) / oldPrice) * 100;
+  return growthRate.toFixed(2); // Returning the growth rate rounded to two decimal places
 }
