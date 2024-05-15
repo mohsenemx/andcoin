@@ -3,5 +3,5 @@
   { "name": "Etherum", "id": "ETH", "usdtPrice": 2800, "growthRate": 0 },
   { "name": "Ton", "id": "TON", "usdtPrice": 6, "growthRate": 0},
   { "name": "Tron", "id": "TRX", "usdtPrice": 0.3, "growthRate": 0},
-  { "name": "DOGE", "id": "DOGE", "usdtPrice": 6, "growthRate": 0}
+  { "name": "DOGE", "id": "DOGE", "usdtPrice": 0.6, "growthRate": 0}
 ]
