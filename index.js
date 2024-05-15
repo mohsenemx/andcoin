@@ -216,7 +216,7 @@ wss.on("connection", function connection(ws) {
   ws.send('{"code": 200, "message": "connection established"}');
   ws.on("error", console.error);
 });
-
+  
 let energyRefill = setInterval(() => {
   for (const user of users) {
     let maxEnergy = 2000;
