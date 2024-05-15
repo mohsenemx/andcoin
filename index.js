@@ -5,7 +5,6 @@ import axios from "axios";
 const wss = new WebSocketServer({ port: 8081 });
 const token = "6876418179:AAGJmGY6dbAV7YYj9ldJor8tg5NyL7KHWBI";
 
-// Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {
   polling: true,
   request: {
@@ -20,6 +19,11 @@ let usersTemplate = fs.readFileSync("./data/users.template.json", "utf8");
 let cryptos = JSON.parse(fs.readFileSync("./data/crypto.json", "utf8"));
 let stats = JSON.parse(fs.readFileSync("./data/stats.json", "utf8"));
 let tasks = JSON.parse(fs.readFileSync("./data/atasks.json", "utf8"));
+let transactionTemplate = fs.readFileSync(
+  "./data/transaction.template.json",
+  "utf8"
+);
+let usdtPrice = 10000;
 wss.on("connection", function connection(ws) {
   stats.online += 1;
   ws.on("message", function message(data) {
@@ -75,7 +79,7 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "buyCrpto") {
       for (const obj of users) {
         if (obj.name == parsed.name) {
-          if (parsed.cointobuy == "btc") {
+          /*if (parsed.cointobuy == "btc") {
             let btctobuy = Number(parsed.btctobuy);
             obj.usdt -= btctobuy * cryptos[0].usdtPrice;
             obj.crypto[0].amount += btctobuy;
@@ -83,6 +87,15 @@ wss.on("connection", function connection(ws) {
             let ethtobuy = Number(parsed.ethtobuy);
             obj.usdt -= ethtobuy * cryptos[1].usdtPrice;
             obj.crypto[1].amount += ethtobuy;
+          }*/
+          let i = 0;
+          for (const cr of cryptos) {
+            if (cr.id == parsed.cointobuy) {
+              let btctobuy = Number(parsed.btctobuy);
+              obj.usdt -= btctobuy * cryptos[i].usdtPrice;
+              obj.crypto[i].amount += btctobuy;
+            }
+            i++;
           }
           break;
         }
@@ -94,7 +107,7 @@ wss.on("connection", function connection(ws) {
 
       for (const obj of users) {
         if (obj.name == parsed.name) {
-          let coinstouse = usddttobuy * 100000;
+          let coinstouse = usddttobuy * usdtPrice;
           obj.coins -= coinstouse;
           obj.usdt += usdttobuy;
           console.log(`User @${obj.name} has bought ${newUsdt} USDT`);
@@ -105,7 +118,7 @@ wss.on("connection", function connection(ws) {
       ws.send(`{"action":"getTasks", "tasks": ${JSON.stringify(tasks)}}`);
     } else if (parsed.action == "getTaskStatus") {
       checkIfUserDoneTask(parsed);
-    } else if (parsed.action == 'sellCrypto') {
+    } else if (parsed.action == "sellCrypto") {
       for (const obj of users) {
         if (obj.name == parsed.name) {
           for (const coin of cryptos) {
@@ -119,9 +132,82 @@ wss.on("connection", function connection(ws) {
                 }
               }
             }
-            
           }
           break;
+        }
+      }
+    } else if (parsed.action == "upgrade") {
+      for (const user of users) {
+        if (user.name == parsed.name) {
+          if (parsed.upgrade == "multitap") {
+            switch (parsed.targetLevel) {
+              case 2: {
+                user.upgrades[0].level = 2;
+                user.coins -= 1500;
+                break;
+              }
+              case 3: {
+                user.upgrades[0].level = 3;
+                user.coins -= 3000;
+              }
+              case 4: {
+                user.upgrades[0].level = 4;
+                user.coins -= 6000;
+              }
+              case 5: {
+                user.upgrades[0].level = 5;
+                user.coins -= 15000;
+              }
+            }
+          } else if (parsed.upgrade == "storage") {
+            switch (parsed.targetLevel) {
+              case 2: {
+                user.upgrades[1].level = 2;
+                user.coins -= 1500;
+                break;
+              }
+              case 3: {
+                user.upgrades[1].level = 3;
+                user.coins -= 3000;
+              }
+              case 4: {
+                user.upgrades[1].level = 4;
+                user.coins -= 6000;
+              }
+              case 5: {
+                user.upgrades[1].level = 5;
+                user.coins -= 15000;
+              }
+            }
+          } else if (parsed.upgrade == "recharge") {
+            switch (parsed.targetLevel) {
+              case 2: {
+                user.upgrades[2].level = 2;
+                user.coins -= 1500;
+                break;
+              }
+              case 3: {
+                user.upgrades[2].level = 3;
+                user.coins -= 5000;
+              }
+              case 4: {
+                user.upgrades[2].level = 4;
+                user.coins -= 10000;
+              }
+              case 5: {
+                user.upgrades[2].level = 5;
+                user.coins -= 25000;
+              }
+            }
+          }
+        }
+      }
+    } else if (parsed.action == "sellUsdt") {
+      for (const user of users) {
+        if (user.name == parsed.name) {
+          let cointoget = parsed.usdttosell * usdtPrice;
+          user.usdt -= Number(parsed.usdttosell);
+          user.coins += cointoget;
         }
       }
     }
@@ -131,6 +217,40 @@ wss.on("connection", function connection(ws) {
   ws.on("error", console.error);
 });
 
+let energyRefill = setInterval(() => {
+  for (const user of users) {
+    let maxEnergy = 2000;
+    switch (user.upgrades[1].level) {
+      case 1: {
+        maxEnergy = 2000;
+        break;
+      }
+      case 2: {
+        maxEnergy = 2500;
+        break;
+      }
+      case 3: {
+        maxEnergy = 3000;
+        break;
+      }
+      case 4: {
+        maxEnergy = 4000;
+        break;
+      }
+      case 5: {
+        maxEnergy = 5000;
+        break;
+      }
+      default: {
+        maxEnergy = 2000;
+        break;
+      }
+    }
+    if (user.energy < maxEnergy) {
+      user.energy += user.upgrades[2].level;
+    }
+  }
+}, 2000);
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {
     if (ws.isAlive === false) return ws.terminate();
@@ -154,7 +274,7 @@ let saveInterval = setInterval(() => {
 let statsSave = setInterval(() => {
   fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
 }, 400000);
-let updateCrypto =  setInterval(() => {
+let updateCrypto = setInterval(() => {
   updateCryptoPrice();
 }, 900000);
 bot.onText(/\/start (\w+)/, function (msg, match) {
@@ -177,7 +297,7 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
       );
       bot.sendMessage(
         obj.tgId,
-        `@${msg.chat.username} accepted your invite and you both recieved 5000 coins!`
+        `<<@${msg.chat.username}>> accepted your invite and you both recieved 5000 coins!`
       );
       break;
     }
@@ -306,23 +426,37 @@ async function updateCryptoPrice() {
     .request(config)
     .then(async (response) => {
       data = response.data;
-      
+
       for (const coin of data.data) {
-        
-        if (coin.symbol == 'BTC') {
-          cryptos[0].growthRate = calculateGrowthRate(cryptos[0].usdtPrice, Math.floor(Number(coin.price_usd)));
+        if (coin.symbol == "BTC") {
+          cryptos[0].growthRate = calculateGrowthRate(
+            cryptos[0].usdtPrice,
+            Math.floor(Number(coin.price_usd))
+          );
           cryptos[0].usdtPrice = Math.floor(Number(coin.price_usd));
-        } else if (coin.symbol == 'ETH') {
-          cryptos[1].growthRate = calculateGrowthRate(cryptos[1].usdtPrice, Math.floor(Number(coin.price_usd)));
+        } else if (coin.symbol == "ETH") {
+          cryptos[1].growthRate = calculateGrowthRate(
+            cryptos[1].usdtPrice,
+            Math.floor(Number(coin.price_usd))
+          );
           cryptos[1].usdtPrice = Math.floor(Number(coin.price_usd));
-        } else if (coin.symbol == 'TON') {
-          cryptos[2].growthRate = calculateGrowthRate(cryptos[2].usdtPrice, Math.floor(Number(coin.price_usd)));
+        } else if (coin.symbol == "TON") {
+          cryptos[2].growthRate = calculateGrowthRate(
+            cryptos[2].usdtPrice,
+            Math.floor(Number(coin.price_usd))
+          );
           cryptos[2].usdtPrice = Math.floor(Number(coin.price_usd));
-        } else if (coin.symbol == 'TRX') {
-          cryptos[3].growthRate = calculateGrowthRate(cryptos[3].usdtPrice, Number(coin.price_usd));
+        } else if (coin.symbol == "TRX") {
+          cryptos[3].growthRate = calculateGrowthRate(
+            cryptos[3].usdtPrice,
+            Number(coin.price_usd)
+          );
           cryptos[3].usdtPrice = Number(coin.price_usd);
-        } else if (coin.symbol == 'DOGE') {
-          cryptos[4].growthRate = calculateGrowthRate(cryptos[4].usdtPrice, Number(coin.price_usd));
+        } else if (coin.symbol == "DOGE") {
+          cryptos[4].growthRate = calculateGrowthRate(
+            cryptos[4].usdtPrice,
+            Number(coin.price_usd)
+          );
           cryptos[4].usdtPrice = Number(coin.price_usd);
         }
       }
@@ -333,5 +467,5 @@ async function updateCryptoPrice() {
 }
 function calculateGrowthRate(oldPrice, newPrice) {
   var growthRate = ((newPrice - oldPrice) / oldPrice) * 100;
-  return growthRate.toFixed(2); // Returning the growth rate rounded to two decimal places
+  return growthRate.toFixed(2);
 }

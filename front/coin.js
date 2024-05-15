@@ -151,7 +151,7 @@ function loadTasks() {
 function doTasks(div) {
   console.log(div.getAttribute("data-id"));
   let taskId = div.getAttribute("data-id");
-    socket.send(`{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`);
+  socket.send(`{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`);
 }
 function loadCryptos() {
   
