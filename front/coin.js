@@ -47,7 +47,8 @@ socket.onmessage = function (event) {
     atasks = pjson.tasks;
     loadTasks();
   } else if (pjson.action == 'getCrypto') {
-    console.log(pjson.cryptos);
+    cryptos = pjson.cryptos;
+    loadCryptos();
   }
 };
 socket.onclose = function (event) {
@@ -154,5 +155,15 @@ function doTasks(div) {
     socket.send(`{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`);
 }
 function loadCryptos() {
-  
+  let cryptosList = document.getElementById("cryptoList");
+  cryptosList.innerHTML = "";
+  for (const coin of cryptos) {
+    cryptosList.innerHTML += `<div class="coinItem"><img src="./img/coin/${coin.id.toLowerCase()}.png"></img><div class="coinName"><div class="coinPrices2"><p>${coin.id}</p><br><p>${coin.name}</p></div><div class="coinPrices"><p>${coin.usdtPrice}</p><p style="${(coin.growthRate >= 0) ? "color: green;" : "color: red;"}">${coin.growthRate}%</p></div></div></div>`;
+  }
+}
+function cryptoBuy(id) {
+
+}
+function cryptoSell(id) {
+
 }
