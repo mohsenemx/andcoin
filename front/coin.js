@@ -55,14 +55,13 @@ socket.onclose = function (event) {
   // Log a message when disconnected
   //  from the WebSocket server
     alert('Connection failed with server');
-};;
+    clearInterval(coinSync);
+    clearInterval(objectSync);
+}
 let coinSync = setInterval(function () {
-    if (socket.CLOSED) return;
     socket.send(`{"action":"updateCoinsFromUser", "name": "${parsedTGdata.user.username}", "coins": "${coinsSinceLastSync}"}`);
     coinsSinceLastSync = 0;
 },3000);
-// content
-
 tasks.onclick = function () {
   document.getElementById("modalTasks").style.display = "block";
 };
@@ -150,7 +149,6 @@ function loadTasks() {
   }
 }
 function doTasks(div) {
-  console.log(div.getAttribute("data-id"));
   let taskId = div.getAttribute("data-id");
   socket.send(`{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`);
 }
@@ -158,12 +156,9 @@ function loadCryptos() {
   let cryptosList = document.getElementById("cryptoList");
   cryptosList.innerHTML = "";
   for (const coin of cryptos) {
-    cryptosList.innerHTML += `<div class="coinItem"><img src="./img/coin/${coin.id.toLowerCase()}.png"></img><div class="coinName"><div class="coinPrices2"><p>${coin.id}</p><br><p>${coin.name}</p></div><div class="coinPrices"><p>${coin.usdtPrice}</p><p style="${(coin.growthRate >= 0) ? "color: green;" : "color: red;"}">${coin.growthRate}%</p></div></div></div>`;
+    cryptosList.innerHTML += `<div class="coinItem" data-id=${coin.id} onclick="buySellmenu(this)"><img src="./img/coin/${coin.id.toLowerCase()}.png"></img><div class="coinName"><div class="coinPrices2"><p>${coin.id}</p><br><p>${coin.name}</p></div><div class="coinPrices"><p>${coin.usdtPrice}</p><p style="${(coin.growthRate >= 0) ? "color: green;" : "color: red;"}">${coin.growthRate}%</p></div></div></div>`;
   }
 }
-function cryptoBuy(id) {
-
-}
-function cryptoSell(id) {
-
+function buySellMenu(div) {
+  let cryptoId = div.getAttribute("data-id");
 }

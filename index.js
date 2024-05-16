@@ -2,8 +2,10 @@ import { WebSocketServer } from "ws";
 import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
+
 const wss = new WebSocketServer({ port: 8081 });
-const token = "6876418179:AAGJmGY6dbAV7YYj9ldJor8tg5NyL7KHWBI";
+const token = fs.readFileSync('./token', "utf8");
+//const token = "6876418179:AAGJmGY6dbAV7YYj9ldJor8tg5NyL7KHWBI";
 
 const bot = new TelegramBot(token, {
   polling: true,
@@ -11,9 +13,13 @@ const bot = new TelegramBot(token, {
     proxy: "http://127.0.0.1:2081",
   },
 });
+var startDate = new Date();
+let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
+console.log(`[${start}] Starting...`);
 console.log("Telegram bot running...");
 console.log("API server running...");
 //updateCryptoPrice();
+
 let users = JSON.parse(fs.readFileSync("./data/users.json", "utf8"));
 let usersTemplate = fs.readFileSync("./data/users.template.json", "utf8");
 let cryptos = JSON.parse(fs.readFileSync("./data/crypto.json", "utf8"));
@@ -66,7 +72,8 @@ wss.on("connection", function connection(ws) {
       users.forEach((e) => {
         if (e.name == parsed.name) {
           e.coins += Number(parsed.coins);
-          console.log(`User @${e.name} now has ${e.coins} coins`);
+          stats.minedPastHour += Number(parsed.coins);
+          stats.allCoinsClicked += Number(parsed.coins);
         }
       });
       ws.send('{"action" : "updateCoinsFromUser", "result" : "success"}');
@@ -215,6 +222,7 @@ wss.on("connection", function connection(ws) {
 
   ws.send('{"code": 200, "message": "connection established"}');
   ws.on("error", console.error);
+  ws.on('pong', heartbeat);
 });
   
 let energyRefill = setInterval(() => {
@@ -314,7 +322,12 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
   }
 });
 bot.on("message", (msg) => {
-  const chatId = msg.chat.id;
+  if (msg.text == '/stats' && msg.chat.title == 'AndCoin DevChat') {
+    bot.sendMessage(
+      msg.chat.id,
+      `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coin Clicks: ${stats.allCoinsClicked}`
+    );
+  }
 });
 
 function sendDefaultTGmessage(chatId) {
@@ -468,4 +481,7 @@ async function updateCryptoPrice() {
 function calculateGrowthRate(oldPrice, newPrice) {
   var growthRate = ((newPrice - oldPrice) / oldPrice) * 100;
   return growthRate.toFixed(2);
+}
+function heartbeat() {
+  this.isAlive = true;
 }
