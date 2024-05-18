@@ -14,54 +14,64 @@ setTimeout(() => {
   if (parsedTGdata == false) {
     alert("Required data is missing, please reload the page");
   }
-},1000);
+}, 1000);
 socket.onopen = function (event) {
-    // Alert the user that they are 
-    // connected to the WebSocket server
-    socket.send(`{"action":"login", "name": "${parsedTGdata.user.username}", "tgId": "${parsedTGdata.user.id}"}`);
-    setTimeout(function () {
-        socket.send(`{"action":"getObject", "name": "${parsedTGdata.user.username}"}`);
-    },100);
-    setTimeout(function () {
-      socket.send(`{"action":"getTasks"}`);
-    }, 200);
-    setTimeout(function () {
-      socket.send(`{"action":"getCrypto"}`);
-    }, 300);  
+  // Alert the user that they are
+  // connected to the WebSocket server
+  socket.send(
+    `{"action":"login", "name": "${parsedTGdata.user.username}", "tgId": "${parsedTGdata.user.id}"}`
+  );
+  setTimeout(function () {
+    socket.send(
+      `{"action":"getObject", "name": "${parsedTGdata.user.username}"}`
+    );
+  }, 100);
+  setTimeout(function () {
+    socket.send(`{"action":"getTasks"}`);
+  }, 200);
+  setTimeout(function () {
+    socket.send(`{"action":"getCrypto"}`);
+  }, 300);
 };
 let objectSync = setInterval(() => {
-  socket.send(`{"action":"getObject", "name": "${parsedTGdata.user.username}"}`);
-},5000);
+  socket.send(
+    `{"action":"updateEnergy", "name": "${parsedTGdata.user.username}","energy" : "${globalAndObject.energy}"}`
+  );
+  setTimeout(
+    socket.send(
+      `{"action":"getObject", "name": "${parsedTGdata.user.username}"}`
+    ),
+    200
+  );
+  updateEnergy();
+}, 5000);
 socket.onmessage = function (event) {
-  // Handle received message
   let pjson = JSON.parse(event.data);
-  if (pjson.action == 'getObject') {
-    
+  if (pjson.action == "getObject") {
     globalAndObject = pjson.object;
     upgrades = globalAndObject.upgrades;
     coins = globalAndObject.coins;
     coinsDisplay.innerHTML = numberWithCommas(coins);
     updateRank();
-  } else if (pjson.action == 'getTasks') {
-    
+  } else if (pjson.action == "getTasks") {
     atasks = pjson.tasks;
     loadTasks();
-  } else if (pjson.action == 'getCrypto') {
+  } else if (pjson.action == "getCrypto") {
     cryptos = pjson.cryptos;
     loadCryptos();
   }
 };
 socket.onclose = function (event) {
-  // Log a message when disconnected
-  //  from the WebSocket server
-    alert('Connection failed with server');
-    clearInterval(coinSync);
-    clearInterval(objectSync);
-}
+  alert("Connection failed with server");
+  clearInterval(coinSync);
+  clearInterval(objectSync);
+};
 let coinSync = setInterval(function () {
-    socket.send(`{"action":"updateCoinsFromUser", "name": "${parsedTGdata.user.username}", "coins": "${coinsSinceLastSync}"}`);
-    coinsSinceLastSync = 0;
-},3000);
+  socket.send(
+    `{"action":"updateCoinsFromUser", "name": "${parsedTGdata.user.username}", "coins": "${coinsSinceLastSync}"}`
+  );
+  coinsSinceLastSync = 0;
+}, 3000);
 tasks.onclick = function () {
   document.getElementById("modalTasks").style.display = "block";
 };
@@ -120,22 +130,28 @@ home3.onclick = function () {
 
 /*   transition coin   */
 function numberWithCommas(x) {
-    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 function coinClicked() {
   try {
-    coins += upgrades[0].level;
-    coinsSinceLastSync += upgrades[0].level;
-    coinsDisplay.innerHTML = numberWithCommas(coins);
+    if (globalAndObject.energy - upgrades[0].level > 0) {
+      coins += upgrades[0].level;
+      coinsSinceLastSync += upgrades[0].level;
+      globalAndObject.energy -= upgrades[0].level;
+      updateEnergy();
+      coinsDisplay.innerHTML = numberWithCommas(coins);
+    }
   } catch (e) {
     console.log(e);
   }
 }
 function updateRank() {
-    document.getElementById("userRank").innerHTML = globalAndObject.rank;
+  document.getElementById("userRank").innerHTML = globalAndObject.rank;
 }
 function referFriend() {
-  socket.send(`{"action":"getReferalCode","name":"${parsedTGdata.user.username}"}`);
+  socket.send(
+    `{"action":"getReferalCode","name":"${parsedTGdata.user.username}"}`
+  );
 }
 function loadTasks() {
   let tasksDiv = document.getElementById("tasksdiv");
@@ -145,20 +161,63 @@ function loadTasks() {
     if (globalAndObject.completedTasks.includes(task.id)) {
       doneTask = true;
     }
-    tasksDiv.innerHTML += `<div class="taskItem"><p>${task.name}</p><div class="taskButton"><button onclick="doTasks(this)" data-id="${task.id}" ${(doneTask) ? "disabled" : "notDone"}>${(doneTask) ? "Done" : (task.task == "joinChannel") ? "Join" : "Go" }</button></div></div>`;
+    tasksDiv.innerHTML += `<div class="taskItem"><p>${
+      task.name
+    }</p><div class="taskButton"><button onclick="doTasks(this)" data-id="${
+      task.id
+    }" ${doneTask ? "disabled" : "notDone"}>${
+      doneTask ? "Done" : task.task == "joinChannel" ? "Join" : "Go"
+    } ${doneTask ? "<img src=\"./img/checkmark.png\" class=\"donePic\">" : ""} </button></div></div>`;
   }
 }
 function doTasks(div) {
   let taskId = div.getAttribute("data-id");
-  socket.send(`{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`);
+  socket.send(
+    `{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`
+  );
 }
 function loadCryptos() {
   let cryptosList = document.getElementById("cryptoList");
   cryptosList.innerHTML = "";
   for (const coin of cryptos) {
-    cryptosList.innerHTML += `<div class="coinItem" data-id=${coin.id} onclick="buySellmenu(this)"><img src="./img/coin/${coin.id.toLowerCase()}.png"></img><div class="coinName"><div class="coinPrices2"><p>${coin.id}</p><br><p>${coin.name}</p></div><div class="coinPrices"><p>${coin.usdtPrice}</p><p style="${(coin.growthRate >= 0) ? "color: green;" : "color: red;"}">${coin.growthRate}%</p></div></div></div>`;
+    cryptosList.innerHTML += `<div class="coinItem" data-id=${
+      coin.id
+    } onclick="buySellMenu(this)"><img src="./img/coin/${coin.id.toLowerCase()}.png"></img><div class="coinName"><div class="coinPrices2"><p>${
+      coin.id
+    }</p><br><p>${
+      coin.name
+    }</p></div><div class="coinPrices"><div class="usdtPrices"><img class="usdtPic" src="./img/coin/usdt.png"><p id="cPrice">${coin.usdtPrice.toFixed(
+      2
+    )}</p></div><p style="${
+      coin.growthRate >= 0 ? "color: green;" : "color: red;"
+    }" id="growth">${coin.growthRate}%</p></div></div></div>`;
   }
 }
+let showingTradeModal = false;
 function buySellMenu(div) {
   let cryptoId = div.getAttribute("data-id");
+  let cryptoTrade = document.getElementById("cryptoTrade");
+  
+  cryptoTrade.style.width = "90%";
+  cryptoTrade.style.height = "50%";
+  setTimeout(() => {
+    showingTradeModal = true;
+  }, 100);
+  document.querySelector("body").addEventListener("click", (t) => {
+    if (t.target != cryptoTrade) {
+      if (showingTradeModal) {
+        showingTradeModal = false;
+        
+        cryptoTrade.style.width = "0%";
+        cryptoTrade.style.height = "0%";
+      }
+    }
+  });
+}
+function updateEnergy() {
+  document.getElementById(
+    "energyValues"
+  ).innerHTML = `${globalAndObject.energy}/${globalAndObject.maxEnergy}`;
+  let percentage = (globalAndObject.energy / globalAndObject.maxEnergy) * 100;
+  document.getElementById("bluebar").style.width = `${percentage * 0.6}%`;
 }

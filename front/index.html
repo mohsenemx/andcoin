@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Andcoin</title>
-    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
     <link href="style.css" rel="stylesheet" />
     <link href="modaltrade.css" rel="stylesheet" />
     <link href="modaltasks.css" rel="stylesheet" />
@@ -26,13 +26,13 @@
       <div class="Coin" id="coin" onclick="coinClicked()">
         <img src="img/Group 1127.png" />
       </div>
-
-      <div class="Energy">
-        <div class="whiteFilter"><img src="img/Button.png" /></div>
-        <div class="blueFilter"><img src="img/Button-1.png" /></div>
-        <div class="numberEnergy"><img src="img/3000.png" /></div>
+      <div class="ggv">
+        <div class="energyBox">
+          <div class="whiteBar"></div>
+          <div class="blueBar" id="bluebar"></div>
+          <div class="numberEnergy" id="energyValues">2000/2000</div>
+        </div>
       </div>
-
       <div class="footer">
         <div class="items it1" id="tasks">
           <div class="all tasks" id="titleTasks"></div>
@@ -55,12 +55,10 @@
       <div class="header">
         <div class="wallet" id="wallet2"><img src="img/favorites.png" /></div>
         <div class="trade pagetitle">TRADE</div>
-        <div class="profile"><img src="img/Group 1123.png" /></div>
       </div>
 
-      <div class="cryptos" id="cryptoList">
-      </div>
-      
+      <div class="cryptos" id="cryptoList"></div>
+      <div class="cryptoTrade" id="cryptoTrade"></div>
 
       <div class="footer">
         <div class="items it1" id="tasks2">
@@ -84,7 +82,6 @@
       <div class="header">
         <div class="wallet" id="wallet3"><img src="img/favorites.png" /></div>
         <div class="trade pagetitle">TASKS</div>
-        <div class="profile"><img src="img/Group 1123.png" /></div>
       </div>
 
       <div class="blueBox">
@@ -129,16 +126,15 @@
         <div class="items it2"></div>
         <div class="items it3"></div>
       </div>
-
+      <!--
       <div class="box">
         <div class="items it1">Swap</div>
         <div class="items it2">Buy</div>
         <div class="items it3">Receive</div>
       </div>
-
+-->
       <div class="yourCoin">
-        <div class="ycoin">Your Coin</div>
-        <div class="allcoin"></div>
+        <div class="ycoin">Your Coins</div>
       </div>
 
       <div class="footer">
@@ -157,7 +153,6 @@
       </div>
     </div>
 
-    <!-- link JS -->
     <script src="utility.js"></script>
     <script src="coin.js"></script>
   </body>

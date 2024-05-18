@@ -5,7 +5,6 @@ import axios from "axios";
 
 const wss = new WebSocketServer({ port: 8081 });
 const token = fs.readFileSync('./token', "utf8");
-//const token = "6876418179:AAGJmGY6dbAV7YYj9ldJor8tg5NyL7KHWBI";
 
 const bot = new TelegramBot(token, {
   polling: true,
@@ -44,12 +43,13 @@ wss.on("connection", function connection(ws) {
           console.log("Users exists, logging in");
         } else {
           console.log("User does not exist, creating new user");
+          
           if (parsed.name != null && parsed.name != "") {
             let newUser = JSON.parse(usersTemplate);
             console.log(newUser);
             newUser.name = parsed.name;
-            newUser.hash = parsed.hash;
             newUser.tgId = parsed.tgId;
+            stats.totalUsers += 1;
             users.push(newUser);
             ws.send('{ "action" : "createAccount", "result" : "success" }');
           } else {
@@ -170,19 +170,23 @@ wss.on("connection", function connection(ws) {
             switch (parsed.targetLevel) {
               case 2: {
                 user.upgrades[1].level = 2;
+                user.maxEnergy = 3000;
                 user.coins -= 1500;
                 break;
               }
               case 3: {
                 user.upgrades[1].level = 3;
+                user.maxEnergy = 3500;
                 user.coins -= 3000;
               }
               case 4: {
                 user.upgrades[1].level = 4;
+                user.maxEnergy = 4000;
                 user.coins -= 6000;
               }
               case 5: {
                 user.upgrades[1].level = 5;
+                user.maxEnergy = 5000;
                 user.coins -= 15000;
               }
             }
@@ -217,6 +221,12 @@ wss.on("connection", function connection(ws) {
           user.coins += cointoget;
         }
       }
+    } else if (parsed.action == 'updateEnergy') {
+      for (const user of users) {
+        if (user.name == parsed.name) {
+          user.energy = Number(parsed.energy);
+        }
+      }
     }
   });
 
@@ -227,34 +237,7 @@ wss.on("connection", function connection(ws) {
   
 let energyRefill = setInterval(() => {
   for (const user of users) {
-    let maxEnergy = 2000;
-    switch (user.upgrades[1].level) {
-      case 1: {
-        maxEnergy = 2000;
-        break;
-      }
-      case 2: {
-        maxEnergy = 2500;
-        break;
-      }
-      case 3: {
-        maxEnergy = 3000;
-        break;
-      }
-      case 4: {
-        maxEnergy = 4000;
-        break;
-      }
-      case 5: {
-        maxEnergy = 5000;
-        break;
-      }
-      default: {
-        maxEnergy = 2000;
-        break;
-      }
-    }
-    if (user.energy < maxEnergy) {
+    if (user.energy < user.maxEnergy) {
       user.energy += user.upgrades[2].level;
     }
   }
@@ -267,7 +250,7 @@ const interval = setInterval(function ping() {
     ws.ping();
     stats.online -= 1;
   });
-}, 60000);
+}, 10000);
 
 wss.on("close", function close() {
   clearInterval(interval);
@@ -312,13 +295,12 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
   }
   if (!isPresent) {
     let newUser = JSON.parse(usersTemplate);
-    console.log(newUser);
+    stats.totalUsers += 1;
     newUser.name = msg.chat.username;
     newUser.hash = "TOBEFILLED";
     newUser.tgId = msg.chat.id;
     newUser.coins = 5000;
     users.push(newUser);
-    console.log(users);
   }
 });
 bot.on("message", (msg) => {

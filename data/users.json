@@ -8,6 +8,7 @@
     "rank": "Poor",
     "villageId": null,
     "energy": 2000,
+    "maxEnergy": 2000,
     "crypto": [
       { "id": "BTC", "amount": 0 },
       { "id": "ETH", "amount": 0 },
