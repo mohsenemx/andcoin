@@ -72,8 +72,17 @@ let coinSync = setInterval(function () {
   );
   coinsSinceLastSync = 0;
 }, 3000);
+function updateFooter(page) {
+  if (page == 'tasks') {
+    for (const el of document.querySelectorAll("#tasksIcon")) {
+      el.src = './img/edit1.png';
+    }
+    
+  }
+}
 tasks.onclick = function () {
   document.getElementById("modalTasks").style.display = "block";
+  updateFooter("tasks");
 };
 trade.onclick = function () {
   document.getElementById("modalTrade").style.display = "block";
@@ -167,7 +176,9 @@ function loadTasks() {
       task.id
     }" ${doneTask ? "disabled" : "notDone"}>${
       doneTask ? "Done" : task.task == "joinChannel" ? "Join" : "Go"
-    } ${doneTask ? "<img src=\"./img/checkmark.png\" class=\"donePic\">" : ""} </button></div></div>`;
+    } ${
+      doneTask ? '<img src="./img/checkmark.png" class="donePic">' : ""
+    } </button></div></div>`;
   }
 }
 function doTasks(div) {
@@ -193,26 +204,32 @@ function loadCryptos() {
     }" id="growth">${coin.growthRate}%</p></div></div></div>`;
   }
 }
-let showingTradeModal = false;
+let cryptoTrade = document.getElementById("cryptoTrade");
+let shouldCloseModal = false;
 function buySellMenu(div) {
   let cryptoId = div.getAttribute("data-id");
-  let cryptoTrade = document.getElementById("cryptoTrade");
-  
-  cryptoTrade.style.width = "90%";
-  cryptoTrade.style.height = "50%";
+
+  cryptoTrade.style.display = 'block';
   setTimeout(() => {
-    showingTradeModal = true;
-  }, 100);
-  document.querySelector("body").addEventListener("click", (t) => {
-    if (t.target != cryptoTrade) {
-      if (showingTradeModal) {
-        showingTradeModal = false;
-        
-        cryptoTrade.style.width = "0%";
-        cryptoTrade.style.height = "0%";
-      }
+    shouldCloseModal = true;
+  },100);
+  for (const crypto of cryptos) {
+    if (crypto.id == cryptoId) {
+      document.getElementById(
+        "cryptoTitle"
+      ).innerHTML = `Trading ${crypto.name}`;
     }
-  });
+  }
+}
+window.onclick = function(event) {
+  if (event.target != cryptoTrade) {
+    if (shouldCloseModal) {
+      cryptoTrade.style.display = "none";
+      shouldCloseModal = false;
+    }
+    
+
+  }
 }
 function updateEnergy() {
   document.getElementById(
