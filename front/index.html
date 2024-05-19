@@ -35,7 +35,9 @@
       </div>
       <div class="footer">
         <div class="items it1" id="tasks">
-          <div class="footerpic" id="titleTasks"><img id="tasksIcon" src="./img/edit1.png"></div>
+          <div class="footerpic" id="titleTasks">
+            <img id="tasksIcon" src="./img/edit1.png" />
+          </div>
           <div class="footertext" id="imgTasks">Tasks</div>
         </div>
         <div class="items it2">
@@ -59,46 +61,50 @@
 
       <div class="cryptos" id="cryptoList"></div>
       <div class="cryptoTrade" id="cryptoTrade">
-        <div class="cryptotradetitle">
-          <img id="cryptoPicture">
-          <p id="cryptoTitle"></p>
+        <div class="cryptoBuy">
+          <div class="cryptotradetitle">
+            <img id="cryptoPicture" />
+            <p id="cryptoTitle"></p>
+          </div>
+          <div class="yourCoin" id="yourcoin"></div>
+
+          <div class="buyBox">
+            <center id="centeredSwitch">
+              <input type="checkbox" id="switch" class="checkbox" />
+
+              <label for="switch" class="toggle">
+                <p>SELL BUY</p>
+              </label>
+            </center>
+            <br />
+            <label for="mainInput">Amount: </label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value="50"
+              class="inputLine"
+              name="mainInputs"
+              id="mainInputs"
+            />
+          </div>
+          <button>Go</button>
         </div>
-        <div class="yourCoin" id="yourcoin">
-        </div>
-        
-        <div class="buyBox">
-          <center>
-          <input type="checkbox"
-               id="switch"
-               class="checkbox" />
-                
-        <label for="switch"
-               class="toggle">
-            <p>
-                SELL  BUY
-            </p>
-        </label>
-      </center>
-        <br>
-        <label for="mainInput">Amount: </label>
-          <input type="text" class="inputLine" name="mainInputs">
-        </div>
-        <button>
-          Go
-        </button>
       </div>
 
       <div class="footer">
         <div class="items it1" id="tasks2">
-          <div class="footerpic" id="titleTasks"><img id="tasksIcon" src="./img/edit1.png"></div>
+          <div class="footerpic" id="titleTasks">
+            <img id="tasksIcon" src="./img/edit1.png" />
+          </div>
           <div class="footertext" id="imgTasks">Tasks</div>
         </div>
         <div class="items it2" id="home">
-          <div class="footerpic"><img src="./img/Category1.png"></div>
+          <div class="footerpic"><img src="./img/Category1.png" /></div>
           <div class="footertext">Home</div>
         </div>
         <div class="items it3">
-          <div class="footerpic"><img src="./img/repeat-64.png"></div>
+          <div class="footerpic"><img src="./img/repeat-64.png" /></div>
           <div class="footertext">Trade</div>
         </div>
       </div>
@@ -126,7 +132,9 @@
 
       <div class="footer">
         <div class="items it1">
-          <div class="footerpic" id="titleTasks"><img id="tasksIcon" src="./img/edit1.png"></div>
+          <div class="footerpic" id="titleTasks">
+            <img id="tasksIcon" src="./img/edit1.png" />
+          </div>
           <div class="imgtasks"></div>
         </div>
         <div class="items it2" id="home2">
@@ -150,9 +158,24 @@
 
       <div class="blueBox">
         <div class="items it0"></div>
-        <div class="items it1"></div>
-        <div class="items it2"></div>
-        <div class="items it3"></div>
+        <div class="items it1">Current Wallet Balance</div>
+        <div class="items it2" id="walletUsdtBalance"></div>
+        <div class="items it3" id="walletAndBalance"></div>
+      </div>
+      <div class="transactions">
+        <p>Your Transactions</p>
+        <div class="transactionsList" id="transList">
+          <div class="transItem">
+            <div class="transItemTitle">
+              <p>Bought 69,420 Ton</p>
+              <p>24/4/2026</p>
+            </div>
+            <div class="transItemInfo">
+              <p>From: The Trade Hub</p>
+              <p>To: You</p>
+            </div>
+          </div>
+        </div>
       </div>
       <!--
       <div class="box">
@@ -164,7 +187,9 @@
 
       <div class="footer">
         <div class="items it1" id="tasks3">
-          <div class="footerpic" id="titleTasks"><img id="tasksIcon" src="./img/edit1.png"></div>
+          <div class="footerpic" id="titleTasks">
+            <img id="tasksIcon" src="./img/edit1.png" />
+          </div>
           <div class="imgtasks" id="imgTasks"></div>
         </div>
         <div class="items it2" id="home3">

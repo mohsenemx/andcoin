@@ -40,7 +40,7 @@
   line-height: 55px;
   font-size: 33px;
   color: #56a6e9;
-  font-family: bol;
+  font-family: 'laror';
   margin-right: 50px;
 }
 
@@ -60,8 +60,13 @@
   height: 190px;
   margin: auto;
   margin-top: 20px;
-  background: url("img/Rectangle 37.png") no-repeat;
-  background-size: 100% 100%;
+  background: rgb(3, 3, 204);
+  background: linear-gradient(
+    66deg,
+    rgba(3, 3, 204, 1) 9%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  border-radius: 25px;
 }
 
 #modalWalet > .blueBox > .items {
@@ -77,24 +82,34 @@
 #modalWalet > .blueBox > .it1 {
   width: 200px;
   height: 13px;
-  background: url("img/Current Wallet Balance.png") no-repeat;
-  background-size: 100% 100%;
   margin-top: 25px;
+  font-family: 'laro';
+  color: white;
+  font-size: 16px;
 }
 
 #modalWalet > .blueBox > .it2 {
   width: 230px;
   height: 50px;
-  background: url("img/$ 5,323.00.png") no-repeat;
-  background-size: 100% 100%;
   margin-top: 15px;
+  font-family: 'laro';
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }
-
+#modalWalet > .blueBox > .it2 img {
+  max-width: 50px;
+  margin: 10px;
+}
 #modalWalet > .blueBox > .it3 {
   width: 270px;
   height: 28px;
-  background: url("img/Frame 8.png") no-repeat;
-  background-size: 100% 100%;
+  font-family: 'SFPro';
+  color: white;
+  font-size: 15px;
+  text-align: center;
   margin-top: 10px;
 }
 
@@ -286,4 +301,40 @@
     width: 80%;
     margin: auto;
   }
+}
+.transactions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.transactions p {
+  font-family: 'laro';
+  font-size: 20px;
+  color: white;
+  margin: 20px;
+}
+
+.transItem {
+  width: 90%;
+  margin: 5%;
+  max-height: 150px;
+  border: 3px solid #56a6e9;
+  border-radius: 15px;
+  display: flex;
+  flex-shrink: 1;
+}
+.transItemTitle p {
+  font-family: 'SFPro';
+  font-size: 15px;
+  margin: 10px;
+}
+.transItemInfo p {
+  font-family: 'SFPro';
+  font-size: 15px;
+  margin: 10px;
+  text-align: center;
+}
+.transItemInfo {
+  position: fixed;
+  right: 30px;
 }

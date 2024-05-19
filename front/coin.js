@@ -53,6 +53,7 @@ socket.onmessage = function (event) {
     coins = globalAndObject.coins;
     coinsDisplay.innerHTML = numberWithCommas(coins);
     updateRank();
+    updateWallet();
   } else if (pjson.action == "getTasks") {
     atasks = pjson.tasks;
     loadTasks();
@@ -205,6 +206,7 @@ function loadCryptos() {
   }
 }
 let cryptoTrade = document.getElementById("cryptoTrade");
+let cryptoTradeContent = document.getElementById("cryptoBuy");
 let shouldCloseModal = false;
 function buySellMenu(div) {
   let cryptoId = div.getAttribute("data-id");
@@ -214,6 +216,7 @@ function buySellMenu(div) {
     shouldCloseModal = true;
   },100);
   let amount = 0;
+
   for (const crypto of cryptos) {
     if (crypto.id == cryptoId) {
       for (const crc of globalAndObject.crypto) {
@@ -221,6 +224,7 @@ function buySellMenu(div) {
           amount = crc.amount;
         }
       }
+      
       document.getElementById(
         "cryptoTitle"
       ).innerHTML = `Trading ${crypto.name}`;
@@ -231,7 +235,8 @@ function buySellMenu(div) {
   }
 }
 window.onclick = function(event) {
-  if (event.target != cryptoTrade) {
+  let switchBox = document.getElementById("centeredSwitch");
+  if (event.target != cryptoTrade && event.target != cryptoTradeContent && event.target != switchBox) {
     if (shouldCloseModal) {
       cryptoTrade.style.display = "none";
       shouldCloseModal = false;
@@ -244,4 +249,10 @@ function updateEnergy() {
   ).innerHTML = `${globalAndObject.energy}/${globalAndObject.maxEnergy}`;
   let percentage = (globalAndObject.energy / globalAndObject.maxEnergy) * 100;
   document.getElementById("bluebar").style.width = `${percentage * 0.6}%`;
+}
+function updateWallet() {
+  let usdtbalance = document.getElementById("walletUsdtBalance");
+  let andbalance = document.getElementById("walletAndBalance");
+  usdtbalance.innerHTML = `<img src="./img/coin/usdt.png" id="walletUsdt">${numberWithCommas(globalAndObject.usdt)}`;
+  andbalance.innerHTML = `Your $AND balance: ${numberWithCommas(globalAndObject.coins)}`;
 }

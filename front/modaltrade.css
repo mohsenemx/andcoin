@@ -217,6 +217,7 @@
   background-color: white;
   border-radius: 20px;
   display: none;
+
   font-family: 'SFPro';
   flex-direction: column;
   justify-content: start;
@@ -258,8 +259,6 @@
   border: 2px solid #56a6e9;
   margin-top: 50px;
 }
-
-
 .toggle {
   position : relative ;
   display : inline-block;
@@ -307,4 +306,11 @@
 .switch {
   display: flex;
   align-self: center;
+}
+.cryptoBuy {
+  display: flex;
+  font-family: 'SFPro';
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
 }
