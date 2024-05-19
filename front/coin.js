@@ -209,15 +209,24 @@ let shouldCloseModal = false;
 function buySellMenu(div) {
   let cryptoId = div.getAttribute("data-id");
 
-  cryptoTrade.style.display = 'block';
+  cryptoTrade.style.display = 'flex';
   setTimeout(() => {
     shouldCloseModal = true;
   },100);
+  let amount = 0;
   for (const crypto of cryptos) {
     if (crypto.id == cryptoId) {
+      for (const crc of globalAndObject.crypto) {
+        if (crc.id == crypto.id) {
+          amount = crc.amount;
+        }
+      }
       document.getElementById(
         "cryptoTitle"
       ).innerHTML = `Trading ${crypto.name}`;
+      document.getElementById("cryptoPicture").src = `./img/coin/${crypto.id.toLowerCase()}.png`;
+      document.getElementById("yourcoin").innerHTML = `You have <img id="cryptoPictureT" src="./img/coin/${crypto.id.toLowerCase()}.png"> ${amount} and <img id="cryptoPictureB" src="./img/coin/usdt.png"> ${globalAndObject.usdt}`;
+
     }
   }
 }
@@ -227,8 +236,6 @@ window.onclick = function(event) {
       cryptoTrade.style.display = "none";
       shouldCloseModal = false;
     }
-    
-
   }
 }
 function updateEnergy() {
