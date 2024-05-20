@@ -8,7 +8,7 @@ let upgrades = [];
 let coinsDisplay = document.getElementById("coinsDisplay");
 let atasks = [];
 let cryptos = [];
-
+let usdtPrice = 6000;
 const socket = new WebSocket("ws://localhost:8081");
 setTimeout(() => {
   if (parsedTGdata == false) {
@@ -208,13 +208,12 @@ function loadCryptos() {
 let cryptoTrade = document.getElementById("cryptoTrade");
 let cryptoTradeContent = document.getElementById("cryptoBuy");
 let shouldCloseModal = false;
+let tradeObject;
+let userTradeObject;
 function buySellMenu(div) {
   let cryptoId = div.getAttribute("data-id");
 
   cryptoTrade.style.display = 'flex';
-  setTimeout(() => {
-    shouldCloseModal = true;
-  },100);
   let amount = 0;
 
   for (const crypto of cryptos) {
@@ -222,6 +221,8 @@ function buySellMenu(div) {
       for (const crc of globalAndObject.crypto) {
         if (crc.id == crypto.id) {
           amount = crc.amount;
+          tradeObject = crypto;
+          userTradeObject = crc;
         }
       }
       
@@ -234,13 +235,23 @@ function buySellMenu(div) {
     }
   }
 }
-window.onclick = function(event) {
-  let switchBox = document.getElementById("centeredSwitch");
-  if (event.target != cryptoTrade && event.target != cryptoTradeContent && event.target != switchBox) {
-    if (shouldCloseModal) {
-      cryptoTrade.style.display = "none";
-      shouldCloseModal = false;
-    }
+document.getElementById("Cryptoclose").addEventListener('click', () => {
+  cryptoTrade.style.display = "none";
+  document.getElementById("amountP").innerHTML = '';
+});
+let slider = document.getElementById("slider");
+slider.oninput = () => {
+  let isBuy = document.getElementById("switch").checked;
+  if (!isBuy) {
+    let maxPossible = (globalAndObject.usdt / tradeObject.usdtPrice).toFixed(5);
+    let howMany = (maxPossible / 100) * Number(slider.value);
+    document.getElementById("amountP").innerHTML = `Selected Amount: ${howMany.toFixed(3)}`;
+  } else {
+    let maxPossible = userTradeObject.amount;
+    let howMany = (maxPossible / 100) * Number(slider.value);
+    document.getElementById("amountP").innerHTML = `Selected Amount: ${howMany.toFixed(3)}`;
+    let worth = howMany * usdtPrice;
+    document.getElementById("amountDiv").innerHTML = `Worth: <img src="./img/coin/usdt.png" id="cryptoPictureT"> ${worth}`;
   }
 }
 function updateEnergy() {

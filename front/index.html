@@ -65,6 +65,7 @@
           <div class="cryptotradetitle">
             <img id="cryptoPicture" />
             <p id="cryptoTitle"></p>
+            <p id="Cryptoclose">&#10005;</p>
           </div>
           <div class="yourCoin" id="yourcoin"></div>
 
@@ -77,17 +78,20 @@
               </label>
             </center>
             <br />
+            <p id="amountP">Selected Amount: 0</p>
+            <div id="amountDiv"></div>
             <label for="mainInput">Amount: </label>
             <input
               type="range"
               min="0"
               max="100"
-              value="50"
-              class="inputLine"
+              value="0"
+              class="slider"
               name="mainInputs"
-              id="mainInputs"
+              id="slider"
             />
           </div>
+          
           <button>Go</button>
         </div>
       </div>
