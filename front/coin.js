@@ -32,6 +32,7 @@ socket.onopen = function (event) {
   setTimeout(function () {
     socket.send(`{"action":"getCrypto"}`);
   }, 300);
+  socket.send(`{"action":"getUsdtPrice"}`);
 };
 let objectSync = setInterval(() => {
   socket.send(
@@ -54,12 +55,15 @@ socket.onmessage = function (event) {
     coinsDisplay.innerHTML = numberWithCommas(coins);
     updateRank();
     updateWallet();
+    updateEnergy();
   } else if (pjson.action == "getTasks") {
     atasks = pjson.tasks;
     loadTasks();
   } else if (pjson.action == "getCrypto") {
     cryptos = pjson.cryptos;
     loadCryptos();
+  } else if (pjson.action == "getUsdtPrice") {
+    usdtPrice = Number(pjson.price);
   }
 };
 socket.onclose = function (event) {
@@ -74,11 +78,10 @@ let coinSync = setInterval(function () {
   coinsSinceLastSync = 0;
 }, 3000);
 function updateFooter(page) {
-  if (page == 'tasks') {
+  if (page == "tasks") {
     for (const el of document.querySelectorAll("#tasksIcon")) {
-      el.src = './img/edit1.png';
+      el.src = "./img/edit1.png";
     }
-    
   }
 }
 tasks.onclick = function () {
@@ -137,7 +140,12 @@ home3.onclick = function () {
   document.getElementById("modalTrade").style.display = "none";
   document.getElementById("modalTasks").style.display = "none";
 };
-
+boost.onclick = () => {
+  document.getElementById("boostDiv").style.display = "block";
+};
+boostBack.onclick = () => {
+  document.getElementById("boostDiv").style.display = "none";
+};
 /*   transition coin   */
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -213,7 +221,7 @@ let userTradeObject;
 function buySellMenu(div) {
   let cryptoId = div.getAttribute("data-id");
 
-  cryptoTrade.style.display = 'flex';
+  cryptoTrade.style.display = "flex";
   let amount = 0;
 
   for (const crypto of cryptos) {
@@ -225,35 +233,62 @@ function buySellMenu(div) {
           userTradeObject = crc;
         }
       }
-      
+
       document.getElementById(
         "cryptoTitle"
       ).innerHTML = `Trading ${crypto.name}`;
-      document.getElementById("cryptoPicture").src = `./img/coin/${crypto.id.toLowerCase()}.png`;
-      document.getElementById("yourcoin").innerHTML = `You have <img id="cryptoPictureT" src="./img/coin/${crypto.id.toLowerCase()}.png"> ${amount} and <img id="cryptoPictureB" src="./img/coin/usdt.png"> ${globalAndObject.usdt}`;
-
+      document.getElementById(
+        "cryptoPicture"
+      ).src = `./img/coin/${crypto.id.toLowerCase()}.png`;
+      document.getElementById(
+        "yourcoin"
+      ).innerHTML = `You have <img id="cryptoPictureT" src="./img/coin/${crypto.id.toLowerCase()}.png"> ${amount.toFixed(
+        4
+      )} and <img id="cryptoPictureB" src="./img/coin/usdt.png"> ${globalAndObject.usdt.toFixed(
+        1
+      )}`;
     }
   }
 }
-document.getElementById("Cryptoclose").addEventListener('click', () => {
+document.getElementById("Cryptoclose").addEventListener("click", () => {
   cryptoTrade.style.display = "none";
-  document.getElementById("amountP").innerHTML = '';
+  document.getElementById("amountP").innerHTML = "";
 });
+document.getElementById("switch").oninput = () => {
+  document.getElementById("amountP").innerHTML = "";
+  document.getElementById("amountDiv").innerHTML = "";
+};
 let slider = document.getElementById("slider");
 slider.oninput = () => {
   let isBuy = document.getElementById("switch").checked;
   if (!isBuy) {
-    let maxPossible = (globalAndObject.usdt / tradeObject.usdtPrice).toFixed(5);
+    let maxPossible = (globalAndObject.usdt / tradeObject.usdtPrice).toFixed(4);
     let howMany = (maxPossible / 100) * Number(slider.value);
-    document.getElementById("amountP").innerHTML = `Selected Amount: ${howMany.toFixed(3)}`;
+    document.getElementById(
+      "amountP"
+    ).innerHTML = `Selected Amount: <img src="./img/coin/${tradeObject.id.toLowerCase()}.png" id="cryptoPictureT"> ${numberWithCommas(
+      howMany.toFixed(1)
+    )}`;
+    let worth = howMany * tradeObject.usdtPrice;
+    document.getElementById(
+      "amountDiv"
+    ).innerHTML = `Worth: <img src="./img/coin/usdt.png" id="cryptoPictureB"> ${numberWithCommas(
+      worth.toFixed(1)
+    )}`;
   } else {
     let maxPossible = userTradeObject.amount;
     let howMany = (maxPossible / 100) * Number(slider.value);
-    document.getElementById("amountP").innerHTML = `Selected Amount: ${howMany.toFixed(3)}`;
-    let worth = howMany * usdtPrice;
-    document.getElementById("amountDiv").innerHTML = `Worth: <img src="./img/coin/usdt.png" id="cryptoPictureT"> ${worth}`;
+    document.getElementById(
+      "amountP"
+    ).innerHTML = `Selected Amount: ${numberWithCommas(howMany.toFixed(4))}`;
+    let worth = howMany * tradeObject.usdtPrice;
+    document.getElementById(
+      "amountDiv"
+    ).innerHTML = `Worth: <img src="./img/coin/usdt.png" id="cryptoPictureB"> ${numberWithCommas(
+      worth.toFixed(1)
+    )}`;
   }
-}
+};
 function updateEnergy() {
   document.getElementById(
     "energyValues"
@@ -264,6 +299,172 @@ function updateEnergy() {
 function updateWallet() {
   let usdtbalance = document.getElementById("walletUsdtBalance");
   let andbalance = document.getElementById("walletAndBalance");
-  usdtbalance.innerHTML = `<img src="./img/coin/usdt.png" id="walletUsdt">${numberWithCommas(globalAndObject.usdt)}`;
-  andbalance.innerHTML = `Your $AND balance: ${numberWithCommas(globalAndObject.coins)}`;
+  usdtbalance.innerHTML = `<img src="./img/coin/usdt.png" id="walletUsdt">${numberWithCommas(
+    globalAndObject.usdt
+  )}`;
+  andbalance.innerHTML = `Your $AND balance: ${numberWithCommas(
+    globalAndObject.coins
+  )}`;
+}
+document.getElementById("goForTradeButton").addEventListener("click", () => {
+  let isBuy = document.getElementById("switch").checked;
+  if (!isBuy) {
+    let maxPossible = globalAndObject.usdt / tradeObject.usdtPrice;
+    let howMany = (maxPossible / 100) * Number(slider.value);
+    socket.send(
+      `{"action":"buyCrpto", "name":"${parsedTGdata.user.username}", "cointobuy":"${tradeObject.id}", "cryptotobuy":"${howMany}"}`
+    );
+  } else {
+    let maxPossible = userTradeObject.amount;
+    let howMany = (maxPossible / 100) * Number(slider.value);
+    console.log(howMany, maxPossible);
+    socket.send(
+      `{"action":"sellCrypto", "name":"${parsedTGdata.user.username}", "cointosell":"${tradeObject.id}", "amounttosell":"${howMany}"}`
+    );
+  }
+});
+
+function upgradeBoost(name) {
+  let upgradeName = name.getAttribute("data-name");
+  if (upgradeName == "storage") {
+    if (globalAndObject.upgrades[1].level == 1) {
+      if (globalAndObject.coins < 1500) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","name":"${
+            parsedTGdata.user.username
+          }","upgrade":"storage","targetLevel":"${
+            globalAndObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEnergy();
+        updateBoost();
+      }
+    } else if (globalAndObject.upgrades[1].level == 2) {
+      if (globalAndObject.coins < 3000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","name":"${
+            parsedTGdata.user.username
+          }","upgrade":"storage","targetLevel":"${
+            globalAndObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEnergy();
+        updateBoost();
+      }
+    } else if (globalAndObject.upgrades[1].level == 3) {
+      if (globalAndObject.coins < 6000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","name":"${
+            parsedTGdata.user.username
+          }","upgrade":"storage","targetLevel":"${
+            globalAndObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEnergy();
+        updateBoost();
+      }
+    } else if (globalAndObject.upgrades[1].level == 4) {
+      if (globalAndObject.coins < 15000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","name":"${
+            parsedTGdata.user.username
+          }","upgrade":"storage","targetLevel":"${
+            globalAndObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEnergy();
+        updateBoost();
+      }
+    }
+  } else if (upgradeName == "multi") {
+    if (globalAndObject.upgrades[0].level == 1) {
+      if (globalAndObject.coins < 1500) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else if (globalAndObject.upgrades[0].level == 2) {
+      if (globalAndObject.coins < 3000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else if (globalAndObject.upgrades[0].level == 3) {
+      if (globalAndObject.coins < 6000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else if (globalAndObject.upgrades[0].level == 4) {
+      if (globalAndObject.coins < 15000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else {
+      socket.send(
+        `{"action":"upgrade","name":"${
+          parsedTGdata.user.username
+        }","upgrade":"multitap","targetLevel":"${
+          globalAndObject.upgrades[0].level + 1
+        }"}`
+      );
+      updateBoost();
+    }
+  } else if (upgradeName == "recharge") {
+    if (globalAndObject.upgrades[2].level == 1) {
+      if (globalAndObject.coins < 1500) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else if (globalAndObject.upgrades[2].level == 2) {
+      if (globalAndObject.coins < 5000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else if (globalAndObject.upgrades[2].level == 3) {
+      if (globalAndObject.coins < 10000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else if (globalAndObject.upgrades[2].level == 4) {
+      if (globalAndObject.coins < 25000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      }
+    } else {
+      socket.send(
+        `{"action":"upgrade","name":"${
+          parsedTGdata.user.username
+        }","upgrade":"recharge","targetLevel":"${
+          globalAndObject.upgrades[2].level + 1
+        }"}`
+      );
+      updateBoost();
+    }
+  }
+}
+function updateBoost() {
+  document.getElementById(
+    "storageLevel"
+  ).innerHTML = `/ level ${globalAndObject.upgrades[1].level}`;
+}
+function showBoostError(msg) {
+  document.getElementById("boostError").innerHTML = msg;
+  document.getElementById("boostError").style.display = "flex";
+  setTimeout(() => {
+    removeBoostError();
+  }, 3000);
+}
+function removeBoostError() {
+  document.getElementById("boostError").innerHTML = ``;
+  document.getElementById("boostError").style.display = `none`;
 }

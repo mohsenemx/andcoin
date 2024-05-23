@@ -15,8 +15,8 @@
       <div class="header">
         <div class="wallet" id="wallet"><img src="img/favorites.png" /></div>
         <div class="mine pagetitle">MINE</div>
+        <div class="boost" id="boost"><img src="img/icons/energy.png" /></div>
       </div>
-
       <div class="price">
         <div class="items it1"></div>
         <div class="items it2" id="coinsDisplay">0</div>
@@ -50,7 +50,61 @@
         </div>
       </div>
     </div>
-
+    <div id="boostDiv">
+      <div class="boostheader">
+        <div id="boostBack">
+          <img src="./img/Left circle.png">
+        </div>
+        <div class="boosttitle">BOOST</div>
+        <div class="boostbody"> 
+          <div id="boostError">
+            
+          </div>
+          <div class="boostItem" id="multitap">
+            <div class="boostIcon">
+              <img src="./img/icons/multi.png">
+            </div>
+            <div class="boostTitle">
+              Multi Tap
+            </div>
+            <div class="boostlvl">
+              / level 1
+            </div>
+            <div class="boostUpgrade">
+              <button onclick="upgradeBoost(this)" data-name="multi">5,000</button>
+            </div>
+          </div>
+          <div class="boostItem" id="multitap">
+            <div class="boostIcon">
+              <img src="./img/icons/Storage-595b40b85ba036ed117db348 1.png">
+            </div>
+            <div class="boostTitle">
+              Storage
+            </div>
+            <div class="boostlvl" id="storageLevel">
+              / level 1
+            </div>
+            <div class="boostUpgrade">
+              <button onclick="upgradeBoost(this)" data-name="storage" id="storageButton">5,000</button>
+            </div>
+          </div>
+          <div class="boostItem" id="multitap">
+            <div class="boostIcon">
+              <img src="./img/icons/energy.png">
+            </div>
+            <div class="boostTitle">
+              Recharge Speed
+            </div>
+            <div class="boostlvl">
+              / level 1
+            </div>
+            <div class="boostUpgrade">
+              <button onclick="upgradeBoost(this)" data-name="recharge">5,000</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- modal trade -->
 
     <div id="modalTrade">
@@ -80,7 +134,7 @@
             <br />
             <p id="amountP">Selected Amount: 0</p>
             <div id="amountDiv"></div>
-            <label for="mainInput">Amount: </label>
+            <label for="mainInput">Amount: 0</label>
             <input
               type="range"
               min="0"
@@ -92,7 +146,7 @@
             />
           </div>
           
-          <button>Go</button>
+          <button id="goForTradeButton" class="goButton">Go</button>
         </div>
       </div>
 

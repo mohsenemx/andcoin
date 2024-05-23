@@ -86,21 +86,13 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "buyCrpto") {
       for (const obj of users) {
         if (obj.name == parsed.name) {
-          /*if (parsed.cointobuy == "btc") {
-            let btctobuy = Number(parsed.btctobuy);
-            obj.usdt -= btctobuy * cryptos[0].usdtPrice;
-            obj.crypto[0].amount += btctobuy;
-          } else if (parsed.cointobuy == "eth") {
-            let ethtobuy = Number(parsed.ethtobuy);
-            obj.usdt -= ethtobuy * cryptos[1].usdtPrice;
-            obj.crypto[1].amount += ethtobuy;
-          }*/
           let i = 0;
           for (const cr of cryptos) {
             if (cr.id == parsed.cointobuy) {
-              let btctobuy = Number(parsed.btctobuy);
-              obj.usdt -= btctobuy * cryptos[i].usdtPrice;
-              obj.crypto[i].amount += btctobuy;
+              ws.send(`{"action" : "getObject", "object": ${JSON.stringify(obj)}}`);
+              let cryptotobuy = Number(parsed.cryptotobuy);
+              obj.usdt -= cryptotobuy * cryptos[i].usdtPrice;
+              obj.crypto[i].amount += cryptotobuy;
             }
             i++;
           }
@@ -108,6 +100,7 @@ wss.on("connection", function connection(ws) {
         }
       }
     } else if (parsed.action == "logUsers") {
+      ws.send(JSON.stringify(users));
       console.log(users);
     } else if (parsed.action == "buyUsdt") {
       let usdttobuy = Number(parsed.usdttobuy);
@@ -131,9 +124,11 @@ wss.on("connection", function connection(ws) {
           for (const coin of cryptos) {
             if (coin.id == parsed.cointosell) {
               let amount = Number(parsed.amounttosell);
+              
               let usdtPrice = amount * coin.usdtPrice;
               for (const fc of obj.crypto) {
                 if (fc.id == coin.id) {
+                  console.log(`@${obj.name} has ${fc.amount} of ${fc.id} and wants to sell ${amount}`);
                   fc.amount -= amount;
                   obj.usdt += usdtPrice;
                 }
@@ -147,7 +142,7 @@ wss.on("connection", function connection(ws) {
       for (const user of users) {
         if (user.name == parsed.name) {
           if (parsed.upgrade == "multitap") {
-            switch (parsed.targetLevel) {
+            switch (Number(parsed.targetLevel)) {
               case 2: {
                 user.upgrades[0].level = 2;
                 user.coins -= 1500;
@@ -219,14 +214,18 @@ wss.on("connection", function connection(ws) {
           let cointoget = parsed.usdttosell * usdtPrice;
           user.usdt -= Number(parsed.usdttosell);
           user.coins += cointoget;
+          break;
         }
       }
     } else if (parsed.action == 'updateEnergy') {
       for (const user of users) {
         if (user.name == parsed.name) {
           user.energy = Number(parsed.energy);
+          break;
         }
       }
+    } else if (parsed.action == 'getUsdtPrice') {
+      ws.send(`{"action": "getUsdtPrice", "price":"${usdtPrice}"}`);
     }
   });
 
