@@ -11,11 +11,15 @@
     <link href="modalwalet.css" rel="stylesheet" />
   </head>
   <body>
+    <div id="mainError">
+      Something went wrong!
+      <button onclick="location.reload()">Reload</button>
+    </div>
     <div id="content">
       <div class="header">
         <div class="wallet" id="wallet"><img src="img/favorites.png" /></div>
         <div class="mine pagetitle">MINE</div>
-        <div class="boost" id="boost"><img src="img/icons/energy.png" /></div>
+        <div class="boost" id="boost"><img src="img/icons/1.png" /></div>
       </div>
       <div class="price">
         <div class="items it1"></div>
@@ -62,7 +66,7 @@
           </div>
           <div class="boostItem" id="multitap">
             <div class="boostIcon">
-              <img src="./img/icons/multi.png">
+              <img src="./img/icons/2.png">
             </div>
             <div class="boostTitle">
               Multi Tap
@@ -76,7 +80,7 @@
           </div>
           <div class="boostItem" id="multitap">
             <div class="boostIcon">
-              <img src="./img/icons/Storage-595b40b85ba036ed117db348 1.png">
+              <img src="./img/icons/3.png">
             </div>
             <div class="boostTitle">
               Storage
@@ -90,7 +94,7 @@
           </div>
           <div class="boostItem" id="multitap">
             <div class="boostIcon">
-              <img src="./img/icons/energy.png">
+              <img src="./img/icons/1.png">
             </div>
             <div class="boostTitle">
               Recharge Speed
@@ -175,12 +179,20 @@
         <div class="wallet" id="wallet3"><img src="img/favorites.png" /></div>
         <div class="trade pagetitle">TASKS</div>
       </div>
-
       <div class="blueBox">
         <p>Refer your friends and you both will earn some $AND</p>
         <button class="referButton" onclick="referFriend()">
           Refer a friend
         </button>
+      </div>
+      <div class="Textlabel">
+        Your Friends
+      </div>
+      <div id="friendsDiv">
+
+      </div>
+      <div class="Textlabel">
+        Tasks
       </div>
       <div id="tasksdiv"></div>
       <p id="taskNotice">

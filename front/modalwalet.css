@@ -40,17 +40,10 @@
   line-height: 55px;
   font-size: 33px;
   color: #56a6e9;
-  font-family: 'laror';
+  font-family: 'laro';
   margin-right: 50px;
 }
 
-#modalWalet > .header > .zangole {
-  /* border: 1px solid #ccc; */
-  width: 55px;
-  height: 55px;
-  background: url("img/Group 1129.png") no-repeat;
-  background-size: 90% 100%;
-}
 
 /*   blue box   */
 
@@ -60,12 +53,9 @@
   height: 190px;
   margin: auto;
   margin-top: 20px;
-  background: rgb(3, 3, 204);
-  background: linear-gradient(
-    66deg,
-    rgba(3, 3, 204, 1) -1%,
-    rgba(0, 212, 255, 1) 100%
-  );
+  background-image: url('./img/Rectangle\ 37.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   border-radius: 25px;
 }
 
@@ -113,7 +103,7 @@
   margin-top: 10px;
   padding: 10px 3px 3px 3px;
   border-radius: 20px;
-  background-color: #161616b5;
+  background-color: #16161689;
 }
 
 /*   box   */

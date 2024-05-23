@@ -4,7 +4,7 @@ import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 
 const wss = new WebSocketServer({ port: 8081 });
-const token = fs.readFileSync('./token', "utf8");
+const token = fs.readFileSync("./token", "utf8");
 
 const bot = new TelegramBot(token, {
   polling: true,
@@ -13,7 +13,10 @@ const bot = new TelegramBot(token, {
   },
 });
 var startDate = new Date();
-let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
+let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()} ${startDate.getHours()}:${startDate
+  .getMinutes()
+  .toString()
+  .padStart(2, "0")}`;
 console.log(`[${start}] Starting...`);
 console.log("Telegram bot running...");
 console.log("API server running...");
@@ -37,14 +40,15 @@ wss.on("connection", function connection(ws) {
       ws.send('{"message" : "Hash and Name are not present"}');
     }*/
     if (parsed.action == "login") {
-      users.forEach((element) => {
+      for (const element of users) {
         //console.log(parsed);
-        if (element.name == parsed.name) {
+        if (element.tgId == parsed.tgId) {
           console.log("Users exists, logging in");
+          break;
         } else {
           console.log("User does not exist, creating new user");
-          
-          if (parsed.name != null && parsed.name != "") {
+
+          if (parsed.tgId != undefined && parsed.tgId.trim() != "") {
             let newUser = JSON.parse(usersTemplate);
             console.log(newUser);
             newUser.name = parsed.name;
@@ -52,44 +56,51 @@ wss.on("connection", function connection(ws) {
             stats.totalUsers += 1;
             users.push(newUser);
             ws.send('{ "action" : "createAccount", "result" : "success" }');
+            break;
           } else {
             ws.send('{"action" : "createAccount", "result" : "fail"}');
+            break;
           }
         }
-      });
+      }
     } else if (parsed.action == "getObject") {
-      users.forEach((e) => {
-        if (e.name == parsed.name) {
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
           checkIfUserDoneTask(parsed, true);
-          ws.send(`{"action" : "getObject", "object": ${JSON.stringify(e)}}`);
+          ws.send(`{"action" : "getObject", "object": ${JSON.stringify(user)}}`);
+          break;
         }
-      });
+      }
     } else if (parsed.action == "getCrypto") {
       ws.send(
         `{"action" : "getCrypto", "cryptos" : ${JSON.stringify(cryptos)}}`
       );
     } else if (parsed.action == "updateCoinsFromUser") {
-      users.forEach((e) => {
-        if (e.name == parsed.name) {
-          e.coins += Number(parsed.coins);
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
+          user.coins += Number(parsed.coins);
           stats.minedPastHour += Number(parsed.coins);
           stats.allCoinsClicked += Number(parsed.coins);
         }
-      });
+      }
+
       ws.send('{"action" : "updateCoinsFromUser", "result" : "success"}');
     } else if (parsed.action == "getReferalCode") {
-      users.forEach((e) => {
-        if (e.name == parsed.name) {
-          sendReferalCodeTG(e.tgId);
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
+          sendReferalCodeTG(user.tgId);
+          break;
         }
-      });
+      }
     } else if (parsed.action == "buyCrpto") {
       for (const obj of users) {
-        if (obj.name == parsed.name) {
+        if (obj.tgid == parsed.tgId) {
           let i = 0;
           for (const cr of cryptos) {
             if (cr.id == parsed.cointobuy) {
-              ws.send(`{"action" : "getObject", "object": ${JSON.stringify(obj)}}`);
+              ws.send(
+                `{"action" : "getObject", "object": ${JSON.stringify(obj)}}`
+              );
               let cryptotobuy = Number(parsed.cryptotobuy);
               obj.usdt -= cryptotobuy * cryptos[i].usdtPrice;
               obj.crypto[i].amount += cryptotobuy;
@@ -106,7 +117,7 @@ wss.on("connection", function connection(ws) {
       let usdttobuy = Number(parsed.usdttobuy);
 
       for (const obj of users) {
-        if (obj.name == parsed.name) {
+        if (obj.tgid == parsed.tgId) {
           let coinstouse = usddttobuy * usdtPrice;
           obj.coins -= coinstouse;
           obj.usdt += usdttobuy;
@@ -120,15 +131,17 @@ wss.on("connection", function connection(ws) {
       checkIfUserDoneTask(parsed);
     } else if (parsed.action == "sellCrypto") {
       for (const obj of users) {
-        if (obj.name == parsed.name) {
+        if (obj.tgid == parsed.tgId) {
           for (const coin of cryptos) {
             if (coin.id == parsed.cointosell) {
               let amount = Number(parsed.amounttosell);
-              
+
               let usdtPrice = amount * coin.usdtPrice;
               for (const fc of obj.crypto) {
                 if (fc.id == coin.id) {
-                  console.log(`@${obj.name} has ${fc.amount} of ${fc.id} and wants to sell ${amount}`);
+                  console.log(
+                    `@${obj.name} has ${fc.amount} of ${fc.id} and wants to sell ${amount}`
+                  );
                   fc.amount -= amount;
                   obj.usdt += usdtPrice;
                 }
@@ -139,6 +152,7 @@ wss.on("connection", function connection(ws) {
         }
       }
     } else if (parsed.action == "upgrade") {
+      console.log(`User wants to upgrade ${JSON.stringify(parsed)}`);
       for (const user of users) {
         if (user.name == parsed.name) {
           if (parsed.upgrade == "multitap") {
@@ -210,37 +224,54 @@ wss.on("connection", function connection(ws) {
       }
     } else if (parsed.action == "sellUsdt") {
       for (const user of users) {
-        if (user.name == parsed.name) {
+        if (user.tgid == parsed.tgId) {
           let cointoget = parsed.usdttosell * usdtPrice;
           user.usdt -= Number(parsed.usdttosell);
           user.coins += cointoget;
           break;
         }
       }
-    } else if (parsed.action == 'updateEnergy') {
+    } else if (parsed.action == "updateEnergy") {
       for (const user of users) {
-        if (user.name == parsed.name) {
+        if (user.tgId == parsed.tgId) {
           user.energy = Number(parsed.energy);
           break;
         }
       }
-    } else if (parsed.action == 'getUsdtPrice') {
+    } else if (parsed.action == "getUsdtPrice") {
       ws.send(`{"action": "getUsdtPrice", "price":"${usdtPrice}"}`);
+    } else if (parsed.action == "getFriends") {
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
+          let friends = [];
+          for (const friend of user.friends) {
+            for (const us of users) {
+              if (us.tgId == friend) {
+                friends.push(us);
+              }
+            }
+          }
+          ws.send(
+            `{"action":"getFriends","friends": ${JSON.stringify(friends)}}`
+          );
+          break;
+        }
+      }
     }
   });
 
   ws.send('{"code": 200, "message": "connection established"}');
   ws.on("error", console.error);
-  ws.on('pong', heartbeat);
+  ws.on("pong", heartbeat);
 });
-  
+
 let energyRefill = setInterval(() => {
   for (const user of users) {
     if (user.energy < user.maxEnergy) {
       user.energy += user.upgrades[2].level;
     }
   }
-}, 2000);
+}, 1000);
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {
     if (ws.isAlive === false) return ws.terminate();
@@ -272,7 +303,10 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
   let isPresent = false;
   for (const obj of users) {
     if (obj.tgId == msg.chat.id) {
-      bot.sendMessage(msg.chat.id, "You have already played this game");
+      bot.sendMessage(
+        msg.chat.id,
+        "You have already started the bot, and cannot be invited again."
+      );
       isPresent = true;
       break;
     }
@@ -303,7 +337,7 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
   }
 });
 bot.on("message", (msg) => {
-  if (msg.text == '/stats' && msg.chat.title == 'AndCoin DevChat') {
+  if (msg.text == "/stats" && msg.chat.title == "AndCoin DevChat") {
     bot.sendMessage(
       msg.chat.id,
       `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coin Clicks: ${stats.allCoinsClicked}`
@@ -365,7 +399,7 @@ function checkIfUserDoneTask(parsed, loop) {
   let loop1 = loop ? true : false;
   if (loop1) {
     for (const user of users) {
-      if (user.name == parsed.name) {
+      if (user.tgid == parsed.tgId) {
         for (const task of tasks) {
           let taskId = task.taskId;
           if (taskId == 0) {

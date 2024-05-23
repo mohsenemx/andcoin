@@ -39,7 +39,7 @@
   line-height: 55px;
   font-size: 33px;
   color: #56a6e9;
-  font-family: 'SFPro';
+  font-family: 'laro';
 }
 
 #modalTasks > .header > .profile {
@@ -254,4 +254,20 @@
 .donePic {
   width: 10px;
   height: 10px;
+}
+.Textlabel {
+  font-family: 'laror';
+  font-size: 20px;
+  display: flex;
+  justify-self: flex-start;
+  margin: 20px;
+  color: white;
+}
+#emptyFriend {
+  display: flex;
+  color: white;
+  margin: 20px;
+  margin-left: 10%;
+  width: 100%;
+  font-family: 'laror';
 }

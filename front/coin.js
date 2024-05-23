@@ -8,11 +8,12 @@ let upgrades = [];
 let coinsDisplay = document.getElementById("coinsDisplay");
 let atasks = [];
 let cryptos = [];
+let friends = [];
 let usdtPrice = 6000;
 const socket = new WebSocket("ws://localhost:8081");
 setTimeout(() => {
   if (parsedTGdata == false) {
-    alert("Required data is missing, please reload the page");
+    showAllError();
   }
 }, 1000);
 socket.onopen = function (event) {
@@ -22,9 +23,7 @@ socket.onopen = function (event) {
     `{"action":"login", "name": "${parsedTGdata.user.username}", "tgId": "${parsedTGdata.user.id}"}`
   );
   setTimeout(function () {
-    socket.send(
-      `{"action":"getObject", "name": "${parsedTGdata.user.username}"}`
-    );
+    socket.send(`{"action":"getObject", "tgId": "${parsedTGdata.user.id}"}`);
   }, 100);
   setTimeout(function () {
     socket.send(`{"action":"getTasks"}`);
@@ -33,19 +32,18 @@ socket.onopen = function (event) {
     socket.send(`{"action":"getCrypto"}`);
   }, 300);
   socket.send(`{"action":"getUsdtPrice"}`);
+  socket.send(`{"action":"getFriends","tgId":"${parsedTGdata.user.id}"}`);
 };
 let objectSync = setInterval(() => {
   socket.send(
-    `{"action":"updateEnergy", "name": "${parsedTGdata.user.username}","energy" : "${globalAndObject.energy}"}`
+    `{"action":"updateEnergy", "tgId": "${parsedTGdata.user.id}","energy" : "${globalAndObject.energy}"}`
   );
   setTimeout(
-    socket.send(
-      `{"action":"getObject", "name": "${parsedTGdata.user.username}"}`
-    ),
+    socket.send(`{"action":"getObject", "tgId": "${parsedTGdata.user.id}"}`),
     200
   );
   updateEnergy();
-}, 5000);
+}, 1000);
 socket.onmessage = function (event) {
   let pjson = JSON.parse(event.data);
   if (pjson.action == "getObject") {
@@ -64,16 +62,25 @@ socket.onmessage = function (event) {
     loadCryptos();
   } else if (pjson.action == "getUsdtPrice") {
     usdtPrice = Number(pjson.price);
+  } else if (pjson.action == "getFriends") {
+    friends = pjson.friends;
+    loadFriends();
   }
 };
 socket.onclose = function (event) {
-  alert("Connection failed with server");
+  showAllError();
   clearInterval(coinSync);
   clearInterval(objectSync);
 };
+socket.onerror = function (event) {
+  showAllError();
+  clearInterval(coinSync);
+  clearInterval(objectSync);
+};
+
 let coinSync = setInterval(function () {
   socket.send(
-    `{"action":"updateCoinsFromUser", "name": "${parsedTGdata.user.username}", "coins": "${coinsSinceLastSync}"}`
+    `{"action":"updateCoinsFromUser", "tgId": "${parsedTGdata.user.id}", "coins": "${coinsSinceLastSync}"}`
   );
   coinsSinceLastSync = 0;
 }, 3000);
@@ -168,7 +175,7 @@ function updateRank() {
 }
 function referFriend() {
   socket.send(
-    `{"action":"getReferalCode","name":"${parsedTGdata.user.username}"}`
+    `{"action":"getReferalCode","tgId":"${parsedTGdata.user.id}"}`
   );
 }
 function loadTasks() {
@@ -176,9 +183,14 @@ function loadTasks() {
   tasksDiv.innerHTML = "";
   for (const task of atasks) {
     let doneTask = false;
-    if (globalAndObject.completedTasks.includes(task.id)) {
-      doneTask = true;
+    try {
+      if (globalAndObject.completedTasks.includes(task.id)) {
+        doneTask = true;
+      }
+    } catch (e) {
+      doneTask = false;
     }
+    
     tasksDiv.innerHTML += `<div class="taskItem"><p>${
       task.name
     }</p><div class="taskButton"><button onclick="doTasks(this)" data-id="${
@@ -193,7 +205,7 @@ function loadTasks() {
 function doTasks(div) {
   let taskId = div.getAttribute("data-id");
   socket.send(
-    `{"action":"getTaskStatus","name":"${parsedTGdata.user.username}", "taskId": "${taskId}"}`
+    `{"action":"getTaskStatus","tgId":"${parsedTGdata.user.id}", "taskId": "${taskId}"}`
   );
 }
 function loadCryptos() {
@@ -312,14 +324,14 @@ document.getElementById("goForTradeButton").addEventListener("click", () => {
     let maxPossible = globalAndObject.usdt / tradeObject.usdtPrice;
     let howMany = (maxPossible / 100) * Number(slider.value);
     socket.send(
-      `{"action":"buyCrpto", "name":"${parsedTGdata.user.username}", "cointobuy":"${tradeObject.id}", "cryptotobuy":"${howMany}"}`
+      `{"action":"buyCrpto", "tgId":"${parsedTGdata.user.id}", "cointobuy":"${tradeObject.id}", "cryptotobuy":"${howMany}"}`
     );
   } else {
     let maxPossible = userTradeObject.amount;
     let howMany = (maxPossible / 100) * Number(slider.value);
     console.log(howMany, maxPossible);
     socket.send(
-      `{"action":"sellCrypto", "name":"${parsedTGdata.user.username}", "cointosell":"${tradeObject.id}", "amounttosell":"${howMany}"}`
+      `{"action":"sellCrypto", "tgId":"${parsedTGdata.user.id}", "cointosell":"${tradeObject.id}", "amounttosell":"${howMany}"}`
     );
   }
 });
@@ -467,4 +479,17 @@ function showBoostError(msg) {
 function removeBoostError() {
   document.getElementById("boostError").innerHTML = ``;
   document.getElementById("boostError").style.display = `none`;
+}
+function loadFriends() {
+  let frDiv = document.getElementById("friendsDiv");
+  if (friends.length == 0) {
+    frDiv.innerHTML = `<div id="emptyFriend">You have no friends</div>`;
+  } else {
+    for (const fr of friends) {
+      frDiv.innerHTML += `<div>friend</div>`;
+    }
+  }
+}
+function showAllError() {
+  document.getElementById("mainError").style.display = "flex";
 }
