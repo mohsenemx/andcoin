@@ -364,7 +364,6 @@ body {
   color: white;
 }
 #mainError button {
-
   background-color: #56a6e9;
   border-radius: 15px;
   color: white;
@@ -374,4 +373,20 @@ body {
   font-family: 'laror';
   font-size: 20px;
   padding: 15px;
+}
+#boostBlueBox {
+  width: 90%;
+  height: 20%;
+  margin: 5;
+  color: white;
+  font-family: 'laror';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  word-wrap: normal;
+  text-align: center;
+  background-image: url('img/Rectangle\ 37.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }

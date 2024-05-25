@@ -82,6 +82,10 @@ let coinSync = setInterval(function () {
   socket.send(
     `{"action":"updateCoinsFromUser", "tgId": "${parsedTGdata.user.id}", "coins": "${coinsSinceLastSync}"}`
   );
+  setTimeout(() => {
+    coins = globalAndObject.coins;
+  }, 100);
+
   coinsSinceLastSync = 0;
 }, 3000);
 function updateFooter(page) {
@@ -174,9 +178,7 @@ function updateRank() {
   document.getElementById("userRank").innerHTML = globalAndObject.rank;
 }
 function referFriend() {
-  socket.send(
-    `{"action":"getReferalCode","tgId":"${parsedTGdata.user.id}"}`
-  );
+  socket.send(`{"action":"getReferalCode","tgId":"${parsedTGdata.user.id}"}`);
 }
 function loadTasks() {
   let tasksDiv = document.getElementById("tasksdiv");
@@ -190,7 +192,7 @@ function loadTasks() {
     } catch (e) {
       doneTask = false;
     }
-    
+
     tasksDiv.innerHTML += `<div class="taskItem"><p>${
       task.name
     }</p><div class="taskButton"><button onclick="doTasks(this)" data-id="${
@@ -329,7 +331,6 @@ document.getElementById("goForTradeButton").addEventListener("click", () => {
   } else {
     let maxPossible = userTradeObject.amount;
     let howMany = (maxPossible / 100) * Number(slider.value);
-    console.log(howMany, maxPossible);
     socket.send(
       `{"action":"sellCrypto", "tgId":"${parsedTGdata.user.id}", "cointosell":"${tradeObject.id}", "amounttosell":"${howMany}"}`
     );
@@ -486,10 +487,57 @@ function loadFriends() {
     frDiv.innerHTML = `<div id="emptyFriend">You have no friends</div>`;
   } else {
     for (const fr of friends) {
-      frDiv.innerHTML += `<div>friend</div>`;
+      frDiv.innerHTML += `<div class="friendItem"><div class="friendItemleft">@${
+        fr.name
+      }</div><div class="friendItemright"><img src="./img/Group 1124.png">${numberWithCommas(
+        fr.coins
+      )}</div></div>`;
     }
   }
 }
 function showAllError() {
   document.getElementById("mainError").style.display = "flex";
+}
+let buyUsdt = document.getElementById("buyUsdt");
+let buyUsdtModal = document.getElementById("usdtBuyModal");
+buyUsdt.addEventListener("click", () => {
+  buyUsdtModal.style.display = "flex";
+  document.getElementById(
+    "buymodalAmount"
+  ).innerHTML = `You have ${numberWithCommas(coins)} $AND`;
+  document.getElementById(
+    "buymodalAmount2"
+  ).innerHTML = `Move the slider to select how much USDT you want to buy`;
+});
+document.getElementById("buymodalclose").addEventListener("click", () => {
+  buyUsdtModal.style.display = "none";
+});
+slider2.oninput = () => {
+  let maxPossible = coins / usdtPrice;
+  let howMany = (maxPossible / 100) * Number(slider2.value);
+  document.getElementById(
+    "buymodalAmount2"
+  ).innerHTML = `You have selected <img src="./img/coin/usdt.png" id="cryptoPictureB"> ${howMany.toFixed(
+    1
+  )}`;
+};
+document.getElementById("goForusdtBuy").addEventListener("click", () => {
+  let maxPossible = coins / usdtPrice;
+  let howMany = ((maxPossible / 100) * Number(slider2.value)).toFixed(1);
+  socket.send(
+    `{"action":"buyUsdt","tgId":"${parsedTGdata.tgId}","usdttobuy": "${howMany}"}`
+  );
+  updateEverything();
+});
+function updateEverything() {
+  socket.send(`{"action":"getObject", "tgId":"${parsedTGdata.user.id}"}`);
+  setTimeout(() => {
+    updateBoost();
+    updateEnergy();
+    updateRank();
+    updateWallet();
+    loadCryptos();
+    loadFriends();
+    loadTasks();
+  }, 100);
 }

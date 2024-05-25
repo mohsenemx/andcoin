@@ -67,7 +67,9 @@ wss.on("connection", function connection(ws) {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
           checkIfUserDoneTask(parsed, true);
-          ws.send(`{"action" : "getObject", "object": ${JSON.stringify(user)}}`);
+          ws.send(
+            `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
+          );
           break;
         }
       }
@@ -118,10 +120,23 @@ wss.on("connection", function connection(ws) {
 
       for (const obj of users) {
         if (obj.tgid == parsed.tgId) {
-          let coinstouse = usddttobuy * usdtPrice;
+          let coinstouse = usdttobuy * usdtPrice;
           obj.coins -= coinstouse;
           obj.usdt += usdttobuy;
-          console.log(`User @${obj.name} has bought ${newUsdt} USDT`);
+          let trns = transactionTemplate;
+          trns.type = "buyCrypto";
+          trns.from = "Cnetral Hub";
+          trns.to = `${obj.name}`;
+          trns.crypto = "usdt";
+          trns.amount = usdttobuy;
+          var transactionDate = new Date();
+          let trnsTime = `${transactionDate.getFullYear()}-${transactionDate.getMonth()}-${transactionDate.getDate()} ${transactionDate.getHours()}:${transactionDate
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")}`;
+          trns.timestamp = trnsTime;
+          obj.transactionHistory.push(trns);
+          console.log(`User ${obj.tgId} has bought ${newUsdt} USDT`);
           break;
         }
       }

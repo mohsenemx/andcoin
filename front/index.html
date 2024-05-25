@@ -64,6 +64,9 @@
           <div id="boostError">
             
           </div>
+          <div id="boostBlueBox">
+            Upgrade your stuff to improve how they work
+          </div>
           <div class="boostItem" id="multitap">
             <div class="boostIcon">
               <img src="./img/icons/2.png">
@@ -138,7 +141,7 @@
             <br />
             <p id="amountP">Selected Amount: 0</p>
             <div id="amountDiv"></div>
-            <label for="mainInput">Amount: 0</label>
+            
             <input
               type="range"
               min="0"
@@ -189,7 +192,7 @@
         Your Friends
       </div>
       <div id="friendsDiv">
-
+        
       </div>
       <div class="Textlabel">
         Tasks
@@ -231,6 +234,31 @@
         <div class="items it1">Current Wallet Balance</div>
         <div class="items it2" id="walletUsdtBalance"></div>
         <div class="items it3" id="walletAndBalance"></div>
+      </div>
+      <div id="usdtBuyModal">
+        <div class="buymodalheader">
+          Buying USDT
+        </div>
+        <div id="buymodalclose">&#10005;</div>
+        
+        <div class="buymodalbody">
+          <div id="buymodalAmount"></div>
+          <div id="buymodalAmount2"></div>
+          <input
+              type="range"
+              min="0"
+              max="100"
+              value="0"
+              class="slider"
+              
+              id="slider2"
+            />
+            <button id="goForusdtBuy" class="goButton1">Go</button>
+          </div>
+        </div>
+      
+      <div class="buySellUsdt">
+        <button id="buyUsdt">+</button>
       </div>
       <div class="transactions">
         <p>Your Transactions</p>

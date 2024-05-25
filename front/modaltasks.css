@@ -271,3 +271,30 @@
   width: 100%;
   font-family: 'laror';
 }
+.friendItem {
+  width: 90%;
+  margin: 5%;
+  border: 3px solid #56a6e9;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.friendItemright {
+  font-family: 'SFPro';
+  color: white;
+  display: flex;
+  align-items: center;
+  font-family: 10px;
+  margin-left: 30%;
+}
+.friendItemright img {
+  width: 20px;
+  margin: 10px;
+}
+.friendItemleft {
+  font-family: 'SFPro';
+  color: white;
+  font-size: 17px;
+  margin: 10px;
+}
