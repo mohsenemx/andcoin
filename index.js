@@ -119,11 +119,11 @@ wss.on("connection", function connection(ws) {
       let usdttobuy = Number(parsed.usdttobuy);
 
       for (const obj of users) {
-        if (obj.tgid == parsed.tgId) {
+        if (obj.tgId == parsed.tgId) {
           let coinstouse = usdttobuy * usdtPrice;
           obj.coins -= coinstouse;
           obj.usdt += usdttobuy;
-          let trns = transactionTemplate;
+          let trns = JSON.parse(transactionTemplate);
           trns.type = "buyCrypto";
           trns.from = "Cnetral Hub";
           trns.to = `${obj.name}`;
@@ -136,7 +136,7 @@ wss.on("connection", function connection(ws) {
             .padStart(2, "0")}`;
           trns.timestamp = trnsTime;
           obj.transactionHistory.push(trns);
-          console.log(`User ${obj.tgId} has bought ${newUsdt} USDT`);
+          console.log(`User ${obj.tgId} has bought ${usdttobuy} USDT`);
           break;
         }
       }
@@ -169,7 +169,7 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "upgrade") {
       console.log(`User wants to upgrade ${JSON.stringify(parsed)}`);
       for (const user of users) {
-        if (user.name == parsed.name) {
+        if (user.tgId == parsed.tgId) {
           if (parsed.upgrade == "multitap") {
             switch (Number(parsed.targetLevel)) {
               case 2: {
@@ -180,18 +180,21 @@ wss.on("connection", function connection(ws) {
               case 3: {
                 user.upgrades[0].level = 3;
                 user.coins -= 3000;
+                break;
               }
               case 4: {
                 user.upgrades[0].level = 4;
                 user.coins -= 6000;
+                break;
               }
               case 5: {
                 user.upgrades[0].level = 5;
                 user.coins -= 15000;
+                break;
               }
             }
           } else if (parsed.upgrade == "storage") {
-            switch (parsed.targetLevel) {
+            switch (Number(parsed.targetLevel)) {
               case 2: {
                 user.upgrades[1].level = 2;
                 user.maxEnergy = 3000;
@@ -202,20 +205,27 @@ wss.on("connection", function connection(ws) {
                 user.upgrades[1].level = 3;
                 user.maxEnergy = 3500;
                 user.coins -= 3000;
+                break;
               }
               case 4: {
                 user.upgrades[1].level = 4;
                 user.maxEnergy = 4000;
                 user.coins -= 6000;
+                break;
               }
               case 5: {
                 user.upgrades[1].level = 5;
                 user.maxEnergy = 5000;
                 user.coins -= 15000;
+                break;
+              }
+              default: {
+                
+                break;
               }
             }
           } else if (parsed.upgrade == "recharge") {
-            switch (parsed.targetLevel) {
+            switch (Number(parsed.targetLevel)) {
               case 2: {
                 user.upgrades[2].level = 2;
                 user.coins -= 1500;
@@ -224,14 +234,17 @@ wss.on("connection", function connection(ws) {
               case 3: {
                 user.upgrades[2].level = 3;
                 user.coins -= 5000;
+                break;
               }
               case 4: {
                 user.upgrades[2].level = 4;
                 user.coins -= 10000;
+                break;
               }
               case 5: {
                 user.upgrades[2].level = 5;
                 user.coins -= 25000;
+                break;
               }
             }
           }
