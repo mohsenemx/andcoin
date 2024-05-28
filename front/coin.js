@@ -10,7 +10,7 @@ let atasks = [];
 let cryptos = [];
 let friends = [];
 let usdtPrice = 6000;
-const socket = new WebSocket("ws://localhost:8081");
+const socket = new WebSocket("wss://and.hamii.xyz:8081/");
 setTimeout(() => {
   if (parsedTGdata == false) {
     showAllError();
@@ -66,11 +66,13 @@ socket.onmessage = function (event) {
   }
 };
 socket.onclose = function (event) {
+  console.log("WebSocket connection closed:", event.code, event.reason);
   showAllError();
   clearInterval(coinSync);
   clearInterval(objectSync);
 };
 socket.onerror = function (event) {
+  console.log("WebSocket connection closed:", event.code, event.reason);
   showAllError();
   clearInterval(coinSync);
   clearInterval(objectSync);
