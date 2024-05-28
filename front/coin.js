@@ -10,15 +10,13 @@ let atasks = [];
 let cryptos = [];
 let friends = [];
 let usdtPrice = 6000;
-const socket = new WebSocket("wss://and.hamii.xyz:8081/");
+const socket = new WebSocket("ws://127.0.0.1:8081/");
 setTimeout(() => {
   if (parsedTGdata == false) {
     showAllError();
   }
 }, 1000);
 socket.onopen = function (event) {
-  // Alert the user that they are
-  // connected to the WebSocket server
   socket.send(
     `{"action":"login", "name": "${parsedTGdata.user.username}", "tgId": "${parsedTGdata.user.id}"}`
   );
@@ -68,14 +66,10 @@ socket.onmessage = function (event) {
 socket.onclose = function (event) {
   console.log("WebSocket connection closed:", event.code, event.reason);
   showAllError();
-  clearInterval(coinSync);
-  clearInterval(objectSync);
 };
 socket.onerror = function (event) {
   console.log("WebSocket connection closed:", event.code, event.reason);
   showAllError();
-  clearInterval(coinSync);
-  clearInterval(objectSync);
 };
 
 let coinSync = setInterval(function () {
@@ -478,7 +472,6 @@ function upgradeBoost(name) {
           }"}`
         );
         updateEverything();
-        
       }
     } else if (globalAndObject.upgrades[2].level == 2) {
       if (globalAndObject.coins < 5000) {
@@ -644,6 +637,8 @@ function loadFriends() {
 }
 function showAllError() {
   document.getElementById("mainError").style.display = "flex";
+  clearInterval(coinSync);
+  clearInterval(objectSync);
 }
 let buyUsdt = document.getElementById("buyUsdt");
 let buyUsdtModal = document.getElementById("usdtBuyModal");
@@ -689,4 +684,15 @@ function updateEverything() {
     loadTasks();
     loadTransactions();
   }, 100);
+}
+function preventDoubleTap(element) {
+  let lastTapTime = 0;
+  element.addEventListener("touchstart", function (event) {
+    const currentTime = new Date().getTime();
+    if (currentTime - lastTapTime < 500) {
+      event.preventDefault();
+    } else {
+      lastTapTime = currentTime;
+    }
+  });
 }

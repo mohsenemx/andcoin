@@ -4,8 +4,13 @@
   "tgId": "TGIDTXT",
   "coins": 0,
   "usdt": 0,
+  "allCoins": 0,
   "villageId": null,
   "rank": "Poor",
+  "energy": 2000,
+  "maxEnergy": 2000,
+  "joined": 0,
+  "lastOnline": 0,
   "crypto": [
     { "id": "BTC", "amount": 0 },
     { "id": "ETH", "amount": 0 },

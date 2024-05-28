@@ -44,6 +44,7 @@ wss.on("connection", function connection(ws) {
         //console.log(parsed);
         if (element.tgId == parsed.tgId) {
           console.log("Users exists, logging in");
+          element.lastOnline = new Date().getTime();
           break;
         } else {
           console.log("User does not exist, creating new user");
@@ -54,6 +55,8 @@ wss.on("connection", function connection(ws) {
             newUser.name = parsed.name;
             newUser.tgId = parsed.tgId;
             stats.totalUsers += 1;
+            element.joined = new Date().getTime();
+            element.lastOnline = new Date().getTime();
             users.push(newUser);
             ws.send('{ "action" : "createAccount", "result" : "success" }');
             break;
@@ -220,7 +223,6 @@ wss.on("connection", function connection(ws) {
                 break;
               }
               default: {
-                
                 break;
               }
             }
@@ -358,9 +360,9 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
     let newUser = JSON.parse(usersTemplate);
     stats.totalUsers += 1;
     newUser.name = msg.chat.username;
-    newUser.hash = "TOBEFILLED";
     newUser.tgId = msg.chat.id;
     newUser.coins = 5000;
+    newUser.joined = new Date().getTime();
     users.push(newUser);
   }
 });
@@ -370,6 +372,25 @@ bot.on("message", (msg) => {
       msg.chat.id,
       `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coin Clicks: ${stats.allCoinsClicked}`
     );
+  }
+  if (msg.text.includes("/profile")) {
+    for (const user of users) {
+      if (user.tgId == msg.from.id) {
+        let dd = new Date(user.joined);
+        bot.sendMessage(
+          msg.chat.id,
+          `💎 User Profile\nName: ${user.name}\nCoins: ${numberWithCommas(
+            user.coins
+          )}\nCoins All Time: ${numberWithCommas(
+            user.allCoins
+          )}\nUSDT: ${numberWithCommas(
+            user.usdt
+          )}\nJoined on: ${dd.getFullYear()}-${
+            dd.getMonth() + 1
+          }-${dd.getDate()}`
+        );
+      }
+    }
   }
 });
 
@@ -427,7 +448,7 @@ function checkIfUserDoneTask(parsed, loop) {
   let loop1 = loop ? true : false;
   if (loop1) {
     for (const user of users) {
-      if (user.tgid == parsed.tgId) {
+      if (user.tgId == parsed.tgId) {
         for (const task of tasks) {
           let taskId = task.taskId;
           if (taskId == 0) {
@@ -450,7 +471,7 @@ function checkIfUserDoneTask(parsed, loop) {
     }
   } else {
     for (const user of users) {
-      if (user.name == parsed.name) {
+      if (user.tgId == parsed.tgId) {
         if (parsed.taskId == 0) {
           if (checkUserJoinedMainTG(user.tgId)) {
             user.completedTasks.push(parsed.taskId);
@@ -527,4 +548,7 @@ function calculateGrowthRate(oldPrice, newPrice) {
 }
 function heartbeat() {
   this.isAlive = true;
+}
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
