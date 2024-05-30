@@ -436,7 +436,7 @@ function sendDefaultTGmessage(chatId) {
         [
           {
             text: "Play",
-            url: "https://google.com",
+            web_app: { url: "https://and.hamii.xyz" },
           },
           {
             text: "Learn how to play",
