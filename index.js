@@ -36,9 +36,6 @@ wss.on("connection", function connection(ws) {
   stats.online += 1;
   ws.on("message", function message(data) {
     let parsed = JSON.parse(data);
-    /*if (parsed.name == undefined || parsed.name =='') {
-      ws.send('{"message" : "Hash and Name are not present"}');
-    }*/
     if (parsed.action == "login") {
       for (const element of users) {
         //console.log(parsed);
@@ -52,11 +49,12 @@ wss.on("connection", function connection(ws) {
           if (parsed.tgId != undefined && parsed.tgId.trim() != "") {
             let newUser = JSON.parse(usersTemplate);
             console.log(newUser);
-            newUser.name = parsed.name;
+            newUser.name = parsed.name.toLowerCase();
             newUser.tgId = parsed.tgId;
             stats.totalUsers += 1;
             element.joined = new Date().getTime();
             element.lastOnline = new Date().getTime();
+
             users.push(newUser);
             ws.send('{ "action" : "createAccount", "result" : "success" }');
             break;
@@ -359,7 +357,7 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
   if (!isPresent) {
     let newUser = JSON.parse(usersTemplate);
     stats.totalUsers += 1;
-    newUser.name = msg.chat.username;
+    newUser.name = msg.chat.username.toLowerCase();
     newUser.tgId = msg.chat.id;
     newUser.coins = 5000;
     newUser.joined = new Date().getTime();
@@ -374,30 +372,88 @@ bot.on("message", (msg) => {
     );
   }
   if (msg.text.includes("/profile")) {
-    for (const user of users) {
-      if (user.tgId == msg.from.id) {
-        let dd = new Date(user.joined);
-        bot.sendMessage(
-          msg.chat.id,
-          `💎 User Profile\nName: ${user.name}\nCoins: ${numberWithCommas(
-            user.coins
-          )}\nCoins All Time: ${numberWithCommas(
-            user.allCoins
-          )}\nUSDT: ${numberWithCommas(
-            user.usdt
-          )}\nJoined on: ${dd.getFullYear()}-${
-            dd.getMonth() + 1
-          }-${dd.getDate()}`
-        );
+    let arg = msg.text.split(" ");
+    let tUsername = false;
+    let foundUser = false;
+    console.log(arg);
+    try {
+      if (arg[1] != undefined || arg[1].trim() != "") {
+        tUsername = arg[1].slice(1).toLowerCase();
       }
+    } catch (e) {
+      tUsername = false;
+      foundUser = true;
+    }
+    for (const user of users) {
+      if (tUsername != false) {
+        if (user.name == tUsername) {
+          let dd = new Date(user.joined);
+          bot.sendMessage(
+            msg.chat.id,
+            `💎 User Profile\nName: @${user.name}\nCoins: ${numberWithCommas(
+              user.coins
+            )}\nCoins All Time: ${numberWithCommas(
+              user.allCoins
+            )}\nUSDT: ${numberWithCommas(
+              user.usdt
+            )}\nJoined on: ${dd.getFullYear()}-${
+              dd.getMonth() + 1
+            }-${dd.getDate()}`
+          );
+          foundUser = true;
+          break;
+        }
+      } else {
+        if (user.tgId == msg.from.id) {
+          let dd = new Date(user.joined);
+          bot.sendMessage(
+            msg.chat.id,
+            `💎 User Profile\nName: @${user.name}\nCoins: ${numberWithCommas(
+              user.coins
+            )}\nCoins All Time: ${numberWithCommas(
+              user.allCoins
+            )}\nUSDT: ${numberWithCommas(
+              user.usdt
+            )}\nJoined on: ${dd.getFullYear()}-${
+              dd.getMonth() + 1
+            }-${dd.getDate()}`
+          );
+        }
+        break;
+      }
+    }
+    if (!foundUser) {
+      bot.sendMessage(msg.chat.id, `User @${tUsername} was not found`);
     }
   }
 });
 
 function sendDefaultTGmessage(chatId) {
+  const opts = {
+    reply_markup: {
+      resize_keyboard: false,
+      keyboard: [
+        [
+          {
+            text: "Play",
+            url: "https://google.com",
+          },
+          {
+            text: "Learn how to play",
+            web_app: { url: "https://google.com" },
+          },
+          {
+            text: "Invite friends",
+            web_app: { url: "https://google.com" },
+          },
+        ],
+      ],
+    },
+  };
   bot.sendMessage(
     chatId,
-    "Welcome to Andcoin!\nClick the 'Play' button to start playing!"
+    "Welcome to Andcoin!\nClick the 'Play' button to start playing!",
+    opts
   );
 }
 function sendReferalCodeTG(chatId) {

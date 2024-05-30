@@ -1,4 +1,5 @@
 /*   onclick   */
+if (!Telegram.WebApp.isExpanded) Telegram.WebApp.expand();
 let currentPage = "home";
 let globalAndObject = {};
 let parsedTGdata = parseTGvalues(window.location.hash);
@@ -696,3 +697,4 @@ function preventDoubleTap(element) {
     }
   });
 }
+Telegram.WebApp.ready();
