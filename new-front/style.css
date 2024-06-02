@@ -1,0 +1,88 @@
+@font-face{
+    font-family: "Bakbak One";
+    src: url("./Fonts/f410590fe1c3850b6066782397bc83ac.eot");
+    src: url("./Fonts/f410590fe1c3850b6066782397bc83ac.eot?#iefix")format("embedded-opentype"),
+        url("./Fonts/f410590fe1c3850b6066782397bc83ac.woff")format("woff"),
+        url("./Fonts/f410590fe1c3850b6066782397bc83ac.woff2")format("woff2"),
+        url("./Fonts/f410590fe1c3850b6066782397bc83ac.ttf")format("truetype"),
+        url("./Fonts/f410590fe1c3850b6066782397bc83ac.svg#Bakbak One")format("svg");
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+}
+
+body{
+    margin: 0;
+    background-color: #CBDEF0;
+    font-family: "Bakbak One";
+}
+
+#content{
+    color: #003B8E;
+}
+
+#head-items{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+
+#andcoin{
+    display: flex;
+    justify-content: center;
+    margin-top: 35%;
+}
+
+#earn{
+    margin: 10px auto;
+    background-color: white;
+    width: 260px;
+    height: 115px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+}
+
+#farm{
+    width: 230px;
+    height: 37px;
+    color: white;
+    background-color: #5DA0FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-top: 7px;
+    font-size: 20px;
+}
+
+#amount{
+    font-size: 25px;
+}
+
+
+#fixed-footer{
+    position: fixed;
+    width: 100%;
+    bottom: -30px;
+}
+
+.pages{
+    position: relative;
+    top: -15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font: 12px;
+}
+
+#panel{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #5DA0FF;
+    padding: 25px;
+    border-radius: 25px;
+}
