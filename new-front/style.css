@@ -31,7 +31,7 @@ body{
 #andcoin{
     display: flex;
     justify-content: center;
-    margin-top: 35%;
+    margin-top: 1%;
 }
 
 #earn{
@@ -85,4 +85,10 @@ body{
     background-color: #5DA0FF;
     padding: 25px;
     border-radius: 25px;
+}
+
+@media screen and (max-width:500px){
+    #andcoin{
+        margin-top: 35%;
+    }
 }
