@@ -92,3 +92,8 @@ body{
         margin-top: 35%;
     }
 }
+@media screen and (max-height:700px){
+    #andcoin{
+        margin-top: 20%;
+    }
+}
