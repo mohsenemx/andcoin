@@ -4,13 +4,10 @@ import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 
 const wss = new WebSocketServer({ port: 8081 });
-const token = fs.readFileSync("./token", "utf8");
+const token = "5790127357:AAES9XJ6sOHOrKPh1PXkfHFkXj6gsWp-Fbk";
 
 const bot = new TelegramBot(token, {
   polling: true,
-  request: {
-    proxy: "http://127.0.0.1:2081",
-  },
 });
 var startDate = new Date();
 let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()} ${startDate.getHours()}:${startDate
