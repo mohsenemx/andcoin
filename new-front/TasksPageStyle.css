@@ -1,0 +1,65 @@
+#Tasks-header{
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+#referral{
+    margin: 0px auto;
+    margin-top: 60px;
+    width: 313px;
+    height: 160px;
+    background-image: linear-gradient(to right,#3884ed,#5DA0FF);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    border-radius: 15px;
+}
+
+#referral-txt{
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+#referral-btn{
+    width: 126px;
+    height: 30px;
+    background-color: white;
+    color: #003B8E;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    margin-left: 15px;
+    margin-bottom: 20px;
+    
+    border-radius: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+.task-items{
+    width: 312px;
+    height: 43px;
+    border: 2px solid #5DA0FF;
+    color: #003B8E;
+    margin: 30px auto;
+    
+}
+
+.task-items{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.join-btn{
+    background-color: #5DA0FF;
+    color: white;
+    width: 50px;
+    height: 25px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+}

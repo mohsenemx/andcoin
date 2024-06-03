@@ -17,7 +17,7 @@ body{
     font-family: "Bakbak One";
 }
 
-#content{
+#Home-content{
     color: #003B8E;
 }
 
@@ -96,4 +96,9 @@ body{
     #andcoin{
         margin-top: 20%;
     }
+}
+
+
+#HomePage{
+    display: none;
 }
