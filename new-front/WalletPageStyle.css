@@ -93,3 +93,11 @@
     font-size: 9px;
     color: #6C757D;
 }
+
+@media screen and (max-height:730px){
+
+    #wallet-box{
+        margin-top: -25px;
+    }
+
+}
