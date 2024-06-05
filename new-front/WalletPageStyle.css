@@ -1,0 +1,95 @@
+#wallet-box{
+    width: 305px;
+    height: 160px;
+    background-image: linear-gradient(to right,#175cbd,#94befa);
+    margin: 0px auto;
+    margin-top: 30px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+#wallet-txt{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+#And-balance-box{
+    width: 207px;
+    height: 25px;
+    background-color: #2f2f3450;
+    font-size: 12px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+#and-balance{
+    display: flex;
+    width: 70px;
+    justify-content: flex-start;
+}
+#money-box{
+    display: flex;
+    font-size: 40px;
+}
+#dollar{
+    width: 40px;
+}
+
+
+#trade-box{
+    display: flex;
+    justify-content: center;
+}
+
+
+.trade-items{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    margin-top: 30px;
+    color: #003B8E;
+}
+
+#Coins-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.coin-items{
+    width: 318px;
+    height: 63px;
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 3px;
+}
+
+.coin-info{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+.profits{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 8px;
+}
+
+.coins-amount{
+    display: flex;
+    justify-content: flex-start;
+    font-size: 9px;
+    color: #6C757D;
+}

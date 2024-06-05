@@ -31,7 +31,7 @@ body{
 #andcoin{
     display: flex;
     justify-content: center;
-    margin-top: 1%;
+    margin-top: 0%;
 }
 
 #earn{
@@ -81,7 +81,7 @@ body{
 #panel{
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-end;
     background-color: #5DA0FF;
     padding: 25px;
     border-radius: 25px;

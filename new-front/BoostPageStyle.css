@@ -1,0 +1,53 @@
+#Boost-header{
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+#boost-box{
+    width: 332px;
+    height: 113px;
+    background-image: linear-gradient(to right,#175cbd,#94befa);
+    margin: 0px auto;
+    margin-top: 60px;
+    border-radius: 15px;
+    color: white;
+    display: flex;
+}
+
+#boost-txt{
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+.boost-icons{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 170px;
+}
+
+.boost-items{
+    color: #003B8E;
+    width: 332px;
+    height: 39px;
+    border: 2px solid #5DA0FF;
+    margin: 30px auto;
+    font-size: 19px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px;
+}
+.upgrade{
+    color: white;
+    font-size: 14px;
+    width: 68px;
+    height: 25px;
+    background-color: #5DA0FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    letter-spacing: 1px;
+}
