@@ -1,0 +1,101 @@
+#Trade-header{
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px;
+}
+
+#trade2-box{
+    width: 332px;
+    height: 140px;
+    background-image: linear-gradient(to right,#175cbd,#94befa);
+    margin: 0px auto;
+    margin-top: 60px;
+    border-radius: 15px;
+    color: white;
+    display: flex;
+}
+#trade2-txt{
+    margin-left: 15px;
+    margin-top: 15px;
+}
+
+#pay-box{
+    width: 332px;
+    height: 115px;
+    background-color: #5da1ff6f;
+    margin: 0px auto;
+    margin-top: 60px;
+    border-radius: 15px;
+    display: flex;
+}
+
+#YouPayCoin{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 121px;
+    height: 44px;
+    border: 1px solid white;
+    border-radius: 20px;
+}
+#pay-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+#pay-right{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+#get-box{
+    width: 332px;
+    height: 115px;
+    background-color: #5da1ff6f;
+    margin: 0px auto;
+    border-radius: 15px;
+    display: flex;
+    position: relative;
+    bottom: 30px;
+}
+
+#YouGetCoin{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 121px;
+    height: 44px;
+    border: 1px solid white;
+    border-radius: 20px;
+}
+#get-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+#get-right{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+
+#confirm-swap{
+    width: 328px;
+    height: 64px;
+    color: white;
+    background-color: #5DA0FF;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin: 15px auto;
+}

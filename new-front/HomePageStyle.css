@@ -1,4 +1,4 @@
-@font-face{
+/* @font-face{
     font-family: "Bakbak One";
     src: url("./Fonts/f410590fe1c3850b6066782397bc83ac.eot");
     src: url("./Fonts/f410590fe1c3850b6066782397bc83ac.eot?#iefix")format("embedded-opentype"),
@@ -9,7 +9,12 @@
     font-weight:normal;
     font-style:normal;
     font-display:swap;
-}
+} */
+
+@font-face {
+    src: url("./Fonts/Bakbak\ One.ttf");
+    font-family: "Bakbak One";
+  }
 
 body{
     margin: 0;
