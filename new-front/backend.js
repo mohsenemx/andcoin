@@ -1,0 +1,11 @@
+let userObject = {};
+let user;
+let coinsSinceLastSync = 0;
+let coins = 0;
+let upgrades = [];
+let coinsDisplay = document.getElementById("coinsDisplay");
+let atasks = [];
+let cryptos = [];
+let friends = [];
+let usdtPrice = 6000;
+const socket = new WebSocket("ws://127.0.0.1:8081/");
