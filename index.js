@@ -4,10 +4,13 @@ import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 
 const wss = new WebSocketServer({ port: 8081 });
-const token = "5790127357:AAES9XJ6sOHOrKPh1PXkfHFkXj6gsWp-Fbk";
+const token = fs.readFileSync("./token");
 
 const bot = new TelegramBot(token, {
   polling: true,
+  request: {
+    proxy: "http://127.0.0.1:2081",
+  },
 });
 var startDate = new Date();
 let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()} ${startDate.getHours()}:${startDate
@@ -323,8 +326,25 @@ let statsSave = setInterval(() => {
 let updateCrypto = setInterval(() => {
   updateCryptoPrice();
 }, 900000);
+
 bot.onText(/\/start (\w+)/, function (msg, match) {
-  sendDefaultTGmessage(msg.chat.id);
+  if (msg.chat.type == "group") {
+    bot.sendMessage(
+      msg.chat.id,
+      `
+    Hey @${msg.from.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
+
+Now we're rolling out our Telegram mini app! Start farming points now 🚀
+
+Don't forget to collect your points. We look forward to seeing you on the app. 🌼
+
+Have friends? Invite them! The more, the merrier! 👯
+    `
+    );
+  } else {
+    sendDefaultTGmessage(msg.chat.id);
+  }
+
   let isPresent = false;
   for (const obj of users) {
     if (obj.tgId == msg.chat.id) {
@@ -367,6 +387,49 @@ bot.on("message", (msg) => {
       msg.chat.id,
       `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coin Clicks: ${stats.allCoinsClicked}`
     );
+  } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
+    if (msg.chat.type == "group" || msg.chat.type == "supergroup") {
+      const opts = {
+        reply_markup: {
+          resize_keyboard: true,
+          inline_keyboard: [
+            [
+              {
+                text: "Play",
+                url: "https://t.me/AndCoin_bot/webapp",
+              },
+            ],
+            [
+              {
+                text: "Learn how to play",
+                callback_data: "howtoplay",
+              },
+            ],
+            [
+              {
+                text: "Invite friends",
+                callback_data: "invitefriends",
+              },
+            ],
+          ],
+        },
+      };
+      bot.sendMessage(
+        msg.chat.id,
+        `
+      Hey @${msg.from.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
+  
+  Now we're rolling out our Telegram mini app! Start farming points now 🚀
+  
+  Don't forget to collect your points. We look forward to seeing you on the app. 🌼
+  
+  Have friends? Invite them! The more, the merrier! 👯
+      `,
+        opts
+      );
+    } else {
+      sendDefaultTGmessage(msg.chat.id);
+    }
   }
   if (msg.text.includes("/profile")) {
     let arg = msg.text.split(" ");
@@ -428,20 +491,24 @@ bot.on("message", (msg) => {
 function sendDefaultTGmessage(chatId) {
   const opts = {
     reply_markup: {
-      resize_keyboard: false,
-      keyboard: [
+      resize_keyboard: true,
+      inline_keyboard: [
         [
           {
             text: "Play",
             web_app: { url: "https://and.hamii.xyz" },
           },
+        ],
+        [
           {
             text: "Learn how to play",
-            web_app: { url: "https://google.com" },
+            callback_data: "howtoplay",
           },
+        ],
+        [
           {
             text: "Invite friends",
-            web_app: { url: "https://google.com" },
+            callback_data: "invitefriends",
           },
         ],
       ],
@@ -449,7 +516,15 @@ function sendDefaultTGmessage(chatId) {
   };
   bot.sendMessage(
     chatId,
-    "Welcome to Andcoin!\nClick the 'Play' button to start playing!",
+    `
+    Hey! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
+
+Now we're rolling out our Telegram mini app! Start farming points now 🚀
+
+Don't forget to collect your points. We look forward to seeing you on the app. 🌼
+
+Have friends? Invite them! The more, the merrier! 👯
+    `,
     opts
   );
 }
@@ -459,6 +534,24 @@ function sendReferalCodeTG(chatId) {
     `You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${chatId}`
   );
 }
+bot.on("callback_query", (callbackQuery) => {
+  const action = callbackQuery.data;
+  const msg = callbackQuery.message;
+  if (action == "invitefriends") {
+    if (msg.chat.type == 'supergroup' || msg.chat.type == 'group') {
+      bot.sendMessage(
+        msg.chat.id,
+        `You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.from.id}`
+      );
+    } else {
+      bot.sendMessage(
+        msg.chat.id,
+        `You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.chat.id}`
+      );
+    }
+    
+  }
+});
 async function checkUserJoinedMainTG(userId) {
   let doesUserExit = false;
   bot

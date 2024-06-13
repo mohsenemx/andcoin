@@ -1,3 +1,4 @@
+if (!Telegram.WebApp.isExpanded) Telegram.WebApp.expand();
 function Home(){
     document.querySelector("#HomePage").style.display = "block";
     document.querySelector("#TasksPage").style.display = "none";
@@ -52,5 +53,4 @@ function TradeETH(){
 
     document.querySelector("#cGet-info").innerHTML = "<img width='32px' height='32px' src='./TradePageIcons/ETH.png' alt=''><div style='font-size: 18px;margin-left: 10px;'>ETH</div>";
 }
-
-
+Telegram.WebApp.ready();
