@@ -1,16 +1,28 @@
 import { WebSocketServer } from "ws";
+import { createServer } from 'https';
 import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
-
-const wss = new WebSocketServer({ port: 8081 });
-const token = fs.readFileSync("./token");
-
+import 'dotenv/config';
+const server = createServer({
+  cert: fs.readFileSync(process.env.PATH_TO_CERT),
+  key: fs.readFileSync(process.env.PATH_TO_KEY)
+});
+const wss = new WebSocketServer({ server });
+const token = process.env.BOT_TOKEN;
+let proxy;
+if (process.env.USE_PROXY == 'true') {
+  proxy = {
+    proxy: process.env.PROXY_ADDRESS,
+  }
+} else {
+  proxy = {
+    proxy: false,
+  }
+}
 const bot = new TelegramBot(token, {
   polling: true,
-  request: {
-    proxy: "http://127.0.0.1:2081",
-  },
+  request: proxy,
 });
 var startDate = new Date();
 let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()} ${startDate.getHours()}:${startDate
@@ -737,3 +749,4 @@ function howtoplay(chatId, replyId) {
     reply_to_message_id: replyId,
   });
 }
+server.listen(8081);

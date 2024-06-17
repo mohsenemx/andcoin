@@ -12,7 +12,7 @@ let tasks = [];
 let cryptos = [];
 let friends = [];
 let usdtPrice = 6000;
-const socket = new WebSocket("ws://127.0.0.1:8081/");
+const socket = new WebSocket("wss://127.0.0.1:8081/");
 setTimeout(() => {
   if (typeof userObject == "undefined") {
     showError("DVE-33");
