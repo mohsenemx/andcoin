@@ -1,581 +1,616 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./HomePageStyle.css">
-    <link rel="stylesheet" href="./TasksPageStyle.css">
-    <link rel="stylesheet" href="./BoostPageStyle.css">
-    <link rel="stylesheet" href="./WalletPageStyle.css">
-    <link rel="stylesheet" href="./TradePageStyle.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./HomePageStyle.css" />
+    <link rel="stylesheet" href="./TasksPageStyle.css" />
+    <link rel="stylesheet" href="./BoostPageStyle.css" />
+    <link rel="stylesheet" href="./WalletPageStyle.css" />
+    <link rel="stylesheet" href="./TradePageStyle.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- <link href="https://db.onlinewebfonts.com/c/f410590fe1c3850b6066782397bc83ac?family=Bakbak+One" rel="stylesheet"> -->
-    <title>Document</title>
-</head>
-<body>
-    
-    <div id="HomePage" style="display: block;">
+    <title>AndCoin</title>
+  </head>
+  <body>
+    <div id="mainError">
+      Something went wrong!
+      <div id="errorCode"></div>
+      <button onclick="location.reload()">Reload</button>
+    </div>
+    <div id="HomePage" style="display: block">
+      <div id="Home-header">
+        <div id="head-items">
+          <div id="wallet-icon" onclick="Wallet()">
+            <img src="./MinePageIcons/Wallet.png" alt="" />
+          </div>
 
-        <div id="Home-header">
-
-            <div id="head-items">
-
-                <div id="wallet-icon" onclick="Wallet()">
-                    <img src="./MinePageIcons/Wallet.png" alt="">
-                </div>
-                
-                <div id="boost-icon" onclick="Boost()">
-                    <img src="./MinePageIcons/Boost.png" alt="">
-                </div>
-
-            </div>
-
+          <div id="boost-icon" onclick="Boost()">
+            <img src="./MinePageIcons/Boost.png" alt="" />
+          </div>
         </div>
+      </div>
 
-        <div id="Home-content">
-
-            <div id="andcoin">
-                <img src="./MinePageIcons/AndCoin.png" alt="">
-            </div>
-
-            <div id="earn">
-
-                <span style="font-size: 13px;text-align: center;margin-top: 5px;">Your Balance</span>
-                <div id="balance">
-                    <div style="display: flex;align-items: center;">
-                        <img style="margin-right: 10px;" width="30px" src="./MinePageIcons/Coin.png" alt="">
-                        <span id="amount">0</span>
-                    </div>
-                    
-                </div>
-
-                <div id="farm">
-                    Start Farming
-                </div>
-
-            </div>
-
+      <div id="Home-content">
+        <div id="andcoin">
+            <img src="./MinePageIcons/AndCoin.png" alt="" />
         </div>
+        <div id="earnAssembly">
+          <div id="earnBackground"></div>
+        <div id="earn">
+          <span style="font-size: 13px; text-align: center; margin-top: 5px"
+            >Your Balance</span
+          >
+          <div id="balance">
+            <div style="display: flex; align-items: center">
+              <img
+                style="margin-right: 10px"
+                width="30px"
+                src="./MinePageIcons/Coin.png"
+                alt=""
+              />
+              <span id="amount">0</span>
+            </div>
+          </div>
 
-        <div id="home-footer">
-
-            <div id="fixed-footer">
-
-                <div id="panel">
-                    <div class="pages" style="color: white;">
-                        <div id="tasks-icon" onclick="Tasks()"><img width="30px" src="./MinePageIcons/Tasks.png" alt=""></div>
-                        <span>Tasks</span>
-                    </div>
-
-                    <div class="pages" style="color: #003B8E;">
-                        <div id="home-icon" onclick="Home()"><img width="25px" src="./MinePageIcons/BlueHome.png" alt=""></div>
-                        <span>Home</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="trade-icon" onclick="Trade()"><img width="35px" src="./MinePageIcons/Trade.png" alt=""></div>
-                        <span>Trade</span>
-                    </div>
-                </div>
-
+          <div id="farm">Start Farming</div>
+        </div>
+      </div>
+    </div>
+      <div id="home-footer">
+        <div id="fixed-footer">
+          <div id="panel">
+            <div class="pages" style="color: white">
+              <div id="tasks-icon" onclick="Tasks()">
+                <img width="30px" src="./MinePageIcons/Tasks.png" alt="" />
+              </div>
+              <span>Tasks</span>
             </div>
 
-        </div>
+            <div class="pages" style="color: #003b8e">
+              <div id="home-icon" onclick="Home()">
+                <img width="25px" src="./MinePageIcons/BlueHome.png" alt="" />
+              </div>
+              <span>Home</span>
+            </div>
 
+            <div class="pages" style="color: white">
+              <div id="trade-icon" onclick="Trade()">
+                <img width="35px" src="./MinePageIcons/Trade.png" alt="" />
+              </div>
+              <span>Trade</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <div id="TasksPage" style="display: none">
+      <div id="Tasks-header">
+        <div id="back" onclick="Home()">
+          <img src="./TasksPageIcons/Left.png" alt="" />
+        </div>
+      </div>
 
+      <div id="Tasks-content">
+        <div id="referral">
+          <div id="referral-txt">
+            <p style="font-size: 12px">Refer and Earn</p>
+            <span style="font-size: 17px">Refer Your Friends</span>
+            <br />
+            <span style="font-size: 17px">and Earn $ANDCOIN</span>
+          </div>
 
-
-
-    <div id="TasksPage" style="display: none;">
-
-        <div id="Tasks-header">
-
-            <div id="back" onclick="Home()">
-                <img src="./TasksPageIcons/Left.png" alt="">
-            </div>
-
+          <div id="referral-btn">Get Your Referral Link</div>
         </div>
 
-        <div id="Tasks-content">
-
-            <div id="referral">
-                
-                <div id="referral-txt">
-                    <p style="font-size: 12px;">Refer and Earn</p>
-                    <span style="font-size: 17px;">Refer Your Friends</span>
-                    <br>
-                    <span style="font-size: 17px;">and Earn $ANDCOIN</span>
-                </div>
-
-                <div id="referral-btn">
-                    Get Your Referral Link
-                </div>
-            </div>
-
-            <div id="tasks">
-
-                <div class="task-items">
-                    <span style="font-size: 17px;">Join Our Telegram Channel</span>
-                    <div class="join-btn">Join</div>
-                </div>
-                <div class="task-items">
-                    <span style="font-size: 17px;">Join Our Telegram Channel</span>
-                    <div class="join-btn">Join</div>
-                </div>
-                <div class="task-items">
-                    <span style="font-size: 17px;">Join Our Telegram Channel</span>
-                    <div class="join-btn">Join</div>
-                </div>
-                <div class="task-items">
-                    <span style="font-size: 17px;">Join Our Telegram Channel</span>
-                    <div class="join-btn">Join</div>
-                </div>
-
-            </div>
-
+        <div id="tasks">
+          <div class="task-items">
+            <span style="font-size: 17px">No tasks right now</span>
+            
+          </div>
+          
+          </div>
         </div>
+      </div>
 
-        <div id="home-footer">
-
-            <div id="fixed-footer">
-
-                <div id="panel">
-                    <div class="pages" style="color: #003B8E;">
-                        <div id="tasks-icon" onclick="Tasks()"><img width="30px" src="./TasksPageIcons/BlueTasks.png" alt=""></div>
-                        <span>Tasks</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="home-icon" onclick="Home()"><img width="25px" src="./TasksPageIcons/Home.png" alt=""></div>
-                        <span>Home</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="trade-icon" onclick="Trade()"><img width="35px" src="./TasksPageIcons/Trade.png" alt=""></div>
-                        <span>Trade</span>
-                    </div>
-                </div>
-
+      <div id="home-footer">
+        <div id="fixed-footer">
+          <div id="panel">
+            <div class="pages" style="color: #003b8e">
+              <div id="tasks-icon" onclick="Tasks()">
+                <img width="30px" src="./TasksPageIcons/BlueTasks.png" alt="" />
+              </div>
+              <span>Tasks</span>
             </div>
 
-        </div>
+            <div class="pages" style="color: white">
+              <div id="home-icon" onclick="Home()">
+                <img width="25px" src="./TasksPageIcons/Home.png" alt="" />
+              </div>
+              <span>Home</span>
+            </div>
 
+            <div class="pages" style="color: white">
+              <div id="trade-icon" onclick="Trade()">
+                <img width="35px" src="./TasksPageIcons/Trade.png" alt="" />
+              </div>
+              <span>Trade</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    
-    <div id="TradePage1" style="display: none;">
-        
-        <div id="Trade-header">
+    <div id="TradePage1" style="display: none">
+      <div id="Trade-header">
+        <div id="back" onclick="Home()">
+          <img src="./TradePageIcons/Left.png" alt="" />
+        </div>
+      </div>
 
-            <div id="back" onclick="Home()">
-                <img src="./TradePageIcons/Left.png" alt="">
+      <div id="Trade1-content">
+        <div id="pay-box">
+          <div id="pay-left" style="width: 50%">
+            <div style="width: 100px; color: #959ea3">You Pay</div>
+            <div>
+              <input
+                type="text"
+                style="
+                  width: 100px;
+                  height: 40px;
+                  font-size: 28px;
+                  border: 0;
+                  background-color: #5da1ff00;
+                  font-family: 'Bakban One';
+                "
+              />
             </div>
+          </div>
 
+          <div id="pay-right" style="width: 50%">
+            <div style="color: #959ea3">
+              Balance: <span id="AND-balance2">0</span>
+            </div>
+            <div id="YouPayCoin">
+              <div style="display: flex; align-items: center">
+                <img
+                  width="32px"
+                  height="32px"
+                  src="./TradePageIcons/AndCoin.png"
+                  alt=""
+                />
+                <div style="font-size: 18px; margin-left: 10px">AND</div>
+              </div>
+
+              <div><img src="./TradePageIcons/arrow-down.png" alt="" /></div>
+            </div>
+          </div>
         </div>
 
-
-        <div id="Trade1-content">
-
-            <div id="pay-box">
-
-                <div id="pay-left" style="width: 50%;">
-                    <div style="width: 100px;color: #959EA3;">You Pay</div>
-                    <div><input type="text" style="width: 100px;height: 40px;font-size: 28px;border: 0;background-color: #5da1ff00;font-family: 'Bakban One';"></div>
-                </div>
-
-                <div id="pay-right" style="width: 50%;">
-                    <div style="color: #959EA3;">Balance: <span id="AND-balance2">0</span></div>
-                    <div id="YouPayCoin">
-                        <div style="display: flex;align-items: center;">
-                            <img width="32px" height="32px" src="./TradePageIcons/AndCoin.png" alt="">
-                            <div style="font-size: 18px;margin-left: 10px;">AND</div>
-                        </div>
-                        
-                        <div><img src="./TradePageIcons/arrow-down.png" alt=""></div>
-                    </div>
-                </div>
-
-
-            </div>
-
-
-            <div style="position: relative;width: 100%;text-align: center;z-index: 2;bottom: 10px;"><img width="60px" src="./WalletPageIcons/Swap.png" alt=""></div>
-
-            <div id="get-box">
-
-                <div id="get-left" style="width: 50%;">
-                    <div style="width: 100px;color: #959EA3;">You Get</div>
-                    <div style="width: 100px;height: 40px;font-size: 28px;border: 0;background-color: #5da1ff00;"></div>
-                </div>
-
-                <div id="get-right" style="width: 50%;">
-                    <div>= $<span id="coin-get">0</span></div>
-                    <div id="YouGetCoin" onclick="Trade()">
-                        <div id="cGet-info" style="display: flex;align-items: center;">
-                            <img width="32px" height="32px" src="./TradePageIcons/AndCoin.png" alt="">
-                            <div style="font-size: 18px;margin-left: 10px;"></div>
-                        </div>
-                        
-                        <div><img src="./TradePageIcons/arrow-down.png" alt=""></div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div id="confirm-swap">Confirm Swap</div>
-
+        <div
+          style="
+            position: relative;
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+            bottom: 10px;
+          "
+        >
+          <img width="60px" src="./WalletPageIcons/Swap.png" alt="" />
         </div>
 
-        <div id="Trade1-footer">
+        <div id="get-box">
+          <div id="get-left" style="width: 50%">
+            <div style="width: 100px; color: #959ea3">You Get</div>
+            <div
+              style="
+                width: 100px;
+                height: 40px;
+                font-size: 28px;
+                border: 0;
+                background-color: #5da1ff00;
+              "
+            ></div>
+          </div>
 
-            <div id="fixed-footer">
-
-                <div id="panel">
-                    <div class="pages" style="color: white;">
-                        <div id="tasks-icon" onclick="Tasks()"><img width="30px" src="./BoostPageIcons/Tasks.png" alt=""></div>
-                        <span>Tasks</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="home-icon" onclick="Home()"><img width="25px" src="./BoostPageIcons/Home.png" alt=""></div>
-                        <span>Home</span>
-                    </div>
-
-                    <div class="pages" style="color: #003B8E;;">
-                        <div id="trade-icon" onclick="Trade()"><img width="35px" src="./TradePageIcons/BlueTrade.png" alt=""></div>
-                        <span>Trade</span>
-                    </div>
-                </div>
-
+          <div id="get-right" style="width: 50%">
+            <div>= $<span id="coin-get">0</span></div>
+            <div id="YouGetCoin" onclick="Trade()">
+              <div id="cGet-info" style="display: flex; align-items: center">
+                <img
+                  width="32px"
+                  height="32px"
+                  src="./TradePageIcons/AndCoin.png"
+                  alt=""
+                />
+                <div style="font-size: 18px; margin-left: 10px"></div>
+              </div>
             </div>
-
+          </div>
         </div>
 
+        <div id="confirm-swap">Confirm Swap</div>
+      </div>
+
+      <div id="Trade1-footer">
+        <div id="fixed-footer">
+          <div id="panel">
+            <div class="pages" style="color: white">
+              <div id="tasks-icon" onclick="Tasks()">
+                <img width="30px" src="./BoostPageIcons/Tasks.png" alt="" />
+              </div>
+              <span>Tasks</span>
+            </div>
+
+            <div class="pages" style="color: white">
+              <div id="home-icon" onclick="Home()">
+                <img width="25px" src="./BoostPageIcons/Home.png" alt="" />
+              </div>
+              <span>Home</span>
+            </div>
+
+            <div class="pages" style="color: #003b8e">
+              <div id="trade-icon" onclick="Trade()">
+                <img width="35px" src="./TradePageIcons/BlueTrade.png" alt="" />
+              </div>
+              <span>Trade</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <div id="TradePage2" style="display: none">
+      <div id="Trade-header">
+        <div id="back" onclick="Home()">
+          <img src="./TradePageIcons/Left.png" alt="" />
+        </div>
+      </div>
 
-    <div id="TradePage2" style="display: none;">
-    
-        <div id="Trade-header">
-
-            <div id="back" onclick="Home()">
-                <img src="./TradePageIcons/Left.png" alt="">
-            </div>
-
+      <div id="Trade2-content">
+        <div id="trade2-box">
+          <div id="trade2-txt">
+            <p
+              style="
+                font-size: 12px;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+              "
+            >
+              Trade
+            </p>
+            <span style="font-size: 18px">Trade Your $AND</span>
+            <br />
+            <span style="font-size: 18px">earn more money</span>
+          </div>
         </div>
 
-
-        <div id="Trade2-content">
-
-            <div id="trade2-box">
-
-                <div id="trade2-txt">
-                    <p style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;">Trade</p>
-                    <span style="font-size: 18px;">Trade Your &ANDCOIN</span>
-                    <br>
-                    <span style="font-size: 18px;">earn more money</span>
-                </div>
-
+        <div id="Coins-box">
+          <div
+            style="
+              width: 318px;
+              font-size: 20px;
+              color: #003b8e;
+              margin-bottom: 20px;
+              margin-top: 10px;
+            "
+          ></div>
+          <div class="coin-items" onclick="TradeETH()">
+            <div class="coin-info">
+              <div id="eth-icon">
+                <img src="./WalletPageIcons/Ethereum.png" alt="" />
+              </div>
+              <div id="eth-name" style="margin-left: 15px">
+                <div>Ethereum</div>
+                <div class="coins-amount" id="eth-amount">0 Eth</div>
+              </div>
             </div>
-
-
-            <div id="Coins-box">
-                <div style="width: 318px;font-size: 20px;color: #003B8E;margin-bottom: 20px;margin-top: 10px;"></div>
-                <div class="coin-items" onclick="TradeETH()">
-                    <div class="coin-info">
-                        <div id="eth-icon"><img src="./WalletPageIcons/Ethereum.png" alt=""></div>
-                        <div id="eth-name" style="margin-left: 15px;">
-                            <div>Ethereum</div>
-                            <div class="coins-amount" id="eth-amount">0 Eth</div>
-                        </div>
-                    </div>
-                    <div class="eth-vector"><img src="WalletPageIcons/Vector1.png" alt=""></div>
-                    <div class="coin-price" style="margin: 15px;">
-                        <div id="eth-price">$0</div>
-                        <div class="profits" id="eth-profit">0</div>
-                    </div>
-                </div>
-
-                <div class="coin-items" onclick="TradeADA()">
-                    <div class="coin-info">
-                        <div id="ada-icon"><img src="./WalletPageIcons/Cardano.png" alt=""></div>
-                        <div id="ada-name" style="margin-left: 15px;">
-                            <div>Cardano</div>
-                            <div class="coins-amount" id="ada-amount">0 ADA</div>
-                        </div>
-                    </div>
-                    <div class="ada-vector"><img src="WalletPageIcons/Vector2.png" alt=""></div>
-                    <div class="coin-price" style="margin: 15px;">
-                        <div id="ada-price">$0</div>
-                        <div class="profits" id="ada-profit">0</div>
-                    </div>
-                </div>
-                
-
-                <div class="coin-items" onclick="TradeTRX()">
-                    <div class="coin-info">
-                        <div id="trx-icon"><img src="./WalletPageIcons/Tron.png" alt=""></div>
-                        <div id="trx-name" style="margin-left: 15px;">
-                            <div>Tron</div>
-                            <div class="coins-amount" id="trx-amount">0 TRX</div>
-                        </div>
-                    </div>
-                    <div class="trx-vector"><img src="WalletPageIcons/Vector3.png" alt=""></div>
-                    <div class="coin-price" style="margin: 15px;">
-                        <div id="trx-price">$0</div>
-                        <div class="profits" id="trx-profit">0</div>
-                    </div>
-                </div>
-
-
+            <div class="eth-vector">
+              <img src="WalletPageIcons/Vector1.png" alt="" />
             </div>
+            <div class="coin-price" style="margin: 15px">
+              <div id="eth-price">$0</div>
+              <div class="profits" id="eth-profit">0</div>
+            </div>
+          </div>
 
+          <div class="coin-items" onclick="TradeADA()">
+            <div class="coin-info">
+              <div id="ada-icon">
+                <img src="./WalletPageIcons/Cardano.png" alt="" />
+              </div>
+              <div id="ada-name" style="margin-left: 15px">
+                <div>Cardano</div>
+                <div class="coins-amount" id="ada-amount">0 ADA</div>
+              </div>
+            </div>
+            <div class="ada-vector">
+              <img src="WalletPageIcons/Vector2.png" alt="" />
+            </div>
+            <div class="coin-price" style="margin: 15px">
+              <div id="ada-price">$0</div>
+              <div class="profits" id="ada-profit">0</div>
+            </div>
+          </div>
+
+          <div class="coin-items" onclick="TradeTRX()">
+            <div class="coin-info">
+              <div id="trx-icon">
+                <img src="./WalletPageIcons/Tron.png" alt="" />
+              </div>
+              <div id="trx-name" style="margin-left: 15px">
+                <div>Tron</div>
+                <div class="coins-amount" id="trx-amount">0 TRX</div>
+              </div>
+            </div>
+            <div class="trx-vector">
+              <img src="WalletPageIcons/Vector3.png" alt="" />
+            </div>
+            <div class="coin-price" style="margin: 15px">
+              <div id="trx-price">$0</div>
+              <div class="profits" id="trx-profit">0</div>
+            </div>
+          </div>
         </div>
+      </div>
 
-
-        <div id="Trade2-footer">
-
-            <div id="fixed-footer">
-
-                <div id="panel">
-                    <div class="pages" style="color: white;">
-                        <div id="tasks-icon" onclick="Tasks()"><img width="30px" src="./BoostPageIcons/Tasks.png" alt=""></div>
-                        <span>Tasks</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="home-icon" onclick="Home()"><img width="25px" src="./BoostPageIcons/Home.png" alt=""></div>
-                        <span>Home</span>
-                    </div>
-
-                    <div class="pages" style="color: #003B8E;;">
-                        <div id="trade-icon" onclick="Trade()"><img width="35px" src="./TradePageIcons/BlueTrade.png" alt=""></div>
-                        <span>Trade</span>
-                    </div>
-                </div>
-
+      <div id="Trade2-footer">
+        <div id="fixed-footer">
+          <div id="panel">
+            <div class="pages" style="color: white">
+              <div id="tasks-icon" onclick="Tasks()">
+                <img width="30px" src="./BoostPageIcons/Tasks.png" alt="" />
+              </div>
+              <span>Tasks</span>
             </div>
 
+            <div class="pages" style="color: white">
+              <div id="home-icon" onclick="Home()">
+                <img width="25px" src="./BoostPageIcons/Home.png" alt="" />
+              </div>
+              <span>Home</span>
+            </div>
+
+            <div class="pages" style="color: #003b8e">
+              <div id="trade-icon" onclick="Trade()">
+                <img width="35px" src="./TradePageIcons/BlueTrade.png" alt="" />
+              </div>
+              <span>Trade</span>
+            </div>
+          </div>
         </div>
-
-
-
+      </div>
     </div>
 
+    <div id="BoostPage" style="display: none">
+      <div id="Boost-header">
+        <div id="back" onclick="Home()">
+          <img src="./TasksPageIcons/Left.png" alt="" />
+        </div>
+      </div>
 
-    <div id="BoostPage" style="display: none;">
-
-        <div id="Boost-header">
-
-            <div id="back" onclick="Home()">
-                <img src="./TasksPageIcons/Left.png" alt="">
-            </div>
-
+      <div id="Boost-content">
+        <div id="boost-box">
+          <div id="boost-txt">
+            <p
+              style="
+                font-size: 12px;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+              "
+            >
+              Upgrade
+            </p>
+            <span style="font-size: 18px">Upgrade your option</span>
+            <br />
+            <span style="font-size: 18px">to earn money</span>
+          </div>
         </div>
 
-        <div id="Boost-content">
-
-            <div id="boost-box">
-
-                <div id="boost-txt">
-                    <p style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;">Upgrade</p>
-                    <span style="font-size: 18px;">Upgrade your option</span>
-                    <br>
-                    <span style="font-size: 18px;">to earn money</span>
-                </div>
-
+        <div id="boost-menu">
+          <div class="boost-items">
+            <div class="boost-icons" id="speed-icon">
+              <img width="30px" src="./BoostPageIcons/Speed.png" alt="" />
+              <span style="margin-left: 2px">Farming Speed</span>
             </div>
+            <span style="font-size: 14px"
+              >/ lvl <span id="speed-lvl"> 1 </span></span
+            >
+            <div id="speed-up" class="upgrade">Upgrade</div>
+          </div>
 
-            <div id="boost-menu">
-
-                <div class="boost-items">
-
-                        <div class="boost-icons" id="speed-icon">
-                            <img width="30px" src="./BoostPageIcons/Speed.png" alt="">
-                            <span style="margin-left: 2px;">Farming Speed</span>
-                        </div>
-                        <span style="font-size: 14px;">/ lvl <span id="speed-lvl"> 1 </span></span>
-                        <div id="speed-up" class="upgrade">Upgrade</div>
-
-                </div>
-
-                <div class="boost-items">
-
-                    <div class="boost-icons" id="storage-icon">
-                        <img width="30px" src="./BoostPageIcons/Storage.png" alt="">
-                        <span style="margin-left: 2px;">Storage</span>
-                    </div>
-                    <span style="font-size: 14px;">/ lvl <span id="storage-lvl"> 1 </span></span>
-                    <div id="speed-up" class="upgrade">Upgrade</div>
-
-                </div>
-
+          <div class="boost-items">
+            <div class="boost-icons" id="storage-icon">
+              <img width="30px" src="./BoostPageIcons/Storage.png" alt="" />
+              <span style="margin-left: 2px">Storage</span>
             </div>
-
+            <span style="font-size: 14px"
+              >/ lvl <span id="storage-lvl"> 1 </span></span
+            >
+            <div id="speed-up" class="upgrade">Upgrade</div>
+          </div>
         </div>
+      </div>
 
-        <div id="boost-footer">
-
-            <div id="fixed-footer">
-
-                <div id="panel">
-                    <div class="pages" style="color: white;">
-                        <div id="tasks-icon" onclick="Tasks()"><img width="30px" src="./BoostPageIcons/Tasks.png" alt=""></div>
-                        <span>Tasks</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="home-icon" onclick="Home()"><img width="25px" src="./BoostPageIcons/Home.png" alt=""></div>
-                        <span>Home</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="trade-icon" onclick="Trade()"><img width="35px" src="./BoostPageIcons/Trade.png" alt=""></div>
-                        <span>Trade</span>
-                    </div>
-                </div>
-
+      <div id="boost-footer">
+        <div id="fixed-footer">
+          <div id="panel">
+            <div class="pages" style="color: white">
+              <div id="tasks-icon" onclick="Tasks()">
+                <img width="30px" src="./BoostPageIcons/Tasks.png" alt="" />
+              </div>
+              <span>Tasks</span>
             </div>
 
-        </div>
+            <div class="pages" style="color: white">
+              <div id="home-icon" onclick="Home()">
+                <img width="25px" src="./BoostPageIcons/Home.png" alt="" />
+              </div>
+              <span>Home</span>
+            </div>
 
+            <div class="pages" style="color: white">
+              <div id="trade-icon" onclick="Trade()">
+                <img width="35px" src="./BoostPageIcons/Trade.png" alt="" />
+              </div>
+              <span>Trade</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <div id="WalletPage" style="display: none">
+      <div id="Wallet-header">
+        <div id="head-items">
+          <div id="back" onclick="Home()">
+            <img src="./WalletPageIcons/Left.png" alt="" />
+          </div>
 
-    <div id="WalletPage" style="display: none;">
+          <div id="alaram">
+            <img width="20px" src="./WalletPageIcons/Alarm.png" alt="" />
+          </div>
+        </div>
+      </div>
 
-        <div id="Wallet-header">
-
-            <div id="head-items">
-
-                <div id="back" onclick="Home()">
-                    <img src="./WalletPageIcons/Left.png" alt="">
-                </div>
-                
-                <div id="alaram">
-                    <img width="20px" src="./WalletPageIcons/Alarm.png" alt="">
-                </div>
-
+      <div id="Wallet-content">
+        <div id="wallet-box">
+          <div style="text-align: center; font-size: 14px">
+            Current Wallet Balance
+          </div>
+          <div id="wallet-txt">
+            <div id="money-box">
+              <div id="dollar">$</div>
+              <div id="money"></div>
+              0
             </div>
-
+            <div id="And-balance-box">
+              <span style="margin-left: 10px">Your $AND Balance : </span>
+              <div id="and-balance">0</div>
+            </div>
+          </div>
         </div>
 
-
-        <div id="Wallet-content">
-
-            <div id="wallet-box">
-
-                <div style="text-align: center;font-size: 14px;">Current Wallet Balance</div>
-                    <div id="wallet-txt">
-                        <div id="money-box"><div id="dollar">$</div><div id="money"></div>0</div>
-                        <div id="And-balance-box"><span style="margin-left: 10px;">Your $AND Balance : </span><div id="and-balance">0</div></div>
-                    </div>
-
+        <div id="trade-box">
+          <div class="trade-items" onclick="Trade()">
+            <div id="swap">
+              <img width="65px" src="./WalletPageIcons/Swap.png" alt="" />
             </div>
-
-
-            <div id="trade-box">
-
-                <div class="trade-items">
-                    <div id="swap"><img width="65px" src="./WalletPageIcons/Swap.png" alt=""></div>
-                    <div>Swap</div>
-                </div>
-                <div class="trade-items">
-                    <div id="Buy"><img width="65px" src="./WalletPageIcons/Buy.png" alt=""></div>
-                    <div>Buy</div>
-                </div>
-                <div class="trade-items">
-                    <div id="receive"><img width="65px" src="./WalletPageIcons/Receive.png" alt=""></div>
-                    <div>Receive</div>
-                </div>
-
+            <div>Swap</div>
+          </div>
+          <div class="trade-items">
+            <div id="Buy">
+              <img width="65px" src="./WalletPageIcons/Buy.png" alt="" />
             </div>
-
-
-            <div id="Coins-box">
-                <div style="width: 318px;font-size: 20px;color: #003B8E;margin-bottom: 20px;">Your Coins</div>
-                <div class="coin-items">
-                    <div class="coin-info">
-                        <div id="eth-icon"><img src="./WalletPageIcons/Ethereum.png" alt=""></div>
-                        <div id="eth-name" style="margin-left: 15px;">
-                            <div>Ethereum</div>
-                            <div class="coins-amount" id="eth-amount">0 Eth</div>
-                        </div>
-                    </div>
-                    <div class="eth-vector"><img src="WalletPageIcons/Vector1.png" alt=""></div>
-                    <div class="coin-price" style="margin: 15px;">
-                        <div id="eth-price">$0</div>
-                        <div class="profits" id="eth-profit">0</div>
-                    </div>
-                </div>
-
-                <div class="coin-items">
-                    <div class="coin-info">
-                        <div id="ada-icon"><img src="./WalletPageIcons/Cardano.png" alt=""></div>
-                        <div id="ada-name" style="margin-left: 15px;">
-                            <div>Cardano</div>
-                            <div class="coins-amount" id="ada-amount">0 ADA</div>
-                        </div>
-                    </div>
-                    <div class="ada-vector"><img src="WalletPageIcons/Vector2.png" alt=""></div>
-                    <div class="coin-price" style="margin: 15px;">
-                        <div id="ada-price">$0</div>
-                        <div class="profits" id="ada-profit">0</div>
-                    </div>
-                </div>
-                
-
-                <div class="coin-items">
-                    <div class="coin-info">
-                        <div id="trx-icon"><img src="./WalletPageIcons/Tron.png" alt=""></div>
-                        <div id="trx-name" style="margin-left: 15px;">
-                            <div>Tron</div>
-                            <div class="coins-amount" id="trx-amount">0 TRX</div>
-                        </div>
-                    </div>
-                    <div class="trx-vector"><img src="WalletPageIcons/Vector3.png" alt=""></div>
-                    <div class="coin-price" style="margin: 15px;">
-                        <div id="trx-price">$0</div>
-                        <div class="profits" id="trx-profit">0</div>
-                    </div>
-                </div>
-
-
+            <div>Buy</div>
+          </div>
+          <div class="trade-items">
+            <div id="receive">
+              <img width="65px" src="./WalletPageIcons/Receive.png" alt="" />
             </div>
-
+            <div>Receive</div>
+          </div>
         </div>
 
+        <div id="Coins-box">
+          <div
+            style="
+              width: 318px;
+              font-size: 20px;
+              color: #003b8e;
+              margin-bottom: 20px;
+            "
+          >
+            Your Coins
+          </div>
+          <div class="coin-items">
+            <div class="coin-info">
+              <div id="eth-icon">
+                <img src="./WalletPageIcons/Ethereum.png" alt="" />
+              </div>
+              <div id="eth-name" style="margin-left: 15px">
+                <div>Ethereum</div>
+                <div class="coins-amount" id="eth-amount">0 Eth</div>
+              </div>
+            </div>
+            <div class="eth-vector">
+              <img src="WalletPageIcons/Vector1.png" alt="" />
+            </div>
+            <div class="coin-price" style="margin: 15px">
+              <div id="eth-price">$0</div>
+              <div class="profits" id="eth-profit">0</div>
+            </div>
+          </div>
 
-        <div id="wallet-footer">
+          <div class="coin-items">
+            <div class="coin-info">
+              <div id="ada-icon">
+                <img src="./WalletPageIcons/Cardano.png" alt="" />
+              </div>
+              <div id="ada-name" style="margin-left: 15px">
+                <div>Cardano</div>
+                <div class="coins-amount" id="ada-amount">0 ADA</div>
+              </div>
+            </div>
+            <div class="ada-vector">
+              <img src="WalletPageIcons/Vector2.png" alt="" />
+            </div>
+            <div class="coin-price" style="margin: 15px">
+              <div id="ada-price">$0</div>
+              <div class="profits" id="ada-profit">0</div>
+            </div>
+          </div>
 
-            <div id="fixed-footer">
+          <div class="coin-items">
+            <div class="coin-info">
+              <div id="trx-icon">
+                <img src="./WalletPageIcons/Tron.png" alt="" />
+              </div>
+              <div id="trx-name" style="margin-left: 15px">
+                <div>Tron</div>
+                <div class="coins-amount" id="trx-amount">0 TRX</div>
+              </div>
+            </div>
+            <div class="trx-vector">
+              <img src="WalletPageIcons/Vector3.png" alt="" />
+            </div>
+            <div class="coin-price" style="margin: 15px">
+              <div id="trx-price">$0</div>
+              <div class="profits" id="trx-profit">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <div id="panel">
-                    <div class="pages" style="color: white;">
-                        <div id="tasks-icon" onclick="Tasks()"><img width="30px" src="./BoostPageIcons/Tasks.png" alt=""></div>
-                        <span>Tasks</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="home-icon" onclick="Home()"><img width="25px" src="./BoostPageIcons/Home.png" alt=""></div>
-                        <span>Home</span>
-                    </div>
-
-                    <div class="pages" style="color: white;">
-                        <div id="trade-icon" onclick="Trade()"><img width="35px" src="./BoostPageIcons/Trade.png" alt=""></div>
-                        <span>Trade</span>
-                    </div>
-                </div>
-
+      <div id="wallet-footer">
+        <div id="fixed-footer">
+          <div id="panel">
+            <div class="pages" style="color: white">
+              <div id="tasks-icon" onclick="Tasks()">
+                <img width="30px" src="./BoostPageIcons/Tasks.png" alt="" />
+              </div>
+              <span>Tasks</span>
             </div>
 
+            <div class="pages" style="color: white">
+              <div id="home-icon" onclick="Home()">
+                <img width="25px" src="./BoostPageIcons/Home.png" alt="" />
+              </div>
+              <span>Home</span>
+            </div>
+
+            <div class="pages" style="color: white">
+              <div id="trade-icon" onclick="Trade()">
+                <img width="35px" src="./BoostPageIcons/Trade.png" alt="" />
+              </div>
+              <span>Trade</span>
+            </div>
+          </div>
         </div>
-
-
+      </div>
     </div>
 
     <script src="./script.js"></script>
     <script src="./backend.js"></script>
-</body>
+  </body>
 </html>

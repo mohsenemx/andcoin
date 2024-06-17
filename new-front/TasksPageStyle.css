@@ -54,7 +54,7 @@
     border-radius: 15px;
 }
 
-.join-btn{
+.join-btn {
     background-color: #5DA0FF;
     color: white;
     width: 50px;
@@ -62,8 +62,15 @@
     border-radius: 5px;
     display: flex;
     justify-content: space-around;
+    font-family: 'SFPro';
 }
-
+.join-btn button {
+    outline: none;
+    border: none;
+}
+button:disabled {
+    background-color: #285697;
+}
 @media screen and (max-height:730px){
     #referral{
         margin-top: 30px;

@@ -332,7 +332,7 @@ bot.onText(/\/start (\w+)/, function (msg, match) {
     bot.sendMessage(
       msg.chat.id,
       `
-    Hey @${msg.from.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
+    Hey @${msg.sender_chat.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
 
 Now we're rolling out our Telegram mini app! Start farming points now 🚀
 
@@ -417,7 +417,7 @@ bot.on("message", (msg) => {
       bot.sendMessage(
         msg.chat.id,
         `
-      Hey @${msg.from.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
+      Hey @${msg.sender_chat.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
   
   Now we're rolling out our Telegram mini app! Start farming points now 🚀
   
@@ -486,6 +486,9 @@ bot.on("message", (msg) => {
       bot.sendMessage(msg.chat.id, `User @${tUsername} was not found`);
     }
   }
+  if (msg.text.includes("/howtoplay")) {
+    howtoplay(msg.chat.id, msg.message_id);
+  }
 });
 
 function sendDefaultTGmessage(chatId) {
@@ -538,18 +541,37 @@ bot.on("callback_query", (callbackQuery) => {
   const action = callbackQuery.data;
   const msg = callbackQuery.message;
   if (action == "invitefriends") {
-    if (msg.chat.type == 'supergroup' || msg.chat.type == 'group') {
-      bot.sendMessage(
+    if (msg.chat.type == "supergroup" || msg.chat.type == "group") {
+      /*bot.sendMessage(
         msg.chat.id,
         `You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.from.id}`
+      );*/
+      bot.editMessageText(
+        `
+      You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.sender_chat.id}
+      `,
+        {
+          chat_id: msg.chat.id,
+          message_id: msg.message_id,
+        }
       );
     } else {
-      bot.sendMessage(
-        msg.chat.id,
-        `You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.chat.id}`
+      bot.editMessageText(
+        `
+      You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.sender_chat.id}
+      `,
+        {
+          chat_id: msg.chat.id,
+          message_id: msg.message_id,
+        }
       );
     }
-    
+  } else if (action == "howtoplay") {
+    bot.editMessageText(howtoplayText, {
+      chat_id: msg.chat.id,
+      message_id: msg.message_id,
+      parse_mode: "html",
+    });
   }
 });
 async function checkUserJoinedMainTG(userId) {
@@ -697,4 +719,21 @@ function heartbeat() {
 }
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
+let howtoplayText = `
+<b>AndCoin</b> is a free play to earn game that you can earn <code>$AND</code> in.
+
+<b>Here are some tips so you earn more <code>$AND</code>:</b>
+<b>1.</b> Trading is one of most important part of this game. So, by doing good trades, you can earn a good amount of <code>$AND</code>.
+Prices represent real-life prices, but the trades have no real-life value and is just a virtural trading.
+
+<b>2.</b> Inviting Friends: Other important aspect of AndCoin is having a large friend group.
+
+<b>3.</b> Upgrading: Upgrading (also known as boosting) is the option for you to pay some <code>$AND</code> to upgrade your storage or your farming speed that help you earn more <code>$AND</code> in the long run.
+`;
+function howtoplay(chatId, replyId) {
+  bot.sendMessage(chatId, howtoplayText, {
+    parse_mode: "html",
+    reply_to_message_id: replyId,
+  });
 }

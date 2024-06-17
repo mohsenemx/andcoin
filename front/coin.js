@@ -200,7 +200,7 @@ function loadTasks() {
   }
 }
 function doTasks(div) {
-  let taskId = div.getAttribute("data-id");
+  let taskId = div.getAttribute("data-id"); 
   socket.send(
     `{"action":"getTaskStatus","tgId":"${parsedTGdata.user.id}", "taskId": "${taskId}"}`
   );

@@ -53,4 +53,8 @@ function TradeETH(){
 
     document.querySelector("#cGet-info").innerHTML = "<img width='32px' height='32px' src='./TradePageIcons/ETH.png' alt=''><div style='font-size: 18px;margin-left: 10px;'>ETH</div>";
 }
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  }
 Telegram.WebApp.ready();

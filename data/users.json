@@ -11,6 +11,7 @@
     "maxEnergy": 2000,
     "joined": 0,
     "lastOnline": 0,
+    "lastClaimed": 0,
     "crypto": [
       { "id": "BTC", "amount": 69 },
       { "id": "ETH", "amount": 0 },
