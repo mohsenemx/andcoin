@@ -338,8 +338,22 @@ let statsSave = setInterval(() => {
 let updateCrypto = setInterval(() => {
   updateCryptoPrice();
 }, 900000);
-
+let hourlyBackup = setInterval(
+  () => {
+    performBackup();
+  }, 3600000
+)
+function performBackup() {
+  const currentUtcTime = new Date();
+const offsetHours = +3.5;
+const localTime = new Date(currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours));
+let backupTime = localTime.toISOString();
+  bot.sendDocument(-1002205721312, './data/users.json', {caption: `users.json @ ${backupTime}`});
+  bot.sendDocument(-1002205721312, './data/stats.json', {caption: `stats.json @ ${backupTime}`});
+  bot.sendDocument(-1002205721312, './data/crypto.json', {caption: `crypto.json @ ${backupTime}`});
+}
 bot.onText(/\/start (\w+)/, function (msg, match) {
+  
   if (msg.chat.type == "group") {
     bot.sendMessage(
       msg.chat.id,
@@ -401,6 +415,7 @@ bot.on("message", (msg) => {
     );
   } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
     if (msg.chat.type == "group" || msg.chat.type == "supergroup") {
+      
       const opts = {
         reply_markup: {
           resize_keyboard: true,
@@ -447,7 +462,6 @@ bot.on("message", (msg) => {
     let arg = msg.text.split(" ");
     let tUsername = false;
     let foundUser = false;
-    console.log(arg);
     try {
       if (arg[1] != undefined || arg[1].trim() != "") {
         tUsername = arg[1].slice(1).toLowerCase();
