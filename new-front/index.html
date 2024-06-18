@@ -530,16 +530,36 @@
               </div>
               <div id="eth-name" style="margin-left: 15px">
                 <div>Ethereum</div>
-                <div class="coins-amount" id="eth-amount">0 Eth</div>
+                <div class="coins-amount" id="eth-amount">${coin.amount} ${coin.id}</div>
               </div>
             </div>
             <div class="eth-vector">
               
             </div>
             <div class="coin-price" style="margin: 15px">
-              <div id="eth-price">$0</div>
-              <div class="profits" id="eth-profit">0</div>
+              <div id="eth-price">$${crypto.usdtPrice}</div>
+              <div class="profits" id="eth-profit">${crypto.growthRate}</div>
             </div>
+            
+          </div>
+          <div class="coin-items">
+            <div class="coin-info">
+              <div id="eth-icon">
+                <img src="./WalletPageIcons/Ethereum.png" alt="" />
+              </div>
+              <div id="eth-name" style="margin-left: 15px">
+                <div>Ethereum</div>
+                <div class="coins-amount" id="eth-amount">${coin.amount} ${coin.id}</div>
+              </div>
+            </div>
+            <div class="eth-vector">
+              
+            </div>
+            <div class="coin-price" style="margin: 15px">
+              <div id="eth-price">$${crypto.usdtPrice}</div>
+              <div class="profits" id="eth-profit">${crypto.growthRate}</div>
+            </div>
+            
           </div>
 
         </div>

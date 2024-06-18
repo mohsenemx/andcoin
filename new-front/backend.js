@@ -82,8 +82,48 @@ function startFarming() {
 function updateWallet() {
   let usdtvalue = document.getElementById("money");
   let andvalue = document.getElementById("and-balance");
+  let yourcoinsDiv = document.getElementById("Coins-box");
   usdtvalue.innerHTML = numberWithCommas(userObject.usdt);
   andvalue.innerHTML = numberWithCommas(userObject.coins);
+  yourcoinsDiv.innerHTML = "";
+  yourcoinsDiv.innerHTML += `<div
+  style="
+    width: 318px;
+    font-size: 20px;
+    color: #003b8e;
+    margin-bottom: 20px;
+  "
+>
+  Your Coins
+</div>`;
+
+  for (const coin of userObject.crypto) {
+    for (const crypto of cryptos) {
+      if (crypto.id == coin.id) {
+        yourcoinsDiv.innerHTML += `
+      <div class="coin-items">
+                 <div class="coin-info">
+                   <div id="eth-icon">
+                     <img src="./WalletPageIcons/Ethereum.png" alt="" />
+                   </div>
+                   <div id="eth-name" style="margin-left: 15px">
+                     <div>Ethereum</div>
+                     <div class="coins-amount" id="eth-amount">${coin.amount} ${coin.id}</div>
+                   </div>
+                 </div>
+                 <div class="eth-vector">
+                   
+                 </div>
+                 <div class="coin-price" style="margin: 15px">
+                   <div id="eth-price">$${crypto.usdtPrice}</div>
+                   <div class="profits" id="eth-profit">${crypto.growthRate}</div>
+                 </div>
+                 
+               </div>
+      `;
+      }
+    }
+  }
 }
 function updateTasks() {
   let tasksDiv = document.getElementById("tasks");
@@ -116,8 +156,8 @@ function updateEverything() {
   updateWallet();
   updateTasks();
 }
-document.getElementById('referral-btn').addEventListener('click', () => {
-  socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"`);
+document.getElementById("referral-btn").addEventListener("click", () => {
+  socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"}`);
 });
 function parseQuery(queryString) {
   const params = new URLSearchParams(queryString);

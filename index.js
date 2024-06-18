@@ -584,7 +584,7 @@ bot.on("callback_query", (callbackQuery) => {
     } else {
       bot.editMessageText(
         `
-      You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.sender_chat.id}
+      You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.chat.id}
       `,
         {
           chat_id: msg.chat.id,
