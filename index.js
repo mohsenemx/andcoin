@@ -305,13 +305,6 @@ wss.on("connection", function connection(ws) {
   ws.on("pong", heartbeat);
 });
 
-let energyRefill = setInterval(() => {
-  for (const user of users) {
-    if (user.energy < user.maxEnergy) {
-      user.energy += user.upgrades[2].level;
-    }
-  }
-}, 1000);
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {
     if (ws.isAlive === false) return ws.terminate();

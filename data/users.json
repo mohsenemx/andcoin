@@ -7,8 +7,6 @@
     "usdt": 546754,
     "rank": "Poor",
     "villageId": null,
-    "energy": 2000,
-    "maxEnergy": 2000,
     "joined": 0,
     "lastOnline": 0,
     "lastClaimed": 0,
@@ -17,15 +15,14 @@
       { "id": "ETH", "amount": 0 },
       { "id": "TON", "amount": 0 },
       { "id": "TRX", "amount": 0 },
-      { "id": "DOGE", "amount": 0 }
+      { "id": "DOGE", "amount": 546767 }
     ],
     "upgrades": [
-      { "name": "multitap", "level": 1 },
       { "name": "storage", "level": 1 },
       { "name": "recharge", "level": 1 }
     ],
     "friends": [],
-    "completedTasks": [0, 1],
+    "completedTasks": [0],
     "transactionHistory": []
   }
 ]

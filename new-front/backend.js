@@ -82,7 +82,7 @@ function startFarming() {
 function updateWallet() {
   let usdtvalue = document.getElementById("money");
   let andvalue = document.getElementById("and-balance");
-  let yourcoinsDiv = document.getElementById("Coins-box");
+  let yourcoinsDiv = document.getElementById("wallet-coins-box");
   usdtvalue.innerHTML = numberWithCommas(userObject.usdt);
   andvalue.innerHTML = numberWithCommas(userObject.coins);
   yourcoinsDiv.innerHTML = "";
@@ -104,10 +104,10 @@ function updateWallet() {
       <div class="coin-items">
                  <div class="coin-info">
                    <div id="eth-icon">
-                     <img src="./WalletPageIcons/Ethereum.png" alt="" />
+                     <img src="./CoinIcons/${crypto.id.toLowerCase()}.png" alt="" />
                    </div>
                    <div id="eth-name" style="margin-left: 15px">
-                     <div>Ethereum</div>
+                     <div>${crypto.name}</div>
                      <div class="coins-amount" id="eth-amount">${coin.amount} ${coin.id}</div>
                    </div>
                  </div>
@@ -115,8 +115,8 @@ function updateWallet() {
                    
                  </div>
                  <div class="coin-price" style="margin: 15px">
-                   <div id="eth-price">$${crypto.usdtPrice}</div>
-                   <div class="profits" id="eth-profit">${crypto.growthRate}</div>
+                   <div id="eth}-price">$${crypto.usdtPrice}</div>
+                   <div class="profits" id="eth-profit">${crypto.growthRate}%</div>
                  </div>
                  
                </div>
@@ -166,6 +166,7 @@ function parseQuery(queryString) {
   // Iterate through each entry
   for (const [key, value] of params.entries()) {
     // Decode and parse JSON for 'user' key
+    console.log(key, value)
     if (key === "user") {
       result[key] = JSON.parse(decodeURIComponent(value));
     } else {

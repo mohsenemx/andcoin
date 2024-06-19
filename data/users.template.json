@@ -6,8 +6,6 @@
   "allCoins": 0,
   "villageId": null,
   "rank": "Poor",
-  "energy": 2000,
-  "maxEnergy": 2000,
   "joined": 0,
   "lastOnline": 0,
   "lastClaimed": 0,
@@ -19,7 +17,6 @@
     { "id": "DOGE", "amount": 0 }
   ],
   "upgrades": [
-    { "name": "multitap", "level": 1 },
     { "name": "storage", "level": 1 },
     { "name": "recharge", "level": 1 }
   ],
