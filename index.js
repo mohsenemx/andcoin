@@ -45,6 +45,8 @@ let transactionTemplate = fs.readFileSync(
 );
 let usdtPrice = 10000;
 wss.on("connection", function connection(ws) {
+  const clientIP = req.socket.remoteAddress;
+  console.log(`New Client connected with IP: ${clientIP}`)
   stats.online += 1;
   ws.on("message", function message(data) {
     let parsed = JSON.parse(data);
