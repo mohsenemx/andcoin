@@ -1,7 +1,7 @@
 [
-  { "name": "Bitcoin", "id": "BTC", "usdtPrice": 64000, "growthRate": 0 },
-  { "name": "Etherum", "id": "ETH", "usdtPrice": 2800, "growthRate": 0 },
-  { "name": "Ton", "id": "TON", "usdtPrice": 6, "growthRate": 0},
-  { "name": "Tron", "id": "TRX", "usdtPrice": 0.3, "growthRate": 0},
-  { "name": "DOGE", "id": "DOGE", "usdtPrice": 0.6, "growthRate": 0}
+  { "name": "Bitcoin", "id": "BTC", "usdtPrice": 64000, "growthRate": 0, "priceHistory": [] },
+  { "name": "Etherum", "id": "ETH", "usdtPrice": 2800, "growthRate": 0, "priceHistory": [] },
+  { "name": "Ton", "id": "TON", "usdtPrice": 6, "growthRate": 0, "priceHistory": []},
+  { "name": "Tron", "id": "TRX", "usdtPrice": 0.3, "growthRate": 0, "priceHistory": []},
+  { "name": "DOGE", "id": "DOGE", "usdtPrice": 0.6, "growthRate": 0, "priceHistory": []}
 ]

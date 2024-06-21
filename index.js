@@ -1,12 +1,15 @@
 import { WebSocketServer } from "ws";
-import { createServer } from 'https';
+import { createServer, globalAgent } from 'https';
 import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 import 'dotenv/config';
+import { create } from 'ssl-root-cas';
+/*const rootCas = create();
+globalAgent.options.ca = rootCas;*/
 const server = createServer({
   cert: fs.readFileSync(process.env.PATH_TO_CERT),
-  key: fs.readFileSync(process.env.PATH_TO_KEY)
+  key: fs.readFileSync(process.env.PATH_TO_KEY),
 });
 const wss = new WebSocketServer({ server });
 const token = process.env.BOT_TOKEN;
@@ -45,8 +48,6 @@ let transactionTemplate = fs.readFileSync(
 );
 let usdtPrice = 10000;
 wss.on("connection", function connection(ws) {
-  const clientIP = req.socket.remoteAddress;
-  console.log(`New Client connected with IP: ${clientIP}`)
   stats.online += 1;
   ws.on("message", function message(data) {
     let parsed = JSON.parse(data);
@@ -68,7 +69,6 @@ wss.on("connection", function connection(ws) {
             stats.totalUsers += 1;
             element.joined = new Date().getTime();
             element.lastOnline = new Date().getTime();
-
             users.push(newUser);
             ws.send('{ "action" : "createAccount", "result" : "success" }');
             break;
@@ -758,4 +758,6 @@ function howtoplay(chatId, replyId) {
     reply_to_message_id: replyId,
   });
 }
-server.listen(8081);
+server.listen(8081, () => {
+  console.log('WebSocket server listening on port 8081');
+});

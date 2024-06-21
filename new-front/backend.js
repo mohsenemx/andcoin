@@ -12,12 +12,14 @@ let tasks = [];
 let cryptos = [];
 let friends = [];
 let usdtPrice = 6000;
-const socket = new WebSocket("wss://127.0.0.1:8081/");
+const socket = new WebSocket("wss://127.0.0.1:8081/" , {
+  rejectUnauthorized: false,  // Disable SSL certificate verification
+});
 setTimeout(() => {
   if (typeof userObject == "undefined") {
     showError("DVE-33");
   }
-}, 1000);
+}, 1500);
 function init() {
   if (Telegram.WebApp.platform == "unknown") {
     showError("TGE-21");
@@ -77,6 +79,258 @@ function startFarming() {
     Number(userObject.lastClaimed) > 10800000 ||
     Number(userObject.lastClaimed == 0)
   ) {
+  }
+}
+function upgradeBoost(name) {
+  let upgradeName = name.getAttribute("data-name");
+  if (upgradeName == "storage") {
+    if (userObject.upgrades[1].level == 1) {
+      if (userObject.coins < 1500) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"storage","targetLevel":"${
+            userObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[1].level == 2) {
+      if (userObject.coins < 3000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"storage","targetLevel":"${
+            userObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[1].level == 3) {
+      if (userObject.coins < 6000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"storage","targetLevel":"${
+            userObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[1].level == 4) {
+      if (userObject.coins < 15000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"storage","targetLevel":"${
+            userObject.upgrades[1].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    }
+  } else if (upgradeName == "multi") {
+    if (userObject.upgrades[0].level == 1) {
+      if (userObject.coins < 1500) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"multitap","targetLevel":"${
+            userObject.upgrades[0].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[0].level == 2) {
+      if (userObject.coins < 3000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"multitap","targetLevel":"${
+            userObject.upgrades[0].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[0].level == 3) {
+      if (userObject.coins < 6000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"multitap","targetLevel":"${
+            userObject.upgrades[0].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[0].level == 4) {
+      if (userObject.coins < 15000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"multitap","targetLevel":"${
+            userObject.upgrades[0].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else {
+      socket.send(
+        `{"action":"upgrade","tgId":"${
+          user.id
+        }","upgrade":"multitap","targetLevel":"${
+          userObject.upgrades[0].level + 1
+        }"}`
+      );
+      updateEverything();
+    }
+  } else if (upgradeName == "recharge") {
+    if (userObject.upgrades[2].level == 1) {
+      if (userObject.coins < 1500) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"recharge","targetLevel":"${
+            userObject.upgrades[2].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[2].level == 2) {
+      if (userObject.coins < 5000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"recharge","targetLevel":"${
+            userObject.upgrades[2].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[2].level == 3) {
+      if (userObject.coins < 10000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"recharge","targetLevel":"${
+            userObject.upgrades[2].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else if (userObject.upgrades[2].level == 4) {
+      if (userObject.coins < 25000) {
+        showBoostError("You don't have enough coins for this upgrade!");
+        return;
+      } else {
+        socket.send(
+          `{"action":"upgrade","tgId":"${
+            user.id
+          }","upgrade":"recharge","targetLevel":"${
+            userObject.upgrades[2].level + 1
+          }"}`
+        );
+        updateEverything();
+      }
+    } else {
+      socket.send(
+        `{"action":"upgrade","tgId":"${
+          user.id
+        }","upgrade":"recharge","targetLevel":"${
+          userObject.upgrades[2].level + 1
+        }"}`
+      );
+      updateEverything();
+    }
+  }
+}
+function updateBoost() {
+  let storageButton = document.getElementById("storageButton");
+  let rechargeButton = document.getElementById("rechargeButton");
+  document.getElementById(
+    "storageLevel"
+  ).innerHTML = `/ level ${userObject.upgrades[1].level}`;
+  document.getElementById(
+    "rechargeLevel"
+  ).innerHTML = `/ level ${userObject.upgrades[2].level}`;
+  switch (Number(userObject.upgrades[1].level)) {
+    case 1: {
+      storageButton.innerHTML = numberWithCommas(1500);
+      break;
+    }
+    case 2: {
+      storageButton.innerHTML = numberWithCommas(3000);
+      break;
+    }
+    case 3: {
+      storageButton.innerHTML = numberWithCommas(6000);
+      break;
+    }
+    case 4: {
+      storageButton.innerHTML = numberWithCommas(15000);
+      break;
+    }
+    case 5: {
+      storageButton.innerHTML = `Max Level`;
+      storageButton.setAttribute("disabled", "true");
+      break;
+    }
+  }
+  switch (Number(userObject.upgrades[2].level)) {
+    case 1: {
+      rechargeButton.innerHTML = numberWithCommas(1500);
+      break;
+    }
+    case 2: {
+      rechargeButton.innerHTML = numberWithCommas(5000);
+      break;
+    }
+    case 3: {
+      rechargeButton.innerHTML = numberWithCommas(10000);
+      break;
+    }
+    case 4: {
+      rechargeButton.innerHTML = numberWithCommas(25000);
+      break;
+    }
+    case 5: {
+      rechargeButton.innerHTML = `Max Level`;
+      rechargeButton.setAttribute("disabled", "true");
+      break;
+    }
   }
 }
 function updateWallet() {
@@ -150,11 +404,15 @@ function updateTasks() {
     `;
   }
 }
+function updateFriends() {
 
+}
 function updateEverything() {
   performSync();
   updateWallet();
   updateTasks();
+  updateFriends();
+  updateBoost();
 }
 document.getElementById("referral-btn").addEventListener("click", () => {
   socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"}`);
@@ -166,7 +424,6 @@ function parseQuery(queryString) {
   // Iterate through each entry
   for (const [key, value] of params.entries()) {
     // Decode and parse JSON for 'user' key
-    console.log(key, value)
     if (key === "user") {
       result[key] = JSON.parse(decodeURIComponent(value));
     } else {
