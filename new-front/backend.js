@@ -11,10 +11,8 @@ let farmingButton = document.getElementById("farm");
 let tasks = [];
 let cryptos = [];
 let friends = [];
-let usdtPrice = 6000;
-const socket = new WebSocket("wss://127.0.0.1:8081/" , {
-  rejectUnauthorized: false,  // Disable SSL certificate verification
-});
+let usdtPrice = 1000;
+const socket = new WebSocket(config.SERVER_ADDRESS);
 setTimeout(() => {
   if (typeof userObject == "undefined") {
     showError("DVE-33");

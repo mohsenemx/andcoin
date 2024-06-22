@@ -1,17 +1,20 @@
 import { WebSocketServer } from "ws";
-import { createServer, globalAgent } from 'https';
+import { createServer } from 'https';
 import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 import 'dotenv/config';
-import { create } from 'ssl-root-cas';
-/*const rootCas = create();
-globalAgent.options.ca = rootCas;*/
 const server = createServer({
   cert: fs.readFileSync(process.env.PATH_TO_CERT),
   key: fs.readFileSync(process.env.PATH_TO_KEY),
 });
-const wss = new WebSocketServer({ server });
+let wssConf;
+if (process.env.USE_SSL == 'true') {
+  wssConf = { server };
+} else {
+  wssConf = { port: 8081 }
+}
+const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
 if (process.env.USE_PROXY == 'true') {
@@ -758,6 +761,8 @@ function howtoplay(chatId, replyId) {
     reply_to_message_id: replyId,
   });
 }
-server.listen(8081, () => {
-  console.log('WebSocket server listening on port 8081');
-});
+if (process.env.USE_SSL != 'false') {
+  server.listen(8081, () => {
+    console.log('WebSocket server listening on port 8081');
+  });
+}
