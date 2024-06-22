@@ -404,13 +404,29 @@ function updateTasks() {
     tasksDiv.innerHTML += `
     <div class="task-items">
             <span style="font-size: 17px">${task.name}</span>
-            <button class="join-btn" data-id="${task.id}" ${
+            <button class="join-btn" onclick="doTasks(this)" data-id="${task.id}" ${
       doneTask ? "disabled" : "notDone"
     }>${
       doneTask ? "Done" : task.task == "joinChannel" ? "Join" : "Go"
     } </button>
           </div>
     `;
+  }
+}
+function doTasks(taskDiv) {
+  let taskId = taskDiv.getAttribute('data-id');
+  for (const task of tasks) {
+    if (taskId == task.id) {
+      if (task.task == 'joinChannel') {
+        Telegram.WebApp.openTelegramLink(task.link);
+        
+      } else {
+        Telegram.WebApp.openLink(task.link);
+      }
+      setTimeout(() => {
+          socket.send(`{"action":"getTaskStatus", "tgId":"${user.id}", "taskId":"${task.id}"}`);
+      }, 2500);
+    }
   }
 }
 let interval = setInterval(() => {

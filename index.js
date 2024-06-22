@@ -1,31 +1,31 @@
 import { WebSocketServer } from "ws";
-import { createServer } from 'https';
+import { createServer } from "https";
 import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
-import 'dotenv/config';
+import "dotenv/config";
 const server = createServer({
   cert: fs.readFileSync(process.env.PATH_TO_CERT),
   key: fs.readFileSync(process.env.PATH_TO_KEY),
 });
 let wssConf;
-if (process.env.USE_SSL == 'true') {
+if (process.env.USE_SSL == "true") {
   wssConf = { server };
 } else {
-  wssConf = { port: 8081 }
+  wssConf = { port: 8081 };
 }
 
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
-if (process.env.USE_PROXY == 'true') {
+if (process.env.USE_PROXY == "true") {
   proxy = {
     proxy: process.env.PROXY_ADDRESS,
-  }
+  };
 } else {
   proxy = {
     proxy: false,
-  }
+  };
 }
 
 const bot = new TelegramBot(token, {
@@ -190,33 +190,9 @@ wss.on("connection", function connection(ws) {
         }
       }
     } else if (parsed.action == "upgrade") {
-      console.log(`User wants to upgrade ${JSON.stringify(parsed)}`);
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
-          if (parsed.upgrade == "multitap") {
-            switch (Number(parsed.targetLevel)) {
-              case 2: {
-                user.upgrades[0].level = 2;
-                user.coins -= 1500;
-                break;
-              }
-              case 3: {
-                user.upgrades[0].level = 3;
-                user.coins -= 3000;
-                break;
-              }
-              case 4: {
-                user.upgrades[0].level = 4;
-                user.coins -= 6000;
-                break;
-              }
-              case 5: {
-                user.upgrades[0].level = 5;
-                user.coins -= 15000;
-                break;
-              }
-            }
-          } else if (parsed.upgrade == "storage") {
+          if (parsed.upgrade == "storage") {
             switch (Number(parsed.targetLevel)) {
               case 2: {
                 user.upgrades[1].level = 2;
@@ -307,9 +283,9 @@ wss.on("connection", function connection(ws) {
           break;
         }
       }
-    } else if (parsed.action == 'startFarming') {
-      for (const user of users){
-        if (user.tgId == parsed.tgId){
+    } else if (parsed.action == "startFarming") {
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
           user.lastClaimed = Number(parsed.time);
           break;
         }
@@ -348,22 +324,27 @@ let statsSave = setInterval(() => {
 let updateCrypto = setInterval(() => {
   updateCryptoPrice();
 }, 900000);
-let hourlyBackup = setInterval(
-  () => {
-    performBackup();
-  }, 3600000
-)
+let hourlyBackup = setInterval(() => {
+  performBackup();
+}, 3600000);
 function performBackup() {
   const currentUtcTime = new Date();
-const offsetHours = +3.5;
-const localTime = new Date(currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours));
-let backupTime = localTime.toISOString();
-  bot.sendDocument(-1002205721312, './data/users.json', {caption: `users.json @ ${backupTime}`});
-  bot.sendDocument(-1002205721312, './data/stats.json', {caption: `stats.json @ ${backupTime}`});
-  bot.sendDocument(-1002205721312, './data/crypto.json', {caption: `crypto.json @ ${backupTime}`});
+  const offsetHours = +3.5;
+  const localTime = new Date(
+    currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours)
+  );
+  let backupTime = localTime.toISOString();
+  bot.sendDocument(-1002205721312, "./data/users.json", {
+    caption: `users.json @ ${backupTime}`,
+  });
+  bot.sendDocument(-1002205721312, "./data/stats.json", {
+    caption: `stats.json @ ${backupTime}`,
+  });
+  bot.sendDocument(-1002205721312, "./data/crypto.json", {
+    caption: `crypto.json @ ${backupTime}`,
+  });
 }
 bot.onText(/\/start (\w+)/, function (msg, match) {
-  
   if (msg.chat.type == "group") {
     bot.sendMessage(
       msg.chat.id,
@@ -412,7 +393,7 @@ Have friends? Invite them! The more, the merrier! 👯
     stats.totalUsers += 1;
     newUser.name = msg.chat.username.toLowerCase();
     newUser.tgId = msg.chat.id;
-    newUser.fullname = msg.chat.first_name + ' ' + msg.chat.last_name;
+    newUser.fullname = msg.chat.first_name + " " + msg.chat.last_name;
     newUser.coins = 5000;
     newUser.joined = new Date().getTime();
     users.push(newUser);
@@ -426,7 +407,6 @@ bot.on("message", (msg) => {
     );
   } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
     if (msg.chat.type == "group" || msg.chat.type == "supergroup") {
-      
       const opts = {
         reply_markup: {
           resize_keyboard: true,
@@ -780,8 +760,8 @@ function howtoplay(chatId, replyId) {
     reply_to_message_id: replyId,
   });
 }
-if (process.env.USE_SSL != 'false') {
+if (process.env.USE_SSL != "false") {
   server.listen(8081, () => {
-    console.log('WebSocket server listening on port 8081');
+    console.log("WebSocket server listening on port 8081");
   });
 }
