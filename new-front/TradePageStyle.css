@@ -1,3 +1,6 @@
+body {
+    touch-action: none none;
+}
 #Trade-header{
     display: flex;
     justify-content: flex-start;

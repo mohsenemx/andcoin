@@ -169,14 +169,16 @@
             <div style="width: 100px; color: #959ea3">You Pay</div>
             <div>
               <input
-                type="text"
+                type="number"
                 style="
                   width: 100px;
                   height: 40px;
                   font-size: 28px;
-                  border: 0;
+                  border: 1px solid #003b8e;
                   background-color: #5da1ff00;
-                  font-family: 'Bakban One';
+                  font-family: 'SFPro';
+                  outline: none;
+                  border-radius: 10px;
                 "
               />
             </div>
@@ -184,20 +186,19 @@
 
           <div id="pay-right" style="width: 50%">
             <div style="color: #959ea3">
-              Balance: <span id="AND-balance2">0</span>
+              Balance: <span id="USDT-balance2">0</span>
             </div>
             <div id="YouPayCoin">
               <div style="display: flex; align-items: center">
                 <img
                   width="32px"
                   height="32px"
-                  src="./TradePageIcons/AndCoin.png"
+                  src="./CoinIcons/usdt.png"
                   alt=""
                 />
-                <div style="font-size: 18px; margin-left: 10px">AND</div>
+                <div style="font-size: 18px; margin-left: 10px">USDT</div>
               </div>
 
-              <div><img src="./TradePageIcons/arrow-down.png" alt="" /></div>
             </div>
           </div>
         </div>
@@ -309,62 +310,8 @@
               margin-top: 10px;
             "
           ></div>
-          <div class="coin-items" onclick="TradeETH()">
-            <div class="coin-info">
-              <div id="eth-icon">
-                <img src="./WalletPageIcons/Ethereum.png" alt="" />
-              </div>
-              <div id="eth-name" style="margin-left: 15px">
-                <div>Ethereum</div>
-                <div class="coins-amount" id="eth-amount">0 Eth</div>
-              </div>
-            </div>
-            <div class="eth-vector">
-              <img src="WalletPageIcons/Vector1.png" alt="" />
-            </div>
-            <div class="coin-price" style="margin: 15px">
-              <div id="eth-price">$0</div>
-              <div class="profits" id="eth-profit">0</div>
-            </div>
-          </div>
 
-          <div class="coin-items" onclick="TradeADA()">
-            <div class="coin-info">
-              <div id="ada-icon">
-                <img src="./WalletPageIcons/Cardano.png" alt="" />
-              </div>
-              <div id="ada-name" style="margin-left: 15px">
-                <div>Cardano</div>
-                <div class="coins-amount" id="ada-amount">0 ADA</div>
-              </div>
-            </div>
-            <div class="ada-vector">
-              <img src="WalletPageIcons/Vector2.png" alt="" />
-            </div>
-            <div class="coin-price" style="margin: 15px">
-              <div id="ada-price">$0</div>
-              <div class="profits" id="ada-profit">0</div>
-            </div>
-          </div>
 
-          <div class="coin-items" onclick="TradeTRX()">
-            <div class="coin-info">
-              <div id="trx-icon">
-                <img src="./WalletPageIcons/Tron.png" alt="" />
-              </div>
-              <div id="trx-name" style="margin-left: 15px">
-                <div>Tron</div>
-                <div class="coins-amount" id="trx-amount">0 TRX</div>
-              </div>
-            </div>
-            <div class="trx-vector">
-              <img src="WalletPageIcons/Vector3.png" alt="" />
-            </div>
-            <div class="coin-price" style="margin: 15px">
-              <div id="trx-price">$0</div>
-              <div class="profits" id="trx-profit">0</div>
-            </div>
-          </div>
         </div>
       </div>
 

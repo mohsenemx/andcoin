@@ -195,25 +195,25 @@ wss.on("connection", function connection(ws) {
           if (parsed.upgrade == "storage") {
             switch (Number(parsed.targetLevel)) {
               case 2: {
-                user.upgrades[1].level = 2;
+                user.upgrades[0].level = 2;
                 user.maxEnergy = 3000;
                 user.coins -= 1500;
                 break;
               }
               case 3: {
-                user.upgrades[1].level = 3;
+                user.upgrades[0].level = 3;
                 user.maxEnergy = 3500;
                 user.coins -= 3000;
                 break;
               }
               case 4: {
-                user.upgrades[1].level = 4;
+                user.upgrades[0].level = 4;
                 user.maxEnergy = 4000;
                 user.coins -= 6000;
                 break;
               }
               case 5: {
-                user.upgrades[1].level = 5;
+                user.upgrades[0].level = 5;
                 user.maxEnergy = 5000;
                 user.coins -= 15000;
                 break;
@@ -225,22 +225,22 @@ wss.on("connection", function connection(ws) {
           } else if (parsed.upgrade == "recharge") {
             switch (Number(parsed.targetLevel)) {
               case 2: {
-                user.upgrades[2].level = 2;
+                user.upgrades[1].level = 2;
                 user.coins -= 1500;
                 break;
               }
               case 3: {
-                user.upgrades[2].level = 3;
+                user.upgrades[1].level = 3;
                 user.coins -= 5000;
                 break;
               }
               case 4: {
-                user.upgrades[2].level = 4;
+                user.upgrades[1].level = 4;
                 user.coins -= 10000;
                 break;
               }
               case 5: {
-                user.upgrades[2].level = 5;
+                user.upgrades[1].level = 5;
                 user.coins -= 25000;
                 break;
               }
@@ -710,8 +710,8 @@ async function updateCryptoPrice() {
             Math.floor(Number(coin.price_usd))
           );
 
-          cryptos[2].usdtPrice = Math.floor(Number(coin.price_usd));
-          cryptos[2].priceHistory.push(Math.floor(Number(coin.price_usd)));
+          cryptos[2].usdtPrice = Number(coin.price_usd);
+          cryptos[2].priceHistory.push(Number(coin.price_usd));
         } else if (coin.symbol == "TRX") {
           cryptos[3].growthRate = calculateGrowthRate(
             cryptos[3].usdtPrice,
