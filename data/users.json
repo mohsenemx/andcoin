@@ -10,7 +10,7 @@
     "villageId": null,
     "joined": 0,
     "lastOnline": 0,
-    "lastClaimed": 0,
+    "lastClaimed": 1719064667000,
     "crypto": [
       { "id": "BTC", "amount": 69 },
       { "id": "ETH", "amount": 0 },

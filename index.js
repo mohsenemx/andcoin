@@ -14,6 +14,7 @@ if (process.env.USE_SSL == 'true') {
 } else {
   wssConf = { port: 8081 }
 }
+
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -26,6 +27,7 @@ if (process.env.USE_PROXY == 'true') {
     proxy: false,
   }
 }
+
 const bot = new TelegramBot(token, {
   polling: true,
   request: proxy,
@@ -35,10 +37,12 @@ let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getD
   .getMinutes()
   .toString()
   .padStart(2, "0")}`;
+
 console.log(`[${start}] Starting...`);
 console.log("Telegram bot running...");
+updateCryptoPrice();
+console.log("Updating crypto prices...");
 console.log("API server running...");
-//updateCryptoPrice();
 
 let users = JSON.parse(fs.readFileSync("./data/users.json", "utf8"));
 let usersTemplate = fs.readFileSync("./data/users.template.json", "utf8");
@@ -69,6 +73,7 @@ wss.on("connection", function connection(ws) {
             console.log(newUser);
             newUser.name = parsed.name.toLowerCase();
             newUser.tgId = parsed.tgId;
+            newUser.fullname = parsed.fullname;
             stats.totalUsers += 1;
             element.joined = new Date().getTime();
             element.lastOnline = new Date().getTime();
@@ -302,6 +307,13 @@ wss.on("connection", function connection(ws) {
           break;
         }
       }
+    } else if (parsed.action == 'startFarming') {
+      for (const user of users){
+        if (user.tgId == parsed.tgId){
+          user.lastClaimed = Number(parsed.time);
+          break;
+        }
+      }
     }
   });
 
@@ -400,6 +412,7 @@ Have friends? Invite them! The more, the merrier! 👯
     stats.totalUsers += 1;
     newUser.name = msg.chat.username.toLowerCase();
     newUser.tgId = msg.chat.id;
+    newUser.fullname = msg.chat.first_name + ' ' + msg.chat.last_name;
     newUser.coins = 5000;
     newUser.joined = new Date().getTime();
     users.push(newUser);
@@ -703,30 +716,36 @@ async function updateCryptoPrice() {
             Math.floor(Number(coin.price_usd))
           );
           cryptos[0].usdtPrice = Math.floor(Number(coin.price_usd));
+          cryptos[0].priceHistory.push(Math.floor(Number(coin.price_usd)));
         } else if (coin.symbol == "ETH") {
           cryptos[1].growthRate = calculateGrowthRate(
             cryptos[1].usdtPrice,
             Math.floor(Number(coin.price_usd))
           );
           cryptos[1].usdtPrice = Math.floor(Number(coin.price_usd));
+          cryptos[1].priceHistory.push(Math.floor(Number(coin.price_usd)));
         } else if (coin.symbol == "TON") {
           cryptos[2].growthRate = calculateGrowthRate(
             cryptos[2].usdtPrice,
             Math.floor(Number(coin.price_usd))
           );
+
           cryptos[2].usdtPrice = Math.floor(Number(coin.price_usd));
+          cryptos[2].priceHistory.push(Math.floor(Number(coin.price_usd)));
         } else if (coin.symbol == "TRX") {
           cryptos[3].growthRate = calculateGrowthRate(
             cryptos[3].usdtPrice,
             Number(coin.price_usd)
           );
           cryptos[3].usdtPrice = Number(coin.price_usd);
+          cryptos[3].priceHistory.push(Number(coin.price_usd));
         } else if (coin.symbol == "DOGE") {
           cryptos[4].growthRate = calculateGrowthRate(
             cryptos[4].usdtPrice,
             Number(coin.price_usd)
           );
           cryptos[4].usdtPrice = Number(coin.price_usd);
+          cryptos[4].priceHistory.push(Number(coin.price_usd));
         }
       }
     })

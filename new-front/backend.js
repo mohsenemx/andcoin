@@ -8,6 +8,8 @@ let coins = 0;
 let upgrades = [];
 let balance = document.getElementById("amount");
 let farmingButton = document.getElementById("farm");
+let farmText = document.getElementById("startFarming");
+let farmProgress = document.getElementById("earnBackground");
 let tasks = [];
 let cryptos = [];
 let friends = [];
@@ -24,7 +26,7 @@ function init() {
     return;
   }
   socket.send(
-    `{"action":"login", "name": "${user.username}", "tgId": "${user.id}"}`
+    `{"action":"login", "name": "${user.username}", "tgId": "${user.id}", "fullname":"${user.first_name} ${user.last_name}"}`
   );
   socket.send(`{"action":"getObject", "tgId": "${user.id}"}`);
   socket.send(`{"action":"getTasks"}`);
@@ -73,10 +75,15 @@ farmingButton.addEventListener("click", () => {
   startFarming();
 });
 function startFarming() {
+  let now = Number(new Date().getTime());
   if (
-    Number(userObject.lastClaimed) > 10800000 ||
+    now - Number(userObject.lastClaimed) > 10800000 ||
     Number(userObject.lastClaimed == 0)
   ) {
+    userObject.lastClaimed = now;
+    socket.send(
+      `{"action":"startFarming", "tgId":"${user.id}", "time":"${now}"}`
+    );
   }
 }
 function upgradeBoost(name) {
@@ -276,15 +283,15 @@ function upgradeBoost(name) {
   }
 }
 function updateBoost() {
-  let storageButton = document.getElementById("storageButton");
-  let rechargeButton = document.getElementById("rechargeButton");
+  let storageButton = document.getElementById("storage-up");
+  let rechargeButton = document.getElementById("speed-up");
   document.getElementById(
-    "storageLevel"
-  ).innerHTML = `/ level ${userObject.upgrades[1].level}`;
+    "storage-lvl"
+  ).innerHTML = `${userObject.upgrades[0].level}`;
   document.getElementById(
-    "rechargeLevel"
-  ).innerHTML = `/ level ${userObject.upgrades[2].level}`;
-  switch (Number(userObject.upgrades[1].level)) {
+    "speed-lvl"
+  ).innerHTML = `${userObject.upgrades[1].level}`;
+  switch (Number(userObject.upgrades[0].level)) {
     case 1: {
       storageButton.innerHTML = numberWithCommas(1500);
       break;
@@ -307,7 +314,7 @@ function updateBoost() {
       break;
     }
   }
-  switch (Number(userObject.upgrades[2].level)) {
+  switch (Number(userObject.upgrades[1].level)) {
     case 1: {
       rechargeButton.innerHTML = numberWithCommas(1500);
       break;
@@ -360,7 +367,9 @@ function updateWallet() {
                    </div>
                    <div id="eth-name" style="margin-left: 15px">
                      <div>${crypto.name}</div>
-                     <div class="coins-amount" id="eth-amount">${coin.amount} ${coin.id}</div>
+                     <div class="coins-amount" id="eth-amount">${coin.amount} ${
+          coin.id
+        }</div>
                    </div>
                  </div>
                  <div class="eth-vector">
@@ -368,7 +377,9 @@ function updateWallet() {
                  </div>
                  <div class="coin-price" style="margin: 15px">
                    <div id="eth}-price">$${crypto.usdtPrice}</div>
-                   <div class="profits" id="eth-profit">${crypto.growthRate}%</div>
+                   <div class="profits" id="eth-profit">${
+                     crypto.growthRate
+                   }%</div>
                  </div>
                  
                </div>
@@ -402,15 +413,39 @@ function updateTasks() {
     `;
   }
 }
-function updateFriends() {
-
+let interval = setInterval(() => {
+  updateFarmBar();
+}, 1000);
+function updateFarmBar() {
+  let now = new Date().getTime();
+  if (Number(now) - Number(userObject.lastClaimed) > 10800000) {
+    farmProgress.style.display = "none";
+    farmProgress.style.width = "0%";
+    farmText.innerHTML = "Start Farming";
+  } else {
+    let timePassed = Number(now) - Number(userObject.lastClaimed);
+    let rn = UTCtoTime(10800000 - timePassed);
+    farmText.innerHTML = `${rn[0]}h : ${rn[1]}m : ${rn[2]}s`;
+    let percentage = (timePassed / 10800000).toFixed(2) * 100;
+    farmProgress.style.width = percentage + "%";
+    farmProgress.style.display = "block";
+  }
 }
+function UTCtoTime(time) {
+  let seconds = Math.floor((time / 1000) % 60);
+  let minutes = Math.floor((time / (1000 * 60)) % 60);
+  let hours = Math.floor(time / (1000 * 60 * 60));
+  return [hours, minutes, seconds];
+}
+
+function updateFriends() {}
 function updateEverything() {
   performSync();
   updateWallet();
   updateTasks();
   updateFriends();
   updateBoost();
+  updateFarmBar();
 }
 document.getElementById("referral-btn").addEventListener("click", () => {
   socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"}`);
