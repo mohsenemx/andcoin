@@ -61,28 +61,26 @@ wss.on("connection", function connection(ws) {
     if (parsed.action == "login") {
       const userExists = users.some((obj) => obj.tgId == parsed.tgId);
       if (userExists) {
-        console.log(`User @${element.name} (${element.tgId}) logged in`);
-        element.lastOnline = new Date().getTime();
         for (const user of users) {
-          if (user.tgId == newUser.tgId) {
+          if (user.tgId == parsed.tgId) {
+            console.log(`User @${element.name} (${element.tgId}) logged in`);
+            element.lastOnline = new Date().getTime();
             ws.send(
               `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
             );
+
+            break;
           }
         }
       } else {
-        console.log(
-          `User does not exist, creating new user for @${element.name}`
-        );
-
         let newUser = JSON.parse(usersTemplate);
         console.log(newUser);
         newUser.name = parsed.name.toLowerCase();
         newUser.tgId = parsed.tgId;
         newUser.fullname = parsed.fullname;
         stats.totalUsers += 1;
-        element.joined = new Date().getTime();
-        element.lastOnline = new Date().getTime();
+        newUser.joined = new Date().getTime();
+        newUser.lastOnline = new Date().getTime();
         users.push(newUser);
         ws.send('{ "action" : "createAccount", "result" : "success" }');
         for (const user of users) {

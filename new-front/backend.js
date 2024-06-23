@@ -1,5 +1,3 @@
-import { json } from "express";
-
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
 }
