@@ -1,3 +1,5 @@
+import { json } from "express";
+
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
 }
@@ -20,6 +22,7 @@ let readyToClaim = false;
 const socket = new WebSocket(config.SERVER_ADDRESS);
 setTimeout(() => {
   if (typeof userObject == "undefined") {
+    alert(JSON.stringify(user));
     showError("DVE-33");
   }
 }, 2000);
