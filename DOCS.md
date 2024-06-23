@@ -6,3 +6,4 @@
 - TGE-21 | Telegram mini-app platform not identified
 - TGE-22 | Telegram script not loaded
 - CPE-01 | Parsing Coin Click Code Failed
+- ACE-01 | Account Creation Failed

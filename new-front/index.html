@@ -188,22 +188,28 @@
             <div style="color: #959ea3">
               Balance: <span id="USDT-balance2">0</span>
             </div>
-            <div id="YouPayCoin">
+            <div id="YouPayCoin" onclick="youGiveClciked()">
               <div style="display: flex; align-items: center">
                 <img
+                id="youPayCoinId"
                   width="32px"
                   height="32px"
                   src="./CoinIcons/usdt.png"
                   alt=""
                 />
-                <div style="font-size: 18px; margin-left: 10px">USDT</div>
+                <div style="font-size: 18px; margin-left: 10px">
+                  <div><img src="./TradePageIcons/arrow-down.png" alt=""></div>
+                </div>
+                
               </div>
 
             </div>
+            
           </div>
         </div>
 
         <div
+        onclick="changePayments()"
           style="
             position: relative;
             width: 100%;
@@ -231,16 +237,19 @@
 
           <div id="get-right" style="width: 50%">
             <div>= $<span id="coin-get">0</span></div>
-            <div id="YouGetCoin" onclick="Trade()">
+            <div id="YouGetCoin" onclick="youGetClicked()">
               <div id="cGet-info" style="display: flex; align-items: center">
                 <img
+                id="youGetCoinId"
                   width="32px"
                   height="32px"
                   src="./TradePageIcons/AndCoin.png"
                   alt=""
                 />
                 <div style="font-size: 18px; margin-left: 10px"></div>
+                <div><img src="./TradePageIcons/arrow-down.png" alt=""></div>
               </div>
+              
             </div>
           </div>
         </div>

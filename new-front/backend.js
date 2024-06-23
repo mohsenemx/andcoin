@@ -48,6 +48,11 @@ socket.onerror = function (event) {
   showError("WSE-02");
 };
 function handleMessage(object) {
+  if (object.action == "createAccount") {
+    if (object.result == "failed") {
+      showError('ACE-1');
+    }
+  }
   if (object.action == "getObject") {
     userObject = object.object;
     upgrades = userObject.upgrades;
@@ -399,6 +404,25 @@ function updateCrypto() {
               margin-top: 10px;
             "
           ></div>`;
+          cryptoCoins.innerHTML += `
+    <div class="coin-items" onclick="tradeCrypto(this)" data-id="usdt">
+              <div class="coin-info">
+                <div id="eth-icon">
+                  <img src="./CoinIcons/usdt.png" alt="" />
+                </div>
+                <div id="eth-name" style="margin-left: 15px">
+                  <div>Tether USD</div>
+                  <div class="coins-amount" id="eth-amount">$${numberWithCommas(userObject.usdt)}</div>
+                </div>
+              </div>
+              <div class="eth-vector">
+                
+              </div>
+              <div class="coin-price" style="margin: 15px">
+                <div id="eth-price">$${numberWithCommas(usdtPrice)}</div>
+                <div class="profits" id="eth-profit">0%</div>
+              </div>
+            </div>`;
   for (const crypto of cryptos) {
     cryptoCoins.innerHTML += `
     <div class="coin-items" onclick="tradeCrypto(this)" data-id="${crypto.id}">
@@ -423,11 +447,57 @@ function updateCrypto() {
             </div>`;
   }
 }
+let waitingFor1stSelection = false;
+let waitingFor2ndSelection = false;
+let coinToGive = 'AND';
+let coinToGet = 'USDT';
 function tradeCrypto(cryptoDiv) {
   let id = cryptoDiv.getAttribute("data-id");
-  document.getElementById('USDT-balance2').innerHTML = `$${numberWithCommas(userObject.usdt)}`;
+  if (waitingFor1stSelection) {
+    document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
+    for (const coin in userObject.crypto) {
+      if (coin.id == id) {
+        document.getElementById('USDT-balance2').innerHTML = `${(id == 'USDT') ? userObject.usdt : coin.amount}`;
+        coinToGive = id;
+        waitingFor1stSelection = false;
+      }
+    }
+  } else if (waitingFor2ndSelection) {
+    document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
+    for (const coin in userObject.crypto) {
+      if (coin.id == id) {
+        coinToGet = id;
+        waitingFor2ndSelection = false;
+      }
+    }
+  } else {
+    document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
+    coinToGet = id;
+    coinToGive = 'AND';
+  }
   document.getElementById('TradePage1').style.display = 'block';
   document.getElementById('TradePage2').style.display = 'none';
+}
+function youGetClicked() {
+  waitingFor2ndSelection = true;
+  waitingFor1stSelection = false;
+  document.getElementById('TradePage1').style.display = 'none';
+  document.getElementById('TradePage2').style.display = 'block';
+  
+}
+function youGiveClciked() {
+  waitingFor1stSelection = true;
+  waitingFor2ndSelection = false;
+  document.getElementById('TradePage1').style.display = 'none';
+  document.getElementById('TradePage2').style.display = 'block';
+}
+function changePayments() {
+  document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${coinToGive.toLowerCase()}.png`);
+  document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${coinToGet.toLowerCase()}.png`);
+  document.getElementById('USDT-balance2').innerHTML = `${(coinToGet == 'USDT') ? userObject.usdt : '6'}`;
+  let tmp = coinToGive;
+  coinToGive = coinToGet;
+  coinToGet = tmp;
 }
 function updateFriends() {}
 function updateEverything() {
