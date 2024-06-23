@@ -1,6 +1,6 @@
 html {
   touch-action: pan-x pan-y;
-  /* user-select: none; */
+   user-select: none; 
 }
 @font-face {
   src: url("Fonts/Laro-Bold.ttf");
@@ -53,7 +53,7 @@ html {
   position: absolute;
   left: 0;
   right: 0;
-  z-index: 11;
+  z-index: 9;
   background-color: #cbdef0;
   display: flex;
   justify-content: center;
@@ -99,4 +99,33 @@ html {
   background-color: transparent;
   padding: 10px;
   margin-bottom: 45px;
+}
+#notif {
+  display: none;
+  position: fixed;
+  top: -100px; 
+  padding: 15px;
+  background-color: #333333c2;
+  color: #fff;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  justify-self: center;
+  align-self: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.5s ease-in-out;
+  z-index: 3;
+  margin: 20px;
+}
+
+#notif.show {
+  opacity: 1;
+  top: 30px;
+}
+#notif.error1 {
+  background-color: #ce19199d;
+}
+#notif.info1 {
+  background-color: #3cc45ac2;
 }

@@ -17,6 +17,7 @@
         }
         
 }
+
     </script>
     <link rel="stylesheet" href="./HomePageStyle.css" />
     <link rel="stylesheet" href="./TasksPageStyle.css" />
@@ -49,6 +50,9 @@
       <div id="divLoadingContainer">
         <div id="loadProg"></div>
       </div>
+    </div>
+    <div id="notif">
+      
     </div>
     <div id="HomePage" style="display: block">
       <div id="Home-header">
@@ -260,7 +264,7 @@
           </div>
 
           <div id="get-right" style="width: 50%">
-            <div>= $<span id="coin-get">0</span></div>
+            <div>=<span id="coin-get">0</span></div>
             <div id="YouGetCoin" onclick="youGetClicked()">
               <div id="cGet-info" style="display: flex; align-items: center">
                 <img
@@ -537,7 +541,9 @@
         </div>
       </div>
     </div>
-
+    <script>
+      loading();
+    </script>
     <script src="./script.js"></script>
     <script src="./backend.js"></script>
   </body>

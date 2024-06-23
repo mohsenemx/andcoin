@@ -53,7 +53,7 @@ let transactionTemplate = fs.readFileSync(
   "./data/transaction.template.json",
   "utf8"
 );
-let usdtPrice = 10000;
+let usdtPrice = 1000;
 wss.on("connection", function connection(ws) {
   stats.online += 1;
   ws.on("message", function message(data) {
@@ -121,71 +121,82 @@ wss.on("connection", function connection(ws) {
           break;
         }
       }
-    } else if (parsed.action == "buyCrpto") {
+    } else if (parsed.action == "buyCrypto") {
       for (const obj of users) {
-        if (obj.tgid == parsed.tgId) {
-          for (const cr of cryptos) {
-            if (cr.id == parsed.cointobuy) {
-              let mny = 8 * 8;
+        if (obj.tgId == parsed.tgId) {
+          console.log(JSON.stringify(parsed));
+          let cointopay = getCryptoObject(parsed.cointopay);
+          let cointobuy = getCryptoObject(parsed.cointobuy);
+          let amount = Number(parsed.amount);
+          if (cointobuy.id == "AND") {
+            if (cointopay.id == "USDT") {
+              let coinstoget = amount * usdtPrice;
+              obj.coins += coinstoget;
+              obj.usdt -= amount;
+            } else {
+              let coinstoget = amount * cointopay.usdtPrice * usdtPrice;
+              obj.coins += coinstoget;
+              for (const cr of obj.crypto) {
+                if (cr.id == cointopay.id) {
+                  cr.amount -= amount;
+                }
+              }
+            }
+          } else if (cointobuy.id == "USDT") {
+            if (cointopay.id == "AND") {
+              let usdtoget = amount / usdtPrice;
+              obj.coins -= amount;
+              obj.usdt += usdtoget;
+            } else {
+              let coinstoget = amount * cointopay.usdtPrice;
+              obj.usdt += coinstoget;
+              for (const cr of obj.crypto) {
+                if (cr.id == cointopay.id) {
+                  cr.amount -= amount;
+                }
+              }
+            }
+          } else {
+            if (parsed.cointopay == "AND") {
+              let mny = amount / usdtPrice / cointobuy.usdtPrice;
+              obj.coins -= amount;
+              for (const cr of obj.crypto) {
+                if (cr.id == cointobuy.id) {
+                  cr.amount += mny;
+                }
+              }
+            } else if (parsed.cointopay == "USDT") {
+              let mny = amount / cointobuy.usdtPrice;
+              obj.usdt -= amount;
+              for (const cr of obj.crypto) {
+                if (cr.id == cointobuy.id) {
+                  cr.amount += mny;
+                }
+              }
+            } else {
+              let worthInUsdt = amount * cointopay.usdtPrice;
+              let mny = worthInUsdt / cointobuy.usdtPrice;
+              for (const cr of obj.crypto) {
+                if (cr.id == cointobuy.id) {
+                  cr.amount += mny;
+                }
+                if (cr.id == cointopay.id) {
+                  cr.amount -= amount;
+                }
+              }
             }
           }
+
           break;
         }
       }
     } else if (parsed.action == "logUsers") {
       ws.send(JSON.stringify(users));
       console.log(users);
-    } else if (parsed.action == "buyUsdt") {
-      let usdttobuy = Number(parsed.usdttobuy);
-
-      for (const obj of users) {
-        if (obj.tgId == parsed.tgId) {
-          let coinstouse = usdttobuy * usdtPrice;
-          obj.coins -= coinstouse;
-          obj.usdt += usdttobuy;
-          let trns = JSON.parse(transactionTemplate);
-          trns.type = "buyCrypto";
-          trns.from = "Cnetral Hub";
-          trns.to = `${obj.name}`;
-          trns.crypto = "usdt";
-          trns.amount = usdttobuy;
-          var transactionDate = new Date();
-          let trnsTime = `${transactionDate.getFullYear()}-${transactionDate.getMonth()}-${transactionDate.getDate()} ${transactionDate.getHours()}:${transactionDate
-            .getMinutes()
-            .toString()
-            .padStart(2, "0")}`;
-          trns.timestamp = trnsTime;
-          obj.transactionHistory.push(trns);
-          console.log(`User ${obj.tgId} has bought ${usdttobuy} USDT`);
-          break;
-        }
-      }
     } else if (parsed.action == "getTasks") {
       ws.send(`{"action":"getTasks", "tasks": ${JSON.stringify(tasks)}}`);
     } else if (parsed.action == "getTaskStatus") {
       checkIfUserDoneTask(parsed);
-    } else if (parsed.action == "sellCrypto") {
-      for (const obj of users) {
-        if (obj.tgid == parsed.tgId) {
-          for (const coin of cryptos) {
-            if (coin.id == parsed.cointosell) {
-              let amount = Number(parsed.amounttosell);
-
-              let usdtPrice = amount * coin.usdtPrice;
-              for (const fc of obj.crypto) {
-                if (fc.id == coin.id) {
-                  console.log(
-                    `@${obj.name} has ${fc.amount} of ${fc.id} and wants to sell ${amount}`
-                  );
-                  fc.amount -= amount;
-                  obj.usdt += usdtPrice;
-                }
-              }
-            }
-          }
-          break;
-        }
-      }
     } else if (parsed.action == "upgrade") {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
@@ -283,9 +294,31 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "startFarming") {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
-          user.lastClaimed = Number(parsed.time);
+          //user.lastClaimed = Number(parsed.time);
           break;
         }
+      }
+    } else if (parsed.action == "claimed") {
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
+          user.lastClaimed = Number(parsed.time);
+          let usrLevel = user.upgrades[1].level;
+          if (usrLevel == 1) {
+            user.coins += 2500;
+          } else if (usrLevel == 2) {
+            user.coins += 5000;
+          } else if (usrLevel == 3) {
+            user.coins += 10000;
+          } else if (usrLevel == 4) {
+            user.coins += 20000;
+          } else if (usrLevel == 5) {
+            user.coins += 40000;
+          }
+          break;
+        }
+        ws.send(
+          `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
+        );
       }
     }
   });
@@ -297,11 +330,12 @@ wss.on("connection", function connection(ws) {
 
 const interval = setInterval(function ping() {
   wss.clients.forEach(function each(ws) {
-    if (ws.isAlive === false) return ws.terminate();
-
+    if (ws.isAlive === false) {
+      stats.online -= 1;
+      return ws.terminate();
+    }
     ws.isAlive = false;
     ws.ping();
-    stats.online -= 1;
   });
 }, 10000);
 
@@ -761,4 +795,11 @@ if (process.env.USE_SSL != "false") {
   server.listen(8081, () => {
     console.log("WebSocket server listening on port 8081");
   });
+}
+function getCryptoObject(id) {
+  for (const crypto of cryptos) {
+    if (crypto.id == id) {
+      return crypto;
+    }
+  }
 }
