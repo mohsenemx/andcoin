@@ -506,8 +506,7 @@ function tradeCrypto(cryptoDiv) {
     for (const coin in userObject.crypto) {
       if (coin.id == id) {
         coinToGive = id;
-        console.log(id)
-        document.getElementById('USDT-balance2').innerHTML = `${(id == 'USDT') ? userObject.usdt : coin.amount}`;
+        document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(coin.amount.toFixed(5))}`;
         
         waitingFor1stSelection = false;
       }
@@ -578,12 +577,22 @@ function swap() {
   socket.send(`{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`);
 }
 function changePayments() {
-  document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${coinToGive.toLowerCase()}.png`);
-  document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${coinToGet.toLowerCase()}.png`);
-  document.getElementById('USDT-balance2').innerHTML = `${(coinToGet == 'USDT') ? userObject.usdt : '6'}`;
   let tmp = coinToGive;
   coinToGive = coinToGet;
   coinToGet = tmp;
+  document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${coinToGive.toLowerCase()}.png`);
+  document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${coinToGet.toLowerCase()}.png`);
+  let bal = 0;
+  if (coinToGive != 'AND' && coinToGive != 'USDT'
+  ) {
+    for (const cryp of userObject.crypto) {
+      if (cryp.id == coinToGive) {
+        bal = cryp.amount;
+      }
+    }
+  }
+
+  document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(bal.toFixed(5))}`;
 }
 function updateFriends() {}
 function updateEverything() {
