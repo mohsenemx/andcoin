@@ -1,6 +1,7 @@
 html {
-  touch-action: cross-slide-x cross-slide-y;
+  touch-action: none none;
    user-select: none; 
+   overflow: scroll;
 }
 @font-face {
   src: url("Fonts/Laro-Bold.ttf");
