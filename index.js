@@ -59,34 +59,37 @@ wss.on("connection", function connection(ws) {
   ws.on("message", function message(data) {
     let parsed = JSON.parse(data);
     if (parsed.action == "login") {
-      for (const element of users) {
-        const userExists = users.some(
-          (obj) => obj.tgId !== undefined && obj.tgId == parsed.tgId
+      const userExists = users.some((obj) => obj.tgId == parsed.tgId);
+      if (userExists) {
+        console.log(`User @${element.name} (${element.tgId}) logged in`);
+        element.lastOnline = new Date().getTime();
+        for (const user of users) {
+          if (user.tgId == newUser.tgId) {
+            ws.send(
+              `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
+            );
+          }
+        }
+      } else {
+        console.log(
+          `User does not exist, creating new user for @${element.name}`
         );
-        if (userExists) {
-          console.log(`User @${element.name} (${element.tgId}) logged in`);
-          element.lastOnline = new Date().getTime();
-          break;
-        } else {
-          console.log(
-            `User does not exist, creating new user for @${element.name}`
-          );
 
-          if (parsed.tgId != undefined && parsed.tgId.trim() != "") {
-            let newUser = JSON.parse(usersTemplate);
-            console.log(newUser);
-            newUser.name = parsed.name.toLowerCase();
-            newUser.tgId = parsed.tgId;
-            newUser.fullname = parsed.fullname;
-            stats.totalUsers += 1;
-            element.joined = new Date().getTime();
-            element.lastOnline = new Date().getTime();
-            users.push(newUser);
-            ws.send('{ "action" : "createAccount", "result" : "success" }');
-            break;
-          } else {
-            ws.send('{"action" : "createAccount", "result" : "fail"}');
-            break;
+        let newUser = JSON.parse(usersTemplate);
+        console.log(newUser);
+        newUser.name = parsed.name.toLowerCase();
+        newUser.tgId = parsed.tgId;
+        newUser.fullname = parsed.fullname;
+        stats.totalUsers += 1;
+        element.joined = new Date().getTime();
+        element.lastOnline = new Date().getTime();
+        users.push(newUser);
+        ws.send('{ "action" : "createAccount", "result" : "success" }');
+        for (const user of users) {
+          if (user.tgId == newUser.tgId) {
+            ws.send(
+              `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
+            );
           }
         }
       }
@@ -316,9 +319,7 @@ wss.on("connection", function connection(ws) {
           }
           break;
         }
-        ws.send(
-          `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
-        );
+        ws.send(`{"action" : "getObject", "object": ${JSON.stringify(user)}}`);
       }
     }
   });
@@ -439,43 +440,41 @@ bot.on("message", (msg) => {
   } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
     if (msg.chat.type == "group" || msg.chat.type == "supergroup") {
       const opts = {
-        reply_markup: {
-          resize_keyboard: true,
-          inline_keyboard: [
-            [
-              {
-                text: "Play",
-                url: "https://t.me/AndCoin_bot/webapp",
-              },
-            ],
-            [
-              {
-                text: "Learn how to play",
-                callback_data: "howtoplay",
-              },
-            ],
-            [
-              {
-                text: "Invite friends",
-                callback_data: "invitefriends",
-              },
-            ],
+        resize_keyboard: true,
+        inline_keyboard: [
+          [
+            {
+              text: "Play",
+              url: "https://t.me/AndCoin_bot/webapp",
+            },
           ],
-        },
+          [
+            {
+              text: "Learn how to play",
+              callback_data: "howtoplay",
+            },
+          ],
+          [
+            {
+              text: "Invite friends",
+              callback_data: "invitefriends",
+            },
+          ],
+        ],
       };
-      bot.sendMessage(
-        msg.chat.id,
-        `
-      Hey @${msg.sender_chat.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
-  
-  Now we're rolling out our Telegram mini app! Start farming points now 🚀
-  
-  Don't forget to collect your points. We look forward to seeing you on the app. 🌼
-  
-  Have friends? Invite them! The more, the merrier! 👯
-      `,
-        opts
-      );
+      bot.sendPhoto(chatId, "./assets/b1.jpg", {
+        caption: `
+        Hey @${msg.sender_chat.username}! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
+    
+    Now we're rolling out our Telegram mini app! Start farming points now 🚀
+    
+    Don't forget to collect your points. We look forward to seeing you on the app. 🌼
+    
+    Have friends? Invite them! The more, the merrier! 👯
+        `,
+        reply_markup: opts,
+        parse_mode: "HTML",
+      });
     } else {
       sendDefaultTGmessage(msg.chat.id);
     }
@@ -541,33 +540,30 @@ bot.on("message", (msg) => {
 
 function sendDefaultTGmessage(chatId) {
   const opts = {
-    reply_markup: {
-      resize_keyboard: true,
-      inline_keyboard: [
-        [
-          {
-            text: "Play",
-            web_app: { url: "https://and.hamii.xyz" },
-          },
-        ],
-        [
-          {
-            text: "Learn how to play",
-            callback_data: "howtoplay",
-          },
-        ],
-        [
-          {
-            text: "Invite friends",
-            callback_data: "invitefriends",
-          },
-        ],
+    resize_keyboard: true,
+    inline_keyboard: [
+      [
+        {
+          text: "Play",
+          web_app: { url: "https://and.hamii.xyz" },
+        },
       ],
-    },
+      [
+        {
+          text: "Learn how to play",
+          callback_data: "howtoplay",
+        },
+      ],
+      [
+        {
+          text: "Invite friends",
+          callback_data: "invitefriends",
+        },
+      ],
+    ],
   };
-  bot.sendMessage(
-    chatId,
-    `
+  bot.sendPhoto(chatId, "./assets/b1.jpg", {
+    caption: `
     Hey! It's AndCoin! 🌟 all the cool coins and tokens, right in your pocket!📱
 
 Now we're rolling out our Telegram mini app! Start farming points now 🚀
@@ -576,8 +572,9 @@ Don't forget to collect your points. We look forward to seeing you on the app. �
 
 Have friends? Invite them! The more, the merrier! 👯
     `,
-    opts
-  );
+    reply_markup: opts,
+    parse_mode: "HTML",
+  });
 }
 function sendReferalCodeTG(chatId) {
   bot.sendMessage(

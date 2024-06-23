@@ -22,7 +22,7 @@ setTimeout(() => {
   if (typeof userObject == "undefined") {
     showError("DVE-33");
   }
-}, 1500);
+}, 2000);
 function init() {
   if (Telegram.WebApp.platform == "unknown") {
     showError("TGE-21");
