@@ -63,8 +63,8 @@ wss.on("connection", function connection(ws) {
       if (userExists) {
         for (const user of users) {
           if (user.tgId == parsed.tgId) {
-            console.log(`User @${element.name} (${element.tgId}) logged in`);
-            element.lastOnline = new Date().getTime();
+            console.log(`User @${user.name} (${user.tgId}) logged in`);
+            user.lastOnline = new Date().getTime();
             ws.send(
               `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
             );
@@ -74,7 +74,6 @@ wss.on("connection", function connection(ws) {
         }
       } else {
         let newUser = JSON.parse(usersTemplate);
-        console.log(newUser);
         newUser.name = parsed.name.toLowerCase();
         newUser.tgId = parsed.tgId;
         newUser.fullname = parsed.fullname;
