@@ -47,6 +47,7 @@ socket.onclose = function (event) {
 socket.onerror = function (event) {
   showError("WSE-02");
 };
+
 function handleMessage(object) {
   if (object.action == "createAccount") {
     if (object.result == "failed") {
@@ -483,13 +484,20 @@ function youGetClicked() {
   waitingFor1stSelection = false;
   document.getElementById('TradePage1').style.display = 'none';
   document.getElementById('TradePage2').style.display = 'block';
-  
 }
 function youGiveClciked() {
   waitingFor1stSelection = true;
   waitingFor2ndSelection = false;
   document.getElementById('TradePage1').style.display = 'none';
   document.getElementById('TradePage2').style.display = 'block';
+}
+function swap() {
+  let amount = document.getElementById('buyValue').value;
+  for (const coin of cryptos) {
+    if (coin.id == coinToGive) {
+
+    }
+  }
 }
 function changePayments() {
   document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${coinToGive.toLowerCase()}.png`);
@@ -532,3 +540,4 @@ function showError(ecode) {
   document.getElementById("errorCode").innerHTML = `Error Code: ${ecode}`;
   clearInterval(sync);
 }
+loading();

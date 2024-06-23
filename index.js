@@ -60,13 +60,17 @@ wss.on("connection", function connection(ws) {
     let parsed = JSON.parse(data);
     if (parsed.action == "login") {
       for (const element of users) {
-        const userExists = users.some(obj => obj.tgId !== undefined && obj.tgId == parsed.tgId);
+        const userExists = users.some(
+          (obj) => obj.tgId !== undefined && obj.tgId == parsed.tgId
+        );
         if (userExists) {
           console.log(`User @${element.name} (${element.tgId}) logged in`);
           element.lastOnline = new Date().getTime();
           break;
         } else {
-          console.log(`User does not exist, creating new user for @${element.name}`);
+          console.log(
+            `User does not exist, creating new user for @${element.name}`
+          );
 
           if (parsed.tgId != undefined && parsed.tgId.trim() != "") {
             let newUser = JSON.parse(usersTemplate);

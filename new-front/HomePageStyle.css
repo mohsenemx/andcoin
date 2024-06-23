@@ -93,6 +93,7 @@ body {
 }
 #earnAssembly {
   position: relative;
+  margin-top: 5%;
 }
 #earnBackground {
   position: absolute;
@@ -109,13 +110,18 @@ body {
   position: absolute;
   z-index: 2;
 }
+#andcoin img {
+  max-width: 250px;
+}
 @media screen and (max-width: 500px) {
   #andcoin {
     margin-top: 35%;
+    margin-bottom: 7%;
   }
 }
 @media screen and (max-height: 730px) {
   #andcoin {
     margin-top: 5%;
+    margin-bottom: 5%;
   }
 }

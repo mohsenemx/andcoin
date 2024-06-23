@@ -3,6 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      async function loading() {
+        let loadProg = document.getElementById('loadProg');
+        for (let i = 0; i <= 100; i++) {
+          
+            loadProg.style.width = `${i}%`;
+            loadProg.innerHTML = `${i}%`;
+            if (i == 100){
+              document.getElementById('loading').style.display = 'none';
+            }
+          await new Promise(r => setTimeout(r, 15));
+        }
+        
+}
+    </script>
     <link rel="stylesheet" href="./HomePageStyle.css" />
     <link rel="stylesheet" href="./TasksPageStyle.css" />
     <link rel="stylesheet" href="./BoostPageStyle.css" />
@@ -29,6 +44,12 @@
       <div id="errorCode"></div>
       <button onclick="location.reload()">Reload</button>
     </div>
+    <div id="loading">
+      <div id="holyand">&</div>
+      <div id="divLoadingContainer">
+        <div id="loadProg"></div>
+      </div>
+    </div>
     <div id="HomePage" style="display: block">
       <div id="Home-header">
         <div id="head-items">
@@ -44,7 +65,7 @@
 
       <div id="Home-content">
         <div id="andcoin">
-            <img src="./MinePageIcons/AndCoin.png" alt="" />
+            <img src="./MinePageIcons/AndCoinLarge.png" alt="" />
         </div>
         <div id="earnAssembly">
        
@@ -161,6 +182,8 @@
         <div id="back" onclick="Home()">
           <img src="./TradePageIcons/Left.png" alt="" />
         </div>
+        <br>
+        <div id="tradeError">Errors</div>
       </div>
 
       <div id="Trade1-content">
@@ -170,6 +193,7 @@
             <div>
               <input
                 type="number"
+                id="buyValue"
                 style="
                   width: 100px;
                   height: 40px;
@@ -254,7 +278,7 @@
           </div>
         </div>
 
-        <div id="confirm-swap">Confirm Swap</div>
+        <div id="confirm-swap" onclick="swap()">Confirm Swap</div>
       </div>
 
       <div id="Trade1-footer">
