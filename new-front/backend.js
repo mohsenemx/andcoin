@@ -492,7 +492,7 @@ function updateCrypto() {
   }
 }
 let waitingFor1stSelection = false;
-let waitingFor2ndSelection = false;
+let waitingFor2ndSelection = true;
 let coinToGive = 'USDT';
 let coinToGet = 'AND';
 function tradeCrypto(cryptoDiv) {
@@ -503,14 +503,15 @@ function tradeCrypto(cryptoDiv) {
     for (const coin in userObject.crypto) {
       if (coin.id == id) {
         
-        document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(coin.amount.toFixed(5))}`;
-        
+        document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(parseFloat(coin.amount.toFixed(7)))}`;
+        document.getElementById('youpaycoinname').innerHTML = coinToGive;
         waitingFor1stSelection = false;
       }
     }
   } else if (waitingFor2ndSelection) {
     coinToGet = id;
     document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
+    document.getElementById('yougetcoinname').innerHTML = coinToGet;
     for (const coin in userObject.crypto) {
       if (coin.id == id) {
         waitingFor2ndSelection = false;
@@ -528,7 +529,9 @@ function tradeCrypto(cryptoDiv) {
 let buyInput = document.getElementById('buyValue');
 buyInput.oninput = function() {
   let targetCoin = getCryptoObject(coinToGet);
+  let startCoin = getCryptoObject(coinToGive);
   let hmny;
+  let hmnyc = 'test';
   if (coinToGet == 'AND') {
     if (coinToGive == 'USDT') {
       hmny = buyInput.value * usdtPrice;
@@ -539,12 +542,12 @@ buyInput.oninput = function() {
     }
   } else if (coinToGet == 'USDT') {
     if (coinToGive == 'AND') {
-      hmny = buyInput.value * usdtPrice;
+      hmny = buyInput.value / usdtPrice;
     } else if (coinToGet == 'USDT') {
       hmny = Number(buyInput.value);
     }
     else {
-      hmny = targetCoin.usdtPrice * buyInput.value;
+      hmny = buyInput.value * startCoin.usdtPrice;
     }
   } else {
     if (coinToGive =='AND') {
@@ -553,7 +556,8 @@ buyInput.oninput = function() {
       hmny = buyInput.value / targetCoin.usdtPrice;
     }
   }
-  document.getElementById('coin-get').innerHTML = `${hmny.toFixed(7)} $${coinToGet}`;
+  document.getElementById('yougetcoin').innerHTML = `${parseFloat(hmnyc.toFixed(7))} $${coinToGet}`
+  document.getElementById('coin-get').innerHTML = `${parseFloat(hmny.toFixed(7))} $${coinToGet}`;
 }
 function youGetClicked() {
   waitingFor2ndSelection = true;
@@ -590,8 +594,10 @@ function changePayments() {
   let tmp = coinToGive;
   coinToGive = coinToGet;
   coinToGet = tmp;
-  document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${coinToGive.toLowerCase()}.png`);
-  document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${coinToGet.toLowerCase()}.png`);
+  document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${coinToGet.toLowerCase()}.png`);
+  document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${coinToGive.toLowerCase()}.png`);
+  document.getElementById('yougetcoinname').innerHTML = coinToGet;
+  document.getElementById('youpaycoinname').innerHTML = coinToGive;
   let bal = 0;
   if (coinToGive != 'AND' && coinToGive != 'USDT'
   ) {
@@ -601,7 +607,7 @@ function changePayments() {
       }
     }
   }
-  document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(bal.toFixed(5))}`;
+  document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(parseFloat(bal.toFixed(5)))}`;
 }
 function updateFriends() {}
 function updateEverything() {

@@ -66,9 +66,9 @@ html {
 }
 #divLoadingContainer {
   width: 230px;
-  height: 25px;
+  height: 15px;
   color: white;
-  background-color: #5da0ff;
+  background-color: #9FCBF4;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,14 +81,15 @@ html {
 #loadProg {
   position: absolute;
   width: 0%;
-  height: 25px;
+  height: 15px;
   color: white;
-  background-color: #365e96;
+  background-color: #003B8E;
   color: white;
   left: 0;
-  font-size: 20px;
+  font-size: 10px;
   border-radius: 10px;
   text-align: center;
+
 }
 #imglogo {
   max-width: 50px;
@@ -97,7 +98,7 @@ html {
 #holyand {
   font-family: 'SFPro';
   font-size: 110px;
-  color: #2865bb;
+  color: #003B8E;
   background-color: transparent;
   padding: 10px;
   margin-bottom: 45px;
