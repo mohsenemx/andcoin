@@ -108,6 +108,7 @@ wss.on("connection", function connection(ws) {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
           user.coins += Number(parsed.coins);
+          user.allCoins += Number(parsed.coins);
           stats.minedPastHour += Number(parsed.coins);
           stats.allCoinsClicked += Number(parsed.coins);
         }
@@ -256,23 +257,7 @@ wss.on("connection", function connection(ws) {
           }
         }
       }
-    } else if (parsed.action == "sellUsdt") {
-      for (const user of users) {
-        if (user.tgid == parsed.tgId) {
-          let cointoget = parsed.usdttosell * usdtPrice;
-          user.usdt -= Number(parsed.usdttosell);
-          user.coins += cointoget;
-          break;
-        }
-      }
-    } else if (parsed.action == "updateEnergy") {
-      for (const user of users) {
-        if (user.tgId == parsed.tgId) {
-          user.energy = Number(parsed.energy);
-          break;
-        }
-      }
-    } else if (parsed.action == "getUsdtPrice") {
+    }else if (parsed.action == "getUsdtPrice") {
       ws.send(`{"action": "getUsdtPrice", "price":"${usdtPrice}"}`);
     } else if (parsed.action == "getFriends") {
       for (const user of users) {
@@ -294,7 +279,6 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "startFarming") {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
-          //user.lastClaimed = Number(parsed.time);
           break;
         }
       }
@@ -305,14 +289,29 @@ wss.on("connection", function connection(ws) {
           let usrLevel = user.upgrades[1].level;
           if (usrLevel == 1) {
             user.coins += 2500;
+            user.allCoins += 2500;
+          stats.minedPastHour += 2500;
+          stats.allCoinsClicked += 200;
           } else if (usrLevel == 2) {
             user.coins += 5000;
+            user.allCoins += 5000;
+          stats.minedPastHour += 5000;
+          stats.allCoinsClicked += 5000;
           } else if (usrLevel == 3) {
             user.coins += 10000;
+            user.allCoins += 10000;
+          stats.minedPastHour += 10000;
+          stats.allCoinsClicked += 10000;
           } else if (usrLevel == 4) {
             user.coins += 20000;
+            user.allCoins += 20000;
+          stats.minedPastHour += 20000;
+          stats.allCoinsClicked += 20000;
           } else if (usrLevel == 5) {
             user.coins += 40000;
+            user.allCoins += 40000;
+          stats.minedPastHour += 40000;
+          stats.allCoinsClicked += 40000;
           }
           break;
         }
@@ -432,9 +431,12 @@ bot.on("message", (msg) => {
   if (msg.text == "/stats" && msg.chat.title == "AndCoin DevChat") {
     bot.sendMessage(
       msg.chat.id,
-      `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coin Clicks: ${stats.allCoinsClicked}`
+      `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coins: ${stats.allCoinsClicked}`
     );
-  } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
+  } else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
+    bot.sendMessage(msg.chat.id, JSON.stringify(users));
+  }
+  else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
     if (msg.chat.type == "group" || msg.chat.type == "supergroup") {
       const opts = {
         resize_keyboard: true,

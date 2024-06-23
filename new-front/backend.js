@@ -20,10 +20,6 @@ let readyToClaim = false;
 const socket = new WebSocket(config.SERVER_ADDRESS);
 
 setTimeout(() => {
-  console.log(user);
-  console.log(userObject);
-}, 5000);
-setTimeout(() => {
   if (typeof userObject == "undefined") {
     showError("DVE-33");
   }
@@ -502,20 +498,21 @@ let coinToGet = 'AND';
 function tradeCrypto(cryptoDiv) {
   let id = cryptoDiv.getAttribute("data-id");
   if (waitingFor1stSelection) {
+    coinToGive = id;
     document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
     for (const coin in userObject.crypto) {
       if (coin.id == id) {
-        coinToGive = id;
+        
         document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(coin.amount.toFixed(5))}`;
         
         waitingFor1stSelection = false;
       }
     }
   } else if (waitingFor2ndSelection) {
+    coinToGet = id;
     document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
     for (const coin in userObject.crypto) {
       if (coin.id == id) {
-        coinToGet = id;
         waitingFor2ndSelection = false;
       }
     }
@@ -574,7 +571,20 @@ function youGiveClciked() {
 }
 function swap() {
   let amount = buyInput.value;
-  socket.send(`{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`);
+  for (const cryp of userObject.crypto) {
+    if (cryp.id == coinToGive) {
+      if (cryp.amount >= amount) {
+        socket.send(`{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`);
+        notif('Sucessfully swapped your cryptos', 'info');
+        setTimeout(() => {
+          updateEverything();
+        }, 250);
+      } else {
+        notif('You don\'t have enough funds to proceed with this action.', 'error');
+      }
+    }
+  }
+  
 }
 function changePayments() {
   let tmp = coinToGive;
@@ -591,7 +601,6 @@ function changePayments() {
       }
     }
   }
-
   document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(bal.toFixed(5))}`;
 }
 function updateFriends() {}
