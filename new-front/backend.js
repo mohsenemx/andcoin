@@ -20,9 +20,13 @@ let friends = [];
 let usdtPrice = 1000;
 let readyToClaim = false;
 const socket = new WebSocket(config.SERVER_ADDRESS);
+
+setTimeout(() => {
+  console.log(user);
+  console.log(userObject);
+}, 5000);
 setTimeout(() => {
   if (typeof userObject == "undefined") {
-    alert(JSON.stringify(user));
     showError("DVE-33");
   }
 }, 2000);
