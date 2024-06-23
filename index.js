@@ -124,17 +124,10 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "buyCrpto") {
       for (const obj of users) {
         if (obj.tgid == parsed.tgId) {
-          let i = 0;
           for (const cr of cryptos) {
             if (cr.id == parsed.cointobuy) {
-              ws.send(
-                `{"action" : "getObject", "object": ${JSON.stringify(obj)}}`
-              );
-              let cryptotobuy = Number(parsed.cryptotobuy);
-              obj.usdt -= cryptotobuy * cryptos[i].usdtPrice;
-              obj.crypto[i].amount += cryptotobuy;
+              let mny = 8 * 8;
             }
-            i++;
           }
           break;
         }
