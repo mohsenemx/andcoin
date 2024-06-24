@@ -113,6 +113,19 @@ body {
 #andcoin img {
   max-width: 250px;
 }
+#andContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+#andcoin {
+  border-radius: 50%;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  overflow: hidden;
+}
+
 @media screen and (max-width: 500px) {
   #andcoin {
     margin-top: 35%;
