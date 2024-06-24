@@ -49,5 +49,6 @@
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-    letter-spacing: 1px;
+    word-wrap: normal;
+    padding: 1px;
 }

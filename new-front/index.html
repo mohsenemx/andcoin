@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script>
       async function loading() {
         let loadProg = document.getElementById('loadProg');
@@ -124,7 +124,7 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
     </div>
 
     <div id="TasksPage" style="display: none">
@@ -404,7 +404,7 @@
             <span style="font-size: 14px"
               >/ lvl <span id="speed-lvl"> 1 </span></span
             >
-            <div id="speed-up" class="upgrade">Upgrade</div>
+            <div id="speed-up" class="upgrade" onclick="upgradeBoost(this)" data-name="recharge">Upgrade</div>
           </div>
 
           <div class="boost-items">
@@ -415,7 +415,7 @@
             <span style="font-size: 14px"
               >/ lvl <span id="storage-lvl"> 1 </span></span
             >
-            <div id="storage-up" class="upgrade">Upgrade</div>
+            <div id="storage-up" class="upgrade" onclick="upgradeBoost(this)" data-name="storage">Upgrade</div>
           </div>
         </div>
       </div>
@@ -486,7 +486,7 @@
             </div>
             <div>Swap</div>
           </div>
-          <div class="trade-items">
+          <!--<div class="trade-items">
             <div id="Buy">
               <img width="65px" src="./WalletPageIcons/Buy.png" alt="" />
             </div>
@@ -497,7 +497,7 @@
               <img width="65px" src="./WalletPageIcons/Receive.png" alt="" />
             </div>
             <div>Receive</div>
-          </div>
+          </div>-->
         </div>
 
         <div id="wallet-coins-box">

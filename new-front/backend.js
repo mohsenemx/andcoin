@@ -17,6 +17,8 @@ let cryptos = [];
 let friends = [];
 let usdtPrice = 1000;
 let readyToClaim = false;
+let readyToFarm = true;
+let farming = false;
 const socket = new WebSocket(config.SERVER_ADDRESS);
 
 setTimeout(() => {
@@ -94,11 +96,15 @@ function startFarming() {
   if (readyToClaim) {
     userObject.lastClaimed = now;
     readyToClaim = false;
+    readyToFarm = true;
     socket.send(
       `{"action":"claimed", "tgId":"${user.id}", "time":"${now}"}`
     );
     notif('Successfully Claimed!', 'info');
     updateFarmBar();
+  } else if (readyToFarm) {
+    farming = true;
+    readyToFarm = false;
   }
 }
 mainCoin.addEventListener('click', () => {
@@ -114,9 +120,10 @@ function upgradeBoost(name) {
   if (upgradeName == "storage") {
     if (userObject.upgrades[0].level == 1) {
       if (userObject.coins < 1500) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -128,9 +135,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[0].level == 2) {
       if (userObject.coins < 3000) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -142,9 +150,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[0].level == 3) {
       if (userObject.coins < 6000) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -156,9 +165,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[0].level == 4) {
       if (userObject.coins < 15000) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -172,9 +182,10 @@ function upgradeBoost(name) {
   } else if (upgradeName == "recharge") {
     if (userObject.upgrades[1].level == 1) {
       if (userObject.coins < 1500) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -186,9 +197,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[1].level == 2) {
       if (userObject.coins < 5000) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -200,9 +212,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[1].level == 3) {
       if (userObject.coins < 10000) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -214,9 +227,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[1].level == 4) {
       if (userObject.coins < 25000) {
-        showBoostError("You don't have enough coins for this upgrade!");
+        notif("You don't have enough coins for this upgrade!", 'error');
         return;
       } else {
+        notif("Successfully Upgraded!", 'info');
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -227,6 +241,7 @@ function upgradeBoost(name) {
         updateEverything();
       }
     } else {
+      notif("Successfully Upgraded!", 'info');
       socket.send(
         `{"action":"upgrade","tgId":"${
           user.id
@@ -298,7 +313,16 @@ function updateWallet() {
   let usdtvalue = document.getElementById("money");
   let andvalue = document.getElementById("and-balance");
   let yourcoinsDiv = document.getElementById("wallet-coins-box");
-  usdtvalue.innerHTML = numberWithCommas(userObject.usdt);
+  let totalMoney = userObject.usdt;
+  for (const cryp of userObject.crypto) {
+    for (const cr of cryptos) {
+      if (cryp.id == cr.id) {
+        let coinAmount = cryp.amount * cr.usdtPrice;
+        totalMoney += coinAmount;
+      }
+    }
+  }
+  usdtvalue.innerHTML = numberWithCommas(totalMoney);
   andvalue.innerHTML = numberWithCommas(userObject.coins);
   yourcoinsDiv.innerHTML = "";
   yourcoinsDiv.innerHTML += `<div
@@ -311,7 +335,27 @@ function updateWallet() {
 >
   Your Coins
 </div>`;
-
+yourcoinsDiv.innerHTML += `
+      <div class="coin-items">
+                 <div class="coin-info">
+                   <div id="eth-icon">
+                     <img src="./CoinIcons/usdt.png" alt="" />
+                   </div>
+                   <div id="eth-name" style="margin-left: 15px">
+                     <div>Tether USD</div>
+                     <div class="coins-amount" id="eth-amount">$${userObject.usdt}</div>
+                   </div>
+                 </div>
+                 <div class="eth-vector">
+                   
+                 </div>
+                 <div class="coin-price" style="margin: 15px">
+                   <div id="eth}-price">${usdtPrice} $AND</div>
+                   <div class="profits" id="eth-profit">0%</div>
+                 </div>
+                 
+               </div>
+      `;
   for (const coin of userObject.crypto) {
     for (const crypto of cryptos) {
       if (crypto.id == coin.id) {
@@ -398,9 +442,13 @@ function updateFarmBar() {
   }
   else if (Number(now) - Number(userObject.lastClaimed) > 10800000) {
     readyToClaim = true;
-    farmProgress.style.display = "none";
-    farmProgress.style.width = "0%";
-    farmText.innerHTML = "Start Farming";
+    readyToFarm = false;
+    if (readyToFarm) {
+      farmProgress.style.display = "none";
+      farmProgress.style.width = "0%";
+      farmText.innerHTML = "Start Farming";
+    }
+    
   } 
   else {
     let timePassed = Number(now) - Number(userObject.lastClaimed);
