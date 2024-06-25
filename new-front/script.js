@@ -6,6 +6,7 @@ function Home(){
     document.querySelector("#TradePage1").style.display = "none";
     document.querySelector("#BoostPage").style.display = "none";
     document.querySelector("#WalletPage").style.display = "none";
+    document.querySelector("#tasks-footer").style.display = "none";
 }
 
 function Tasks(){
@@ -15,6 +16,7 @@ function Tasks(){
     document.querySelector("#TradePage1").style.display = "none";
     document.querySelector("#BoostPage").style.display = "none";
     document.querySelector("#WalletPage").style.display = "none";
+    document.querySelector("#tasks-footer").style.display = "block";
 }
 
 function Trade(){
