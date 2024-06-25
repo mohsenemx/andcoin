@@ -11,7 +11,7 @@ let balance = document.getElementById("amount");
 let farmingButton = document.getElementById("farm");
 let farmText = document.getElementById("startFarming");
 let farmProgress = document.getElementById("earnBackground");
-let mainCoin = document.getElementById('andcoin');
+let mainCoin = document.getElementById("andcoin");
 let tasks = [];
 let cryptos = [];
 let friends = [];
@@ -57,7 +57,7 @@ socket.onerror = function (event) {
 function handleMessage(object) {
   if (object.action == "createAccount") {
     if (object.result == "failed") {
-      showError('ACE-1');
+      showError("ACE-1");
     }
   }
   if (object.action == "getObject") {
@@ -80,12 +80,14 @@ let sync = setInterval(() => {
   updateEverything();
 }, 3000);
 function performSync() {
-  socket.send(`{"action":"updateCoinsFromUser", "tgId":"${user.id}", "coins": "${coinsSinceLastSync}"}`);
+  socket.send(
+    `{"action":"updateCoinsFromUser", "tgId":"${user.id}", "coins": "${coinsSinceLastSync}"}`
+  );
   coinsSinceLastSync = 0;
   setTimeout(() => {
     socket.send(`{"action":"getObject", "tgId":"${user.id}"}`);
   }, 200);
-  
+
   socket.send(`{"action":"getTasks", "tgId": "${user.id}"}`);
 }
 farmingButton.addEventListener("click", () => {
@@ -97,17 +99,15 @@ function startFarming() {
     userObject.lastClaimed = now;
     readyToClaim = false;
     readyToFarm = true;
-    socket.send(
-      `{"action":"claimed", "tgId":"${user.id}", "time":"${now}"}`
-    );
-    notif('Successfully Claimed!', 'info');
+    socket.send(`{"action":"claimed", "tgId":"${user.id}", "time":"${now}"}`);
+    notif("Successfully Claimed!", "info");
     updateFarmBar();
   } else if (readyToFarm) {
     farming = true;
     readyToFarm = false;
   }
 }
-mainCoin.addEventListener('click', () => {
+mainCoin.addEventListener("click", () => {
   coinClicked();
 });
 function coinClicked() {
@@ -120,10 +120,10 @@ function upgradeBoost(name) {
   if (upgradeName == "storage") {
     if (userObject.upgrades[0].level == 1) {
       if (userObject.coins < 1500) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -135,10 +135,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[0].level == 2) {
       if (userObject.coins < 3000) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -150,10 +150,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[0].level == 3) {
       if (userObject.coins < 6000) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -165,10 +165,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[0].level == 4) {
       if (userObject.coins < 15000) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -182,10 +182,10 @@ function upgradeBoost(name) {
   } else if (upgradeName == "recharge") {
     if (userObject.upgrades[1].level == 1) {
       if (userObject.coins < 1500) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -197,10 +197,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[1].level == 2) {
       if (userObject.coins < 5000) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -212,10 +212,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[1].level == 3) {
       if (userObject.coins < 10000) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -227,10 +227,10 @@ function upgradeBoost(name) {
       }
     } else if (userObject.upgrades[1].level == 4) {
       if (userObject.coins < 25000) {
-        notif("You don't have enough coins for this upgrade!", 'error');
+        notif("You don't have enough coins for this upgrade!", "error");
         return;
       } else {
-        notif("Successfully Upgraded!", 'info');
+        notif("Successfully Upgraded!", "info");
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -241,7 +241,7 @@ function upgradeBoost(name) {
         updateEverything();
       }
     } else {
-      notif("Successfully Upgraded!", 'info');
+      notif("Successfully Upgraded!", "info");
       socket.send(
         `{"action":"upgrade","tgId":"${
           user.id
@@ -335,7 +335,7 @@ function updateWallet() {
 >
   Your Coins
 </div>`;
-yourcoinsDiv.innerHTML += `
+  yourcoinsDiv.innerHTML += `
       <div class="coin-items">
                  <div class="coin-info">
                    <div id="eth-icon">
@@ -435,21 +435,24 @@ let interval = setInterval(() => {
 }, 1000);
 function updateFarmBar() {
   let now = new Date().getTime();
+  if (Number(now) - Number(userObject.lastClaimed) < 10800000) {
+    farming = true;
+    readyToClaim = false;
+    readyToFarm = false;
+  }
   if (readyToClaim) {
     readyToFarm = false;
     farmProgress.style.display = "none";
     farmProgress.style.width = "0%";
     farmText.innerHTML = "Claim";
-  }
-  else if (Number(now) - Number(userObject.lastClaimed) > 10800000) {
+  } else if (Number(now) - Number(userObject.lastClaimed) > 10800000) {
     readyToClaim = true;
     readyToFarm = false;
   } else if (readyToFarm) {
-      farmProgress.style.display = "none";
-      farmProgress.style.width = "0%";
-      farmText.innerHTML = "Start Farming";
-  }
-  else {
+    farmProgress.style.display = "none";
+    farmProgress.style.width = "0%";
+    farmText.innerHTML = "Start Farming";
+  } else {
     let timePassed = Number(now) - Number(userObject.lastClaimed);
     let rn = UTCtoTime(10800000 - timePassed);
     farmText.innerHTML = `${rn[0]}h : ${rn[1]}m : ${rn[2]}s`;
@@ -476,7 +479,7 @@ function updateCrypto() {
               margin-top: 10px;
             "
           ></div>`;
-          cryptoCoins.innerHTML += `
+  cryptoCoins.innerHTML += `
     <div class="coin-items" onclick="tradeCrypto(this)" data-id="USDT">
               <div class="coin-info">
                 <div id="eth-icon">
@@ -484,7 +487,9 @@ function updateCrypto() {
                 </div>
                 <div id="eth-name" style="margin-left: 15px">
                   <div>Tether USD</div>
-                  <div class="coins-amount" id="eth-amount">$${numberWithCommas(userObject.usdt)}</div>
+                  <div class="coins-amount" id="eth-amount">$${numberWithCommas(
+                    userObject.usdt
+                  )}</div>
                 </div>
               </div>
               <div class="eth-vector">
@@ -495,7 +500,7 @@ function updateCrypto() {
                 <div class="profits" id="eth-profit">0%</div>
               </div>
             </div>`;
-            cryptoCoins.innerHTML += `
+  cryptoCoins.innerHTML += `
     <div class="coin-items" onclick="tradeCrypto(this)" data-id="AND">
               <div class="coin-info">
                 <div id="eth-icon">
@@ -503,7 +508,9 @@ function updateCrypto() {
                 </div>
                 <div id="eth-name" style="margin-left: 15px">
                   <div>AndCoin</div>
-                  <div class="coins-amount" id="eth-amount">$${numberWithCommas(userObject.coins)}</div>
+                  <div class="coins-amount" id="eth-amount">$${numberWithCommas(
+                    userObject.coins
+                  )}</div>
                 </div>
               </div>
               <div class="eth-vector">
@@ -540,84 +547,100 @@ function updateCrypto() {
 }
 let waitingFor1stSelection = false;
 let waitingFor2ndSelection = true;
-let coinToGive = 'USDT';
-let coinToGet = 'AND';
+let coinToGive = "USDT";
+let coinToGet = "AND";
 function tradeCrypto(cryptoDiv) {
   let id = cryptoDiv.getAttribute("data-id");
   if (waitingFor1stSelection) {
     coinToGive = id;
-    document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
+    document
+      .getElementById("youPayCoinId")
+      .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
     for (const coin in userObject.crypto) {
       if (coin.id == id) {
-        
-        document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(parseFloat(coin.amount.toFixed(7)))}`;
-        document.getElementById('youpaycoinname').innerHTML = coinToGive;
+        document.getElementById("USDT-balance2").innerHTML = `${
+          coinToGive == "USDT"
+            ? numberWithCommas(userObject.usdt)
+            : coinToGive == "AND"
+            ? numberWithCommas(userObject.coins)
+            : numberWithCommas(parseFloat(coin.amount.toFixed(7)))
+        }`;
+        document.getElementById("youpaycoinname").innerHTML = coinToGive;
         waitingFor1stSelection = false;
       }
     }
   } else if (waitingFor2ndSelection) {
     coinToGet = id;
-    document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
-    document.getElementById('yougetcoinname').innerHTML = coinToGet;
+    document
+      .getElementById("youGetCoinId")
+      .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
+    document.getElementById("yougetcoinname").innerHTML = coinToGet;
     for (const coin in userObject.crypto) {
       if (coin.id == id) {
         waitingFor2ndSelection = false;
       }
     }
   } else {
-    document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${id.toLowerCase()}.png`);
+    document
+      .getElementById("youGetCoinId")
+      .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
     coinToGet = id;
-    coinToGive = 'USDT';
-    document.getElementById('USDT-balance2').innerHTML = `${numberWithCommas(userObject.usdt)}`;
+    coinToGive = "USDT";
+    document.getElementById("USDT-balance2").innerHTML = `${numberWithCommas(
+      userObject.usdt
+    )}`;
   }
-  document.getElementById('TradePage1').style.display = 'block';
-  document.getElementById('TradePage2').style.display = 'none';
+  document.getElementById("TradePage1").style.display = "block";
+  document.getElementById("TradePage2").style.display = "none";
 }
-let buyInput = document.getElementById('buyValue');
-buyInput.oninput = function() {
+let buyInput = document.getElementById("buyValue");
+buyInput.oninput = function () {
   let targetCoin = getCryptoObject(coinToGet);
   let startCoin = getCryptoObject(coinToGive);
   let hmny;
-  let hmnyc = 'test';
-  if (coinToGet == 'AND') {
-    if (coinToGive == 'USDT') {
+  let hmnyc = "test";
+  if (coinToGet == "AND") {
+    if (coinToGive == "USDT") {
       hmny = buyInput.value * usdtPrice;
-    } else if (coinToGet == 'AND') {
+    } else if (coinToGet == "AND") {
       hmny = Number(buyInput.value);
     } else {
-      hmny = (buyInput.value * targetCoin.usdtPrice) * usdtPrice;
+      hmny = buyInput.value * targetCoin.usdtPrice * usdtPrice;
     }
-  } else if (coinToGet == 'USDT') {
-    if (coinToGive == 'AND') {
+  } else if (coinToGet == "USDT") {
+    if (coinToGive == "AND") {
       hmny = buyInput.value / usdtPrice;
-    } else if (coinToGet == 'USDT') {
+    } else if (coinToGet == "USDT") {
       hmny = Number(buyInput.value);
-    }
-    else {
+    } else {
       hmny = buyInput.value * startCoin.usdtPrice;
     }
   } else {
-    if (coinToGive =='AND') {
-      hmny = (buyInput.value / usdtPrice ) / targetCoin.usdtPrice;
+    if (coinToGive == "AND") {
+      hmny = buyInput.value / usdtPrice / targetCoin.usdtPrice;
     } else {
       hmny = buyInput.value / targetCoin.usdtPrice;
     }
   }
-  document.getElementById('yougetcoin').innerHTML = `${parseFloat(hmnyc.toFixed(7))} $${coinToGet}`
-  document.getElementById('coin-get').innerHTML = `${parseFloat(hmny.toFixed(7))} $${coinToGet}`;
-}
+  document.getElementById("yougetcoin").innerHTML = `${parseFloat(
+    hmnyc.toFixed(7)
+  )} $${coinToGet}`;
+  document.getElementById("coin-get").innerHTML = `${parseFloat(
+    hmny.toFixed(7)
+  )} $${coinToGet}`;
+};
 function youGetClicked() {
   waitingFor2ndSelection = true;
   waitingFor1stSelection = false;
-  document.getElementById('TradePage1').style.display = 'none';
-  document.getElementById('TradePage2').style.display = 'block';
+  document.getElementById("TradePage1").style.display = "none";
+  document.getElementById("TradePage2").style.display = "block";
   tradeCrypto();
 }
 function youGiveClciked() {
   waitingFor1stSelection = true;
   waitingFor2ndSelection = false;
-  document.getElementById('TradePage1').style.display = 'none';
-  document.getElementById('TradePage2').style.display = 'block';
+  document.getElementById("TradePage1").style.display = "none";
+  document.getElementById("TradePage2").style.display = "block";
   tradeCrypto();
 }
 function swap() {
@@ -625,36 +648,49 @@ function swap() {
   for (const cryp of userObject.crypto) {
     if (cryp.id == coinToGive) {
       if (cryp.amount >= amount) {
-        socket.send(`{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`);
-        notif('Sucessfully swapped your cryptos', 'info');
+        socket.send(
+          `{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`
+        );
+        notif("Sucessfully swapped your cryptos", "info");
         setTimeout(() => {
           updateEverything();
         }, 250);
       } else {
-        notif('You don\'t have enough funds to proceed with this action.', 'error');
+        notif(
+          "You don't have enough funds to proceed with this action.",
+          "error"
+        );
       }
     }
   }
-  
 }
 function changePayments() {
   let tmp = coinToGive;
   coinToGive = coinToGet;
   coinToGet = tmp;
-  document.getElementById('youGetCoinId').setAttribute('src', `./CoinIcons/${coinToGet.toLowerCase()}.png`);
-  document.getElementById('youPayCoinId').setAttribute('src', `./CoinIcons/${coinToGive.toLowerCase()}.png`);
-  document.getElementById('yougetcoinname').innerHTML = coinToGet;
-  document.getElementById('youpaycoinname').innerHTML = coinToGive;
+  document
+    .getElementById("youGetCoinId")
+    .setAttribute("src", `./CoinIcons/${coinToGet.toLowerCase()}.png`);
+  document
+    .getElementById("youPayCoinId")
+    .setAttribute("src", `./CoinIcons/${coinToGive.toLowerCase()}.png`);
+  document.getElementById("yougetcoinname").innerHTML = coinToGet;
+  document.getElementById("youpaycoinname").innerHTML = coinToGive;
   let bal = 0;
-  if (coinToGive != 'AND' && coinToGive != 'USDT'
-  ) {
+  if (coinToGive != "AND" && coinToGive != "USDT") {
     for (const cryp of userObject.crypto) {
       if (cryp.id == coinToGive) {
         bal = cryp.amount;
       }
     }
   }
-  document.getElementById('USDT-balance2').innerHTML = `${(coinToGive == 'USDT') ? numberWithCommas(userObject.usdt) : (coinToGive == 'AND') ? numberWithCommas(userObject.coins) : numberWithCommas(parseFloat(bal.toFixed(5)))}`;
+  document.getElementById("USDT-balance2").innerHTML = `${
+    coinToGive == "USDT"
+      ? numberWithCommas(userObject.usdt)
+      : coinToGive == "AND"
+      ? numberWithCommas(userObject.coins)
+      : numberWithCommas(parseFloat(bal.toFixed(5)))
+  }`;
 }
 function updateFriends() {}
 function updateEverything() {
@@ -697,25 +733,24 @@ function getCryptoObject(id) {
   }
 }
 function notif(message, type) {
-  let notifDiv = document.getElementById('notif');
-  notifDiv.classList.remove('info1');
-  notifDiv.classList.remove('error1');
-  if (type == 'info' || type == undefined) {
+  let notifDiv = document.getElementById("notif");
+  notifDiv.classList.remove("info1");
+  notifDiv.classList.remove("error1");
+  if (type == "info" || type == undefined) {
     notifDiv.innerHTML = message;
-    notifDiv.classList.add('info1');
+    notifDiv.classList.add("info1");
   } else {
     notifDiv.innerHTML = message;
-    notifDiv.classList.add('error1');
+    notifDiv.classList.add("error1");
   }
-  notifDiv.style.display = 'flex';
-        setTimeout(() => {
-          notifDiv.classList.add('show');
-            setTimeout(() => {
-              notifDiv.classList.remove('show');
-                setTimeout(() => {
-                  notifDiv.style.display = 'none';
-                }, 500); // Match this to the transition duration
-            }, 1500); // Display for 3 seconds
-        }, 10); // Small delay to trigger the animation
-
+  notifDiv.style.display = "flex";
+  setTimeout(() => {
+    notifDiv.classList.add("show");
+    setTimeout(() => {
+      notifDiv.classList.remove("show");
+      setTimeout(() => {
+        notifDiv.style.display = "none";
+      }, 500); // Match this to the transition duration
+    }, 1500); // Display for 3 seconds
+  }, 10); // Small delay to trigger the animation
 }
