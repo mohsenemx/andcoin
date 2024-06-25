@@ -436,6 +436,7 @@ let interval = setInterval(() => {
 function updateFarmBar() {
   let now = new Date().getTime();
   if (readyToClaim) {
+    readyToFarm = false;
     farmProgress.style.display = "none";
     farmProgress.style.width = "0%";
     farmText.innerHTML = "Claim";
@@ -443,13 +444,11 @@ function updateFarmBar() {
   else if (Number(now) - Number(userObject.lastClaimed) > 10800000) {
     readyToClaim = true;
     readyToFarm = false;
-    if (readyToFarm) {
+  } else if (readyToFarm) {
       farmProgress.style.display = "none";
       farmProgress.style.width = "0%";
       farmText.innerHTML = "Start Farming";
-    }
-    
-  } 
+  }
   else {
     let timePassed = Number(now) - Number(userObject.lastClaimed);
     let rn = UTCtoTime(10800000 - timePassed);
