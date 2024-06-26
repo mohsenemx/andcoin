@@ -117,7 +117,11 @@ function coinClicked() {
 }
 function upgradeBoost(name) {
   let upgradeName = name.getAttribute("data-name");
+  
   if (upgradeName == "storage") {
+    if (userObject.upgrades[0].level + 1 >= 6) {
+      return;
+    }
     if (userObject.upgrades[0].level == 1) {
       if (userObject.coins < 1500) {
         notif("You don't have enough coins for this upgrade!", "error");
@@ -180,6 +184,9 @@ function upgradeBoost(name) {
       }
     }
   } else if (upgradeName == "recharge") {
+    if (userObject.upgrades[0].level + 1 >= 6) {
+      return;
+    }
     if (userObject.upgrades[1].level == 1) {
       if (userObject.coins < 1500) {
         notif("You don't have enough coins for this upgrade!", "error");
@@ -241,6 +248,7 @@ function upgradeBoost(name) {
         updateEverything();
       }
     } else {
+      
       notif("Successfully Upgraded!", "info");
       socket.send(
         `{"action":"upgrade","tgId":"${
@@ -322,8 +330,8 @@ function updateWallet() {
       }
     }
   }
-  usdtvalue.innerHTML = numberWithCommas(totalMoney);
-  andvalue.innerHTML = numberWithCommas(userObject.coins);
+  usdtvalue.innerHTML = numberWithCommas(parseFloat(Number(totalMoney).toFixed(2)));
+  andvalue.innerHTML = numberWithCommas(Number(userObject.coins).toFixed(0));
   yourcoinsDiv.innerHTML = "";
   yourcoinsDiv.innerHTML += `<div
   style="
