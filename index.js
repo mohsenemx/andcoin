@@ -429,9 +429,13 @@ Have friends? Invite them! The more, the merrier! 👯
 });
 bot.on("message", (msg) => {
   if (msg.text == "/stats" && msg.chat.title == "AndCoin DevChat") {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const uptime = `${hours}hr, ${minutes}m, ${seconds}s`;
     bot.sendMessage(
       msg.chat.id,
-      `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coins: ${stats.allCoinsClicked}`
+      `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coins: ${stats.allCoinsClicked}\nUptime: ${uptime}`
     );
   } else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
     bot.sendMessage(msg.chat.id, JSON.stringify(users));
