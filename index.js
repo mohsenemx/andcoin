@@ -54,6 +54,14 @@ let transactionTemplate = fs.readFileSync(
   "utf8"
 );
 let usdtPrice = 1000;
+process.on('SIGINT', () => {
+  console.log("Caught interrupt signal");
+  performBackup('reload');
+  setTimeout(() => {
+    process.exit();
+  }, 1000)
+    
+});
 wss.on("connection", function connection(ws) {
   stats.online += 1;
   ws.on("message", function message(data) {
@@ -360,19 +368,20 @@ function performBackup(isForced) {
   const currentUtcTime = new Date();
   const offsetHours = +3.5;
 
-  const type = typeof isForced == "undefined" ? "Automatic" : "Forced";
+  const type = typeof isForced == "undefined" ? "Automatic" : (isForced == 'reload') ? "Process Exit" : "Forced";
   const localTime = new Date(
     currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours)
   );
   let backupTime = localTime.toISOString();
   bot.sendDocument(-1002205721312, "./data/users.json", {
-    caption: `users.json @ ${backupTime}\nBackup Type: ${type}`,
+    caption: `users.json @ ${backupTime} <br>Backup Type: ${type}`,
   });
   bot.sendDocument(-1002205721312, "./data/stats.json", {
-    caption: `stats.json @ ${backupTime}\nBackup Type: ${type}`,
+    caption: `stats.json @ ${backupTime} <br>Backup Type: ${type}`,
+    parse_mode: "HTML"
   });
   bot.sendDocument(-1002205721312, "./data/crypto.json", {
-    caption: `crypto.json @ ${backupTime}\nBackup Type: ${type}`,
+    caption: `crypto.json @ ${backupTime} <br>Backup Type: ${type}`,
   });
 }
 bot.onText(/\/start (\w+)/, function (msg, match) {
@@ -446,7 +455,8 @@ bot.on("message", (msg) => {
     fs.writeFileSync("./data/users.json", JSON.stringify(users));
     fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
     fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
-    performBackup(true);
+    performBackup('force');
+    bot.sendMessage(msg.chat.id, 'Backed up the data locally and on telegram cloud!');
   } else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
     bot.sendMessage(msg.chat.id, JSON.stringify(users));
   } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
