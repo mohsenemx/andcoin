@@ -355,21 +355,23 @@ let updateCrypto = setInterval(() => {
 let hourlyBackup = setInterval(() => {
   performBackup();
 }, 3600000);
-function performBackup() {
+function performBackup(isForced) {
   const currentUtcTime = new Date();
   const offsetHours = +3.5;
+
+  const type = (typeof isForced == 'undefined') ? 'Automatic' : 'Forced';
   const localTime = new Date(
     currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours)
   );
   let backupTime = localTime.toISOString();
   bot.sendDocument(-1002205721312, "./data/users.json", {
-    caption: `users.json @ ${backupTime}`,
+    caption: `users.json @ ${backupTime}\nBackup Type: ${type}`,
   });
   bot.sendDocument(-1002205721312, "./data/stats.json", {
-    caption: `stats.json @ ${backupTime}`,
+    caption: `stats.json @ ${backupTime}\nBackup Type: ${type}`,
   });
   bot.sendDocument(-1002205721312, "./data/crypto.json", {
-    caption: `crypto.json @ ${backupTime}`,
+    caption: `crypto.json @ ${backupTime}\nBackup Type: ${type}`,
   });
 }
 bot.onText(/\/start (\w+)/, function (msg, match) {
@@ -437,7 +439,14 @@ bot.on("message", (msg) => {
       msg.chat.id,
       `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coins: ${stats.allCoinsClicked}\nUptime: ${uptime}`
     );
-  } else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
+  } else if (msg.text == "/saveInfo" && msg.chat.title == "AndCoin DevChat") {
+    updateCryptoPrice();
+    fs.writeFileSync("./data/users.json", JSON.stringify(users));
+    fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
+    fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
+    performBackup(true);
+  }
+  else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
     bot.sendMessage(msg.chat.id, JSON.stringify(users));
   }
   else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
