@@ -65,6 +65,7 @@ wss.on("connection", function connection(ws) {
           if (user.tgId == parsed.tgId) {
             console.log(`User @${user.name} (${user.tgId}) logged in`);
             user.lastOnline = new Date().getTime();
+            checkIfUserDoneTask(parsed);
             ws.send(
               `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
             );
@@ -257,7 +258,7 @@ wss.on("connection", function connection(ws) {
           }
         }
       }
-    }else if (parsed.action == "getUsdtPrice") {
+    } else if (parsed.action == "getUsdtPrice") {
       ws.send(`{"action": "getUsdtPrice", "price":"${usdtPrice}"}`);
     } else if (parsed.action == "getFriends") {
       for (const user of users) {
@@ -290,28 +291,28 @@ wss.on("connection", function connection(ws) {
           if (usrLevel == 1) {
             user.coins += 2500;
             user.allCoins += 2500;
-          stats.minedPastHour += 2500;
-          stats.allCoinsClicked += 200;
+            stats.minedPastHour += 2500;
+            stats.allCoinsClicked += 200;
           } else if (usrLevel == 2) {
             user.coins += 5000;
             user.allCoins += 5000;
-          stats.minedPastHour += 5000;
-          stats.allCoinsClicked += 5000;
+            stats.minedPastHour += 5000;
+            stats.allCoinsClicked += 5000;
           } else if (usrLevel == 3) {
             user.coins += 10000;
             user.allCoins += 10000;
-          stats.minedPastHour += 10000;
-          stats.allCoinsClicked += 10000;
+            stats.minedPastHour += 10000;
+            stats.allCoinsClicked += 10000;
           } else if (usrLevel == 4) {
             user.coins += 20000;
             user.allCoins += 20000;
-          stats.minedPastHour += 20000;
-          stats.allCoinsClicked += 20000;
+            stats.minedPastHour += 20000;
+            stats.allCoinsClicked += 20000;
           } else if (usrLevel == 5) {
             user.coins += 40000;
             user.allCoins += 40000;
-          stats.minedPastHour += 40000;
-          stats.allCoinsClicked += 40000;
+            stats.minedPastHour += 40000;
+            stats.allCoinsClicked += 40000;
           }
           break;
         }
@@ -359,7 +360,7 @@ function performBackup(isForced) {
   const currentUtcTime = new Date();
   const offsetHours = +3.5;
 
-  const type = (typeof isForced == 'undefined') ? 'Automatic' : 'Forced';
+  const type = typeof isForced == "undefined" ? "Automatic" : "Forced";
   const localTime = new Date(
     currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours)
   );
@@ -431,6 +432,7 @@ Have friends? Invite them! The more, the merrier! 👯
 });
 bot.on("message", (msg) => {
   if (msg.text == "/stats" && msg.chat.title == "AndCoin DevChat") {
+    let totalSeconds = process.uptime().toFixed(0);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
@@ -445,11 +447,9 @@ bot.on("message", (msg) => {
     fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
     fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
     performBackup(true);
-  }
-  else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
+  } else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
     bot.sendMessage(msg.chat.id, JSON.stringify(users));
-  }
-  else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
+  } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
     if (msg.chat.type == "group" || msg.chat.type == "supergroup") {
       const opts = {
         resize_keyboard: true,
@@ -669,50 +669,26 @@ function checkUserJoinedMainGC(userId) {
     });
   return doesUserExit;
 }
-function checkIfUserDoneTask(parsed, loop) {
-  let loop1 = loop ? true : false;
-  if (loop1) {
-    for (const user of users) {
-      if (user.tgId == parsed.tgId) {
-        for (const task of tasks) {
-          let taskId = task.taskId;
-          if (taskId == 0) {
-            if (checkUserJoinedMainTG(user.tgId)) {
-              user.completedTasks.push(taskId);
-              user.coins += task.reward;
-              return true;
-            }
-          } else if (taskId == 1) {
-            if (checkUserJoinedMainGC(user.tgId)) {
-              user.completedTasks.push(taskId);
-              user.coins += task.reward;
-              return true;
-            }
-          }
-        }
-
-        break;
-      }
-    }
-  } else {
-    for (const user of users) {
-      if (user.tgId == parsed.tgId) {
-        if (parsed.taskId == 0) {
+function checkIfUserDoneTask(parsed) {
+  for (const user of users) {
+    if (user.tgId == parsed.tgId) {
+      tasks.forEach((task) => {
+        let taskId = task.id;
+        if (taskId == 0) {
           if (checkUserJoinedMainTG(user.tgId)) {
-            user.completedTasks.push(parsed.taskId);
-            user.coins += tasks[0].reward;
+            user.completedTasks.push(Number(taskId));
+            user.coins += task.reward;
             return true;
           }
-        } else if (parsed.taskId == 1) {
+        } else if (taskId == 1) {
           if (checkUserJoinedMainGC(user.tgId)) {
-            user.completedTasks.push(parsed.taskId);
-            user.coins += tasks[1].reward;
+            user.completedTasks.push(Number(taskId));
+            user.coins += task.reward;
             return true;
           }
         }
-
-        break;
-      }
+      });
+      break;
     }
   }
   return false;
