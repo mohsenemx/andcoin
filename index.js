@@ -15,6 +15,7 @@ if (process.env.USE_SSL == "true") {
   wssConf = { port: 8081 };
 }
 
+
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -77,7 +78,6 @@ wss.on("connection", function connection(ws) {
             ws.send(
               `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
             );
-
             break;
           }
         }
@@ -326,6 +326,20 @@ wss.on("connection", function connection(ws) {
         }
         ws.send(`{"action" : "getObject", "object": ${JSON.stringify(user)}}`);
       }
+    } else if (parsed.action == "getWarns") {
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
+          ws.send(`{"action":"getWarns", "warns":${JSON.stringify(user.warns)}}`);
+          break;
+        }
+      }
+    } else if (parsed.action == "updateWarns") {
+      for (const user of users) {
+        if (user.tgId == parsed.tgId) {
+          user.warns = parsed.warns;
+          break;
+        }
+      }
     }
   });
 
@@ -372,6 +386,7 @@ function performBackup(isForced) {
   const localTime = new Date(
     currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours)
   );
+
   let backupTime = localTime.toISOString();
   bot.sendDocument(-1002205721312, "./data/users.json", {
     caption: `users.json @ ${backupTime} <br>Backup Type: ${type}`,
@@ -643,57 +658,57 @@ bot.on("callback_query", (callbackQuery) => {
 });
 async function checkUserJoinedMainTG(userId) {
   let doesUserExit = false;
-  bot
-    .getChatMember("@andcoino", userId)
-    .then((chat) => {
-      if (
-        chat.status === "member" ||
-        chat.status === "administrator" ||
-        chat.status === "creator"
-      ) {
-        console.log(`${chat.user.username} is a member of the channel`);
-        doesUserExit = true;
-      }
-    })
-    .catch((e) => {
-      doesUserExit = false;
-    });
+  try {
+    const chat = await bot.getChatMember("@andcoino", userId);
+    if (
+      chat.status === "member" ||
+      chat.status === "administrator" ||
+      chat.status === "creator" ||
+      chat.status === "restricted"
+    ) {
+      doesUserExit = true;
+    }
+  } catch (e) {
+    // Handle error if necessary
+  }
   return doesUserExit;
 }
-function checkUserJoinedMainGC(userId) {
+async function checkUserJoinedMainGC(userId) {
   let doesUserExit = false;
-  bot
-    .getChatMember("@andcoin_community", userId)
-    .then((chat) => {
-      if (
-        chat.status === "member" ||
-        chat.status === "administrator" ||
-        chat.status === "creator"
-      ) {
-        console.log(`${chat.user.username} is a member of the group`);
-        doesUserExit = true;
-      }
-    })
-    .catch((e) => {
-      doesUserExit = false;
-    });
+  try {
+    const chat = await bot.getChatMember("@andcoin_community", userId);
+    if (
+      chat.status === "member" ||
+      chat.status === "administrator" ||
+      chat.status === "creator" ||
+      chat.status === "restricted"
+    ) {
+      doesUserExit = true;
+    }
+  } catch (e) {
+    // Handle error if necessary
+  }
   return doesUserExit;
 }
-function checkIfUserDoneTask(parsed) {
+ function checkIfUserDoneTask(parsed) {
   for (const user of users) {
     if (user.tgId == parsed.tgId) {
-      tasks.forEach((task) => {
+      tasks.forEach(async (task) => {
         let taskId = task.id;
         if (taskId == 0) {
           if (checkUserJoinedMainTG(user.tgId)) {
-            user.completedTasks.push(Number(taskId));
-            user.coins += task.reward;
+            if (!user.completedTasks.includes(taskId)) {
+              user.completedTasks.push(Number(taskId));
+              user.coins += task.reward;
+            }
             return true;
           }
         } else if (taskId == 1) {
           if (checkUserJoinedMainGC(user.tgId)) {
-            user.completedTasks.push(Number(taskId));
-            user.coins += task.reward;
+            if (!user.completedTasks.includes(taskId)) {
+              user.completedTasks.push(Number(taskId));
+              user.coins += task.reward;
+            }
             return true;
           }
         }

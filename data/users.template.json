@@ -10,6 +10,7 @@
   "joined": 0,
   "lastOnline": 0,
   "lastClaimed": 0,
+  "warns": [],
   "crypto": [
     { "id": "BTC", "amount": 0 },
     { "id": "ETH", "amount": 0 },

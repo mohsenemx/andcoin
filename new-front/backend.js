@@ -1,6 +1,7 @@
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
 }
+
 let userObject;
 let user = parseQuery(Telegram.WebApp.initData);
 user = user.user;
@@ -15,6 +16,8 @@ let mainCoin = document.getElementById("andcoin");
 let tasks = [];
 let cryptos = [];
 let friends = [];
+let warns = [];
+let recentClicks = [];
 let usdtPrice = 1000;
 let readyToClaim = false;
 let readyToFarm = true;
@@ -38,6 +41,7 @@ function init() {
   socket.send(`{"action":"getTasks"}`);
   socket.send(`{"action":"getCrypto"}`);
   socket.send(`{"action":"getUsdtPrice"}`);
+  socket.send(`{"action":"getWarns", "tgId":"${user.id}"}`);
   socket.send(`{"action":"getFriends","tgId":"${user.id}"}`);
 }
 socket.onopen = function () {
@@ -73,6 +77,8 @@ function handleMessage(object) {
     usdtPrice = Number(object.price);
   } else if (object.action == "getFriends") {
     friends = object.friends;
+  } else if (object.action == "getWarns") {
+    warns = object.warns;
   }
 }
 let sync = setInterval(() => {
@@ -89,6 +95,7 @@ function performSync() {
   }, 200);
 
   socket.send(`{"action":"getTasks", "tgId": "${user.id}"}`);
+  socket.send(`{"action":"updateWarnings", "warns":"${JSON.stringify(warns)}"}`);
 }
 farmingButton.addEventListener("click", () => {
   startFarming();
@@ -107,13 +114,19 @@ function startFarming() {
     readyToFarm = false;
   }
 }
-mainCoin.addEventListener("click", () => {
-  coinClicked();
+mainCoin.addEventListener("click", (e) => {
+  coinClicked(e);
 });
-function coinClicked() {
+function coinClicked(params) {
   coins += 1;
   coinsSinceLastSync += 1;
   balance.innerHTML = `${numberWithCommas(coins)}`;
+  if (recentClicks.length > 5) {
+    recentClicks = [];
+  } else {
+    console.log(params);
+    recentClicks.push({x: params.x, y: params.y});
+  }
 }
 function upgradeBoost(name) {
   let upgradeName = name.getAttribute("data-name");
