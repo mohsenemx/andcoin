@@ -134,12 +134,11 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "buyCrypto") {
       for (const obj of users) {
         if (obj.tgId == parsed.tgId) {
-          console.log(JSON.stringify(parsed));
           let cointopay = getCryptoObject(parsed.cointopay);
           let cointobuy = getCryptoObject(parsed.cointobuy);
           let amount = Number(parsed.amount);
-          if (cointobuy.id == "AND") {
-            if (cointopay.id == "USDT") {
+          if (parsed.cointobuy == "AND") {
+            if (parsed.cointopay == "USDT") {
               let coinstoget = amount * usdtPrice;
               obj.coins += coinstoget;
               obj.usdt -= amount;
@@ -152,8 +151,8 @@ wss.on("connection", function connection(ws) {
                 }
               }
             }
-          } else if (cointobuy.id == "USDT") {
-            if (cointopay.id == "AND") {
+          } else if (parsed.cointobuy == "USDT") {
+            if (parsed.cointopay == "AND") {
               let usdtoget = amount / usdtPrice;
               obj.coins -= amount;
               obj.usdt += usdtoget;
