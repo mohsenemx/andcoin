@@ -215,24 +215,28 @@ wss.on("connection", function connection(ws) {
                 user.upgrades[0].level = 2;
                 user.maxEnergy = 3000;
                 user.coins -= 1500;
+                user.miningTime = 27000000;
                 break;
               }
               case 3: {
                 user.upgrades[0].level = 3;
                 user.maxEnergy = 3500;
                 user.coins -= 3000;
+                user.miningTime = 25200000;
                 break;
               }
               case 4: {
                 user.upgrades[0].level = 4;
                 user.maxEnergy = 4000;
                 user.coins -= 6000;
+                user.miningTime = 23400000;
                 break;
               }
               case 5: {
                 user.upgrades[0].level = 5;
                 user.maxEnergy = 5000;
                 user.coins -= 15000;
+                user.miningTime = 18000000;
                 break;
               }
               default: {

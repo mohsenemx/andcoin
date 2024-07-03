@@ -10,6 +10,7 @@
   "joined": 0,
   "lastOnline": 0,
   "lastClaimed": 0,
+  "miningTime":28800000,
   "warns": [],
   "crypto": [
     { "id": "BTC", "amount": 0 },
