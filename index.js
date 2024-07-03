@@ -55,14 +55,15 @@ let transactionTemplate = fs.readFileSync(
   "utf8"
 );
 let usdtPrice = 1000;
-process.on('SIGINT', () => {
+/*
+function exitApp() {
   console.log("Caught interrupt signal");
   performBackup('reload');
   setTimeout(() => {
     process.exit();
   }, 1000)
     
-});
+}*/
 wss.on("connection", function connection(ws) {
   stats.online += 1;
   ws.on("message", function message(data) {
@@ -134,9 +135,11 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "buyCrypto") {
       for (const obj of users) {
         if (obj.tgId == parsed.tgId) {
+          console.log(parsed);
           let cointopay = getCryptoObject(parsed.cointopay);
           let cointobuy = getCryptoObject(parsed.cointobuy);
           let amount = Number(parsed.amount);
+          
           if (parsed.cointobuy == "AND") {
             if (parsed.cointopay == "USDT") {
               let coinstoget = amount * usdtPrice;
@@ -366,7 +369,7 @@ wss.on("close", function close() {
   clearInterval(interval);
   console.log("Closing server");
 });
-let cryptoSave = setInterval(() => {
+/* let cryptoSave = setInterval(() => {
   fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
 }, 900000);
 let saveInterval = setInterval(() => {
@@ -374,7 +377,7 @@ let saveInterval = setInterval(() => {
 }, 900000);
 let statsSave = setInterval(() => {
   fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
-}, 400000);
+}, 400000);*/
 let updateCrypto = setInterval(() => {
   updateCryptoPrice();
 }, 900000);
@@ -385,22 +388,31 @@ function performBackup(isForced) {
   const currentUtcTime = new Date();
   const offsetHours = +3.5;
 
-  const type = typeof isForced == "undefined" ? "Automatic" : (isForced == 'reload') ? "Process Exit" : "Forced";
+  const type = typeof isForced == "undefined" ? "Automatic" : (isForced == 'reload') ? "Process Terminated" : "Forced";
   const localTime = new Date(
     currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours)
   );
-
+  fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
+  fs.writeFileSync("./data/users.json", JSON.stringify(users));
+  fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
+  const fileOptions = {
+    // Explicitly specify the MIME type.
+    contentType: 'application/json',
+  };
   let backupTime = localTime.toISOString();
-  bot.sendDocument(-1002205721312, "./data/users.json", {
-    caption: `users.json @ ${backupTime} <br>Backup Type: ${type}`,
-  });
-  bot.sendDocument(-1002205721312, "./data/stats.json", {
-    caption: `stats.json @ ${backupTime} <br>Backup Type: ${type}`,
+  const usersStream = fs.createReadStream('./data/users.json');
+  const statsStream = fs.createReadStream('./data/stats.json');
+  const cryptoStream = fs.createReadStream('./data/crypto.json');
+  bot.sendDocument(-1002205721312, usersStream, {
+    caption: `users.json @ ${backupTime} \n Backup Type: ${type}`,
+  }, fileOptions);
+  bot.sendDocument(-1002205721312, statsStream, {
+    caption: `stats.json @ ${backupTime} \n Backup Type: ${type}`,
     parse_mode: "HTML"
-  });
-  bot.sendDocument(-1002205721312, "./data/crypto.json", {
-    caption: `crypto.json @ ${backupTime} <br>Backup Type: ${type}`,
-  });
+  }, fileOptions);
+  bot.sendDocument(-1002205721312, cryptoStream, {
+    caption: `crypto.json @ ${backupTime} \n Backup Type: ${type}`,
+  }, fileOptions);
 }
 bot.onText(/\/start (\w+)/, function (msg, match) {
   if (msg.chat.type == "group") {

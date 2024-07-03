@@ -358,12 +358,13 @@ function updateWallet() {
   let usdtvalue = document.getElementById("money");
   let andvalue = document.getElementById("and-balance");
   let yourcoinsDiv = document.getElementById("wallet-coins-box");
-  let totalMoney = userObject.usdt;
+  usdtvalue.innerHTML = "";
+  let totalMoney = Number(userObject.usdt);
   for (const cryp of userObject.crypto) {
     for (const cr of cryptos) {
       if (cryp.id == cr.id) {
         let coinAmount = cryp.amount * cr.usdtPrice;
-        totalMoney += coinAmount;
+        totalMoney += Number(coinAmount);
       }
     }
   }
@@ -686,12 +687,12 @@ function updateCryptoPrices() {
     hmnyc = hmny * targetCoin.usdtPrice;
   }
   //hmnyc = hmny;
-  document.getElementById("yougetcoin1").innerHTML = `$ ${parseFloat(
+  document.getElementById("yougetcoin1").innerHTML = `$ ${numberWithCommas(parseFloat(
     hmnyc.toFixed(6)
-  )}`;
-  document.getElementById("coin-get").innerHTML = `${parseFloat(
+  ))}`;
+  document.getElementById("coin-get").innerHTML = ` ${numberWithCommas(parseFloat(
     hmny.toFixed(6)
-  )} $${coinToGet}`;
+  ))} $${coinToGet}`;
 }
 buyInput.oninput = function () {
   updateCryptoPrices();
@@ -751,10 +752,12 @@ function swap() {
         `{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`
       );
       notif("Sucessfully swapped your cryptos", "info");
-      buyInput.value = "";
+      
       setTimeout(() => {
         updateEverything();
+        buyInput.value = "";
       }, 250);
+      break;
     } else {
       if (coinToGive == "USDT") {
         socket.send(
@@ -763,8 +766,10 @@ function swap() {
         notif("Sucessfully swapped your cryptos", "info");
         setTimeout(() => {
           updateEverything();
+          buyInput.value = "";
         }, 250);
-        buyInput.value = "";
+        
+        break;
       } else if (coinToGive == "AND") {
         socket.send(
           `{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`
@@ -774,6 +779,7 @@ function swap() {
           updateEverything();
           buyInput.value = "";
         }, 250);
+        break;
       }
     }
   }
