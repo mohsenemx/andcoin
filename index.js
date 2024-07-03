@@ -55,7 +55,9 @@ let transactionTemplate = fs.readFileSync(
   "utf8"
 );
 let usdtPrice = 1000;
-/*
+process.on('beforeExit', () => {
+  exitApp();
+})
 function exitApp() {
   console.log("Caught interrupt signal");
   performBackup('reload');
@@ -63,7 +65,7 @@ function exitApp() {
     process.exit();
   }, 1000)
     
-}*/
+}
 wss.on("connection", function connection(ws) {
   stats.online += 1;
   ws.on("message", function message(data) {
