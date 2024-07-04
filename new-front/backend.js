@@ -35,7 +35,6 @@ setTimeout(() => {
         return;
       }
     }, 1000);
-    
   }
 }, 2000);
 function init() {
@@ -77,7 +76,7 @@ function handleMessage(object) {
     userObject = object.object;
     upgrades = userObject.upgrades;
     coins = userObject.coins;
-    balance.innerHTML = numberWithCommas(coins);
+    balance.innerHTML = numberWithCommas(Math.floor(Number(coins)));
   } else if (object.action == "getTasks") {
     tasks = object.tasks;
   } else if (object.action == "getCrypto") {
@@ -105,7 +104,7 @@ function performSync() {
   setTimeout(() => {
     socket.send(`{"action":"getObject", "tgId":"${user.id}"}`);
   }, 200);
-  
+
   socket.send(`{"action":"getTasks", "tgId": "${user.id}"}`);
   socket.send(
     `{"action":"updateWarnings", "warns":"${JSON.stringify(warns)}"}`
@@ -136,7 +135,7 @@ mainCoin.addEventListener("click", (e) => {
 function coinClicked(params) {
   coins += 1;
   coinsSinceLastSync += 1;
-  balance.innerHTML = `${numberWithCommas(coins)}`;
+  balance.innerHTML = `${numberWithCommas(Math.floor(Number(coins)))}`;
   if (recentClicks.length > 50) {
     recentClicks = [];
   } else {
@@ -424,9 +423,9 @@ function updateWallet() {
                    </div>
                    <div id="eth-name" style="margin-left: 15px">
                      <div>${crypto.name}</div>
-                     <div class="coins-amount" id="eth-amount">${parseFloat(Number(coin.amount).toFixed(7))} ${
-          coin.id
-        }</div>
+                     <div class="coins-amount" id="eth-amount">${parseFloat(
+                       Number(coin.amount).toFixed(7)
+                     )} ${coin.id}</div>
                    </div>
                  </div>
                  <div class="eth-vector">
@@ -457,17 +456,30 @@ function updateTasks() {
     } catch (e) {
       doneTask = false;
     }
+    if (task.task == "joinChannel") {
+      tasksDiv.innerHTML += `
+      <div class="task-items">
+              <span style="font-size: 17px">${task.name}</span>
+              <button class="join-btn" onclick="doTasks(this)" data-id="${
+                task.id
+              }" ${doneTask ? "disabled" : "notDone"}>${
+        doneTask ? "Done" : "Join"
+      } </button>
+            </div>
+      `;
+    } else if (task.task == "addFriend" ) {
+      tasksDiv.innerHTML += `
+      <div class="task-items">
+              <span style="font-size: 17px">${task.name} (${userObject.friends.length}/50)</span>
+              <button class="join-btn" onclick="doTasks(this)" data-id="${
+                task.id
+              }" ${doneTask ? "disabled" : "notDone"}>${
+        doneTask ? "Done" : "Invite"
+      } </button>
+            </div>
+      `;
+    }
 
-    tasksDiv.innerHTML += `
-    <div class="task-items">
-            <span style="font-size: 17px">${task.name}</span>
-            <button class="join-btn" onclick="doTasks(this)" data-id="${
-              task.id
-            }" ${doneTask ? "disabled" : "notDone"}>${
-      doneTask ? "Done" : task.task == "joinChannel" ? "Join" : "Go"
-    } </button>
-          </div>
-    `;
   }
 }
 function doTasks(taskDiv) {
@@ -502,7 +514,10 @@ function updateFarmBar() {
     farmProgress.style.display = "none";
     farmProgress.style.width = "0%";
     farmText.innerHTML = "Claim";
-  } else if (Number(now) - Number(userObject.lastClaimed) > userObject.miningTime) {
+  } else if (
+    Number(now) - Number(userObject.lastClaimed) >
+    userObject.miningTime
+  ) {
     readyToClaim = true;
     readyToFarm = false;
   } else if (readyToFarm) {
@@ -587,14 +602,18 @@ function updateCrypto() {
     for (const crr of userObject.crypto) {
       if (crr.id == crypto.id) {
         cryptoCoins.innerHTML += `
-        <div class="coin-items" onclick="tradeCrypto(this)" data-id="${crypto.id}">
+        <div class="coin-items" onclick="tradeCrypto(this)" data-id="${
+          crypto.id
+        }">
                   <div class="coin-info">
                     <div id="eth-icon">
                       <img src="./CoinIcons/${crypto.id.toLowerCase()}.png" alt="" />
                     </div>
                     <div id="eth-name" style="margin-left: 15px">
                       <div>${crypto.name}</div>
-                      <div class="coins-amount" id="eth-amount">${parseFloat(Number(crr.amount).toFixed(7))} $${crypto.id}</div>
+                      <div class="coins-amount" id="eth-amount">${parseFloat(
+                        Number(crr.amount).toFixed(7)
+                      )} $${crypto.id}</div>
                     </div>
                   </div>
                   <div class="eth-vector">
@@ -609,7 +628,6 @@ function updateCrypto() {
                 </div>`;
       }
     }
-
   }
 }
 let waitingFor1stSelection = false;
@@ -620,9 +638,7 @@ let coinToGet = "AND";
 function updateTextsandBalance() {
   for (const coin in userObject.crypto) {
     if (coin.id == coinToGive) {
-      document.getElementById(
-        "USDT-balance2"
-      ).innerHTML = `${numberWithCommas(
+      document.getElementById("USDT-balance2").innerHTML = `${numberWithCommas(
         parseFloat(coin.amount.toFixed(6))
       )} $${coin.id}`;
       document.getElementById("youpaycoinname").innerHTML = coinToGive;
@@ -643,23 +659,23 @@ function updateTextsandBalance() {
     }
   }
   document
-  .getElementById("youGetCoinId")
-  .setAttribute("src", `./CoinIcons/${coinToGet.toLowerCase()}.png`);
-document.getElementById("yougetcoinname").innerHTML = coinToGet;
+    .getElementById("youGetCoinId")
+    .setAttribute("src", `./CoinIcons/${coinToGet.toLowerCase()}.png`);
+  document.getElementById("yougetcoinname").innerHTML = coinToGet;
 }
 function tradeCrypto(cryptoDiv) {
   let id = cryptoDiv.getAttribute("data-id");
-  
+
   if (firstTimeUsing) {
     firstTimeUsing = false;
     document
-    .getElementById("youGetCoinId")
-    .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
-  coinToGet = id;
-  coinToGive = "USDT";
-  document.getElementById("USDT-balance2").innerHTML = `${numberWithCommas(
-    userObject.usdt
-  )}`;
+      .getElementById("youGetCoinId")
+      .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
+    coinToGet = id;
+    coinToGive = "USDT";
+    document.getElementById("USDT-balance2").innerHTML = `${numberWithCommas(
+      userObject.usdt
+    )}`;
   }
   if (waitingFor1stSelection) {
     waitingFor1stSelection = false;
@@ -737,12 +753,12 @@ function updateCryptoPrices() {
     hmnyc = hmny * targetCoin.usdtPrice;
   }
   //hmnyc = hmny;
-  document.getElementById("yougetcoin1").innerHTML = `$ ${numberWithCommas(parseFloat(
-    hmnyc.toFixed(6)
-  ))}`;
-  document.getElementById("coin-get").innerHTML = ` ${numberWithCommas(parseFloat(
-    hmny.toFixed(6)
-  ))} $${coinToGet}`;
+  document.getElementById("yougetcoin1").innerHTML = `$ ${numberWithCommas(
+    parseFloat(hmnyc.toFixed(6))
+  )}`;
+  document.getElementById("coin-get").innerHTML = ` ${numberWithCommas(
+    parseFloat(hmny.toFixed(6))
+  )} $${coinToGet}`;
 }
 buyInput.oninput = function () {
   updateCryptoPrices();
@@ -803,13 +819,13 @@ function swap() {
         `{"action":"buyCrypto", "tgId":"${user.id}", "amount":"${amount}", "cointobuy":"${coinToGet}", "cointopay":"${coinToGive}"}`
       );
       notif("Sucessfully swapped your cryptos", "info");
-      
+
       setTimeout(() => {
         updateEverything();
         buyInput.value = "";
         updateTextsandBalance();
       }, 250);
-      
+
       break;
     } else {
       if (coinToGive == "USDT") {
@@ -823,7 +839,7 @@ function swap() {
           buyInput.value = "";
           updateTextsandBalance();
         }, 250);
-        
+
         break;
       } else if (coinToGive == "AND") {
         updateCryptoPrices();
@@ -836,7 +852,7 @@ function swap() {
           buyInput.value = "";
           updateTextsandBalance();
         }, 250);
-        
+
         break;
       }
     }
@@ -882,7 +898,6 @@ function updateEverything() {
     updateCrypto();
     updateCryptoPrices();
   }, 250);
-
 }
 document.getElementById("referral-btn").addEventListener("click", () => {
   socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"}`);

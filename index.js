@@ -711,6 +711,9 @@ async function checkUserJoinedMainGC(userId) {
   }
   return doesUserExit;
 }
+function checkAdded50Friends() {
+  
+}
  function checkIfUserDoneTask(parsed) {
   for (const user of users) {
     if (user.tgId == parsed.tgId) {
@@ -721,16 +724,27 @@ async function checkUserJoinedMainGC(userId) {
             if (!user.completedTasks.includes(taskId)) {
               user.completedTasks.push(Number(taskId));
               user.coins += task.reward;
+              return true;
             }
-            return true;
+            
           }
         } else if (taskId == 1) {
           if (checkUserJoinedMainGC(user.tgId)) {
             if (!user.completedTasks.includes(taskId)) {
               user.completedTasks.push(Number(taskId));
               user.coins += task.reward;
+              return true;
             }
-            return true;
+            
+          }
+        } else if (taskId == 2) {
+          if (checkAdded50Friends(user.tgId)) {
+            if (!user.completedTasks.includes(taskId)) {
+              user.completedTasks.push(Number(taskId));
+              user.coins += task.reward;
+              return true;
+            }
+            
           }
         }
       });
