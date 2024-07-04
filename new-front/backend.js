@@ -424,7 +424,7 @@ function updateWallet() {
                    </div>
                    <div id="eth-name" style="margin-left: 15px">
                      <div>${crypto.name}</div>
-                     <div class="coins-amount" id="eth-amount">${coin.amount} ${
+                     <div class="coins-amount" id="eth-amount">${parseFloat(Number(coin.amount).toFixed(7))} ${
           coin.id
         }</div>
                    </div>
@@ -584,27 +584,32 @@ function updateCrypto() {
               </div>
             </div>`;
   for (const crypto of cryptos) {
-    cryptoCoins.innerHTML += `
-    <div class="coin-items" onclick="tradeCrypto(this)" data-id="${crypto.id}">
-              <div class="coin-info">
-                <div id="eth-icon">
-                  <img src="./CoinIcons/${crypto.id.toLowerCase()}.png" alt="" />
-                </div>
-                <div id="eth-name" style="margin-left: 15px">
-                  <div>${crypto.name}</div>
-                  <div class="coins-amount" id="eth-amount"></div>
-                </div>
-              </div>
-              <div class="eth-vector">
-                
-              </div>
-              <div class="coin-price" style="margin: 15px">
-                <div id="eth-price">$${crypto.usdtPrice}</div>
-                <div class="profits" id="eth-profit" style="color: ${
-                  crypto.growthRate >= 0 ? "lightgreen" : "red"
-                }">${crypto.growthRate}%</div>
-              </div>
-            </div>`;
+    for (const crr of userObject.crypto) {
+      if (crr.id == crypto.id) {
+        cryptoCoins.innerHTML += `
+        <div class="coin-items" onclick="tradeCrypto(this)" data-id="${crypto.id}">
+                  <div class="coin-info">
+                    <div id="eth-icon">
+                      <img src="./CoinIcons/${crypto.id.toLowerCase()}.png" alt="" />
+                    </div>
+                    <div id="eth-name" style="margin-left: 15px">
+                      <div>${crypto.name}</div>
+                      <div class="coins-amount" id="eth-amount">${parseFloat(Number(crr.amount).toFixed(7))} $${crypto.id}</div>
+                    </div>
+                  </div>
+                  <div class="eth-vector">
+                    
+                  </div>
+                  <div class="coin-price" style="margin: 15px">
+                    <div id="eth-price">$${crypto.usdtPrice}</div>
+                    <div class="profits" id="eth-profit" style="color: ${
+                      crypto.growthRate >= 0 ? "lightgreen" : "red"
+                    }">${crypto.growthRate}%</div>
+                  </div>
+                </div>`;
+      }
+    }
+
   }
 }
 let waitingFor1stSelection = false;
