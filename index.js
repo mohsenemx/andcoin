@@ -41,8 +41,12 @@ let start = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getD
 
 console.log(`[${start}] Starting...`);
 console.log("Telegram bot running...");
-updateCryptoPrice();
-console.log("Updating crypto prices...");
+
+setTimeout(() => {
+  updateCryptoPrice();
+  console.log("Updating crypto prices...");
+}, 1000);
+
 console.log("API server running...");
 
 let users = JSON.parse(fs.readFileSync("./data/users.json", "utf8"));

@@ -25,7 +25,17 @@ const socket = new WebSocket(config.SERVER_ADDRESS);
 
 setTimeout(() => {
   if (typeof userObject == "undefined") {
-    showError("DVE-33");
+    socket.send(
+      `{"action":"login", "name": "${user.username}", "tgId": "${user.id}", "fullname":"${user.first_name} ${user.last_name}"}`
+    );
+    setTimeout(() => {
+      if (typeof userObject == "undefined") {
+        showError("DVE-33");
+      } else {
+        return;
+      }
+    }, 1000);
+    
   }
 }, 2000);
 function init() {
@@ -95,7 +105,7 @@ function performSync() {
   setTimeout(() => {
     socket.send(`{"action":"getObject", "tgId":"${user.id}"}`);
   }, 200);
-
+  
   socket.send(`{"action":"getTasks", "tgId": "${user.id}"}`);
   socket.send(
     `{"action":"updateWarnings", "warns":"${JSON.stringify(warns)}"}`
