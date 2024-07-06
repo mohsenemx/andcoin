@@ -1,4 +1,3 @@
-const TelegramBot = require("node-telegram-bot-api");
 
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -906,7 +905,27 @@ function changePayments() {
       : numberWithCommas(parseFloat(bal.toFixed(5)))
   }`;
 }
-function updateFriends() {}
+function updateFriends() {
+  let friendsDiv = document.getElementById('friends');
+  friendsDiv.innerHTML = ``;
+  for (const friend of friends) {
+    let friendMoney = 0;
+    friendMoney += Number(friend.usdt);
+    for (const cr of friend.crypto) {
+      for (const crypto of cryptos) {
+        if (cr.id == crypto.id) {
+          friendMoney += Number(cr.amount) * Number(crypto.usdtPrice);
+        }
+      }
+    }
+    friendsDiv.innerHTML += `
+      <div class="task-items">
+              <span style="font-size: 17px">${friend.fullname}</span>
+              <span>$${numberWithCommas(parseFloat(Number(friendMoney).toFixed(2)))}</span>
+            </div>
+      `;
+  }
+}
 function updateEverything() {
   performSync();
   setTimeout(() => {

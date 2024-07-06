@@ -76,3 +76,19 @@ button:disabled {
         margin-top: 30px;
     }
 }
+.friend-items{
+    width: 312px;
+    height: 50px;
+    border: 2px solid #5DA0FF;
+    color: #003B8E;
+    margin: 30px auto;
+    
+}
+
+.friend-items{
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px;
+}
