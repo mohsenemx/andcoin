@@ -63,13 +63,13 @@
     display: flex;
     justify-content: space-around;
     font-family: 'SFPro';
-}
-.join-btn button {
     outline: none;
     border: none;
 }
 button:disabled {
     background-color: #285697;
+    outline: none;
+    border: none;
 }
 @media screen and (max-height:730px){
     #referral{

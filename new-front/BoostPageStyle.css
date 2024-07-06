@@ -52,3 +52,6 @@
     word-wrap: normal;
     padding: 1px;
 }
+.upgrade button:disabled {
+ color: #013783;
+}

@@ -1,3 +1,5 @@
+const TelegramBot = require("node-telegram-bot-api");
+
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
 }
@@ -6,7 +8,6 @@ let user = parseQuery(Telegram.WebApp.initData);
 user = user.user;
 let coins = 0;
 let coinsSinceLastSync = 0;
-let upgrades = [];
 let balance = document.getElementById("amount");
 let farmingButton = document.getElementById("farm");
 let farmText = document.getElementById("startFarming");
@@ -40,6 +41,10 @@ setTimeout(() => {
 function init() {
   if (Telegram.WebApp.platform == "unknown") {
     showError("TGE-21");
+    return;
+  }
+  if (!Telegram.WebApp.isVersionAtLeast('6.0')) {
+    showError('TGE-23');
     return;
   }
   socket.send(
@@ -136,6 +141,7 @@ function coinClicked(params) {
   coins += 1;
   coinsSinceLastSync += 1;
   balance.innerHTML = `${numberWithCommas(Math.floor(Number(coins)))}`;
+  vibrate(1);
   if (recentClicks.length > 50) {
     recentClicks = [];
   } else {
@@ -173,7 +179,7 @@ function giveWarn(x, y) {
 }
 function upgradeBoost(name) {
   let upgradeName = name.getAttribute("data-name");
-
+  let upgradeButton = name;
   if (upgradeName == "storage") {
     if (userObject.upgrades[0].level + 1 >= 6) {
       return;
@@ -184,6 +190,7 @@ function upgradeBoost(name) {
         return;
       } else {
         notif("Successfully Upgraded!", "info");
+        
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -488,6 +495,8 @@ function doTasks(taskDiv) {
     if (taskId == task.id) {
       if (task.task == "joinChannel") {
         Telegram.WebApp.openTelegramLink(task.link);
+      } else if (task.task == "addFriend") {
+        Telegram.WebApp.openLink(task.link);
       } else {
         Telegram.WebApp.openLink(task.link);
       }
@@ -679,7 +688,7 @@ function tradeCrypto(cryptoDiv) {
   }
   if (waitingFor1stSelection) {
     waitingFor1stSelection = false;
-    waitingFor2ndSelection = true;
+    waitingFor2ndSelection = false;
     coinToGive = id;
     document
       .getElementById("youPayCoinId")
@@ -711,10 +720,21 @@ function tradeCrypto(cryptoDiv) {
   } else if (waitingFor2ndSelection) {
     waitingFor2ndSelection = false;
     coinToGet = id;
-    document
-      .getElementById("youGetCoinId")
-      .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
     document.getElementById("yougetcoinname").innerHTML = id;
+      if (id == 'AND') {
+        document
+        .getElementById("youGetCoinId")
+        .setAttribute("src", `./CoinIcons/and.png`);
+      } else if (id == 'USDT') {
+        document
+        .getElementById("youGetCoinId")
+        .setAttribute("src", `./CoinIcons/usdt.png`);
+      } else {
+        document
+        .getElementById("youGetCoinId")
+        .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
+      }
+    
   }
   updateCryptoPrices();
   document.getElementById("TradePage1").style.display = "block";
@@ -943,6 +963,7 @@ function notif(message, type) {
   notifDiv.style.display = "flex";
   setTimeout(() => {
     notifDiv.classList.add("show");
+    vibrate(2);
     setTimeout(() => {
       notifDiv.classList.remove("show");
       setTimeout(() => {
@@ -950,4 +971,13 @@ function notif(message, type) {
       }, 500); // Match this to the transition duration
     }, 1500); // Display for 3 seconds
   }, 10); // Small delay to trigger the animation
+}
+function vibrate(level) {
+  if (level == 1) {
+    Telegram.WebApp.impactOccurred('light');
+  } else if (level == 2) {
+    Telegram.WebApp.impactOccurred('medium');
+  } else if (level == 3) {
+    Telegram.WebApp.impactOccurred('heavy');
+  }
 }
