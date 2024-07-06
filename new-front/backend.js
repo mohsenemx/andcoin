@@ -26,7 +26,7 @@ const socket = new WebSocket(config.SERVER_ADDRESS);
 setTimeout(() => {
   if (typeof userObject == "undefined") {
     socket.send(
-      `{"action":"login", "name": "${user.username}", "tgId": "${user.id}", "fullname":"${user.first_name} ${user.last_name}"}`
+      `{"action":"login", "name": "${user.username}", "tgId": "${user.id}", "fullname":"${(user.first_name == 'undefined') ? '' : user.first_name} ${(user.last_name == 'undefined') ? '' : user.last_name}"}`
     );
     setTimeout(() => {
       if (typeof userObject == "undefined") {
@@ -42,7 +42,7 @@ function init() {
     showError("TGE-21");
     return;
   }
-  if (!Telegram.WebApp.isVersionAtLeast('6.0')) {
+  if (!Telegram.WebApp.isVersionAtLeast('6.1')) {
     showError('TGE-23');
     return;
   }
@@ -998,10 +998,12 @@ function notif(message, type) {
 }
 function vibrate(level) {
   if (level == 1) {
-    Telegram.WebApp.impactOccurred('light');
+    Telegram.WebApp.HapticFeedback.impactOccurred('light');
   } else if (level == 2) {
-    Telegram.WebApp.impactOccurred('medium');
+    Telegram.WebApp.HapticFeedback.notificationOccurred('success');
   } else if (level == 3) {
-    Telegram.WebApp.impactOccurred('heavy');
+    Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+  } else if (level == 4) {
+    Telegram.WebApp.HapticFeedback.notificationOccurred('error');
   }
 }

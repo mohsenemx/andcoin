@@ -455,11 +455,15 @@ Have friends? Invite them! The more, the merrier! 👯
       obj.friends.push(msg.chat.id);
       bot.sendMessage(
         msg.chat.id,
-        `You were invited by @${obj.name}, and you both recieved 5000 coins.`
+        `You were invited by <a href="tg://user?id=${obj.tgId}"><b>${obj.fullname}</b></a>, and you both recieved 5000 coins.`, {
+          parse_mode: "HTML"
+        }
       );
       bot.sendMessage(
         obj.tgId,
-        `<<@${msg.chat.username}>> accepted your invite and you both recieved 5000 coins!`
+        `<a href="tg://user?id=${msg.chat.id}"><b>${(msg.chat.first_name == 'undefined') ? '' : msg.chat.first_name} ${(msg.chat.last_name == 'undefined') ? '' : msg.chat.last_name}</b></a> accepted your invite and you both recieved 5000 coins!`, {
+          parse_mode: "HTML"
+        }
       );
       break;
     }
@@ -469,7 +473,7 @@ Have friends? Invite them! The more, the merrier! 👯
     stats.totalUsers += 1;
     newUser.name = msg.chat.username.toLowerCase();
     newUser.tgId = msg.chat.id;
-    newUser.fullname = msg.chat.first_name + " " + msg.chat.last_name;
+    newUser.fullname = `${(user.first_name == 'undefined') ? '' : user.first_name} ${(user.last_name == 'undefined') ? '' : user.last_name}`;
     newUser.coins = 5000;
     newUser.joined = new Date().getTime();
     users.push(newUser);
