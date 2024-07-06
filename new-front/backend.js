@@ -908,23 +908,28 @@ function changePayments() {
 function updateFriends() {
   let friendsDiv = document.getElementById('friends');
   friendsDiv.innerHTML = ``;
-  for (const friend of friends) {
-    let friendMoney = 0;
-    friendMoney += Number(friend.usdt);
-    for (const cr of friend.crypto) {
-      for (const crypto of cryptos) {
-        if (cr.id == crypto.id) {
-          friendMoney += Number(cr.amount) * Number(crypto.usdtPrice);
+  if (friends.length != 0) {
+    for (const friend of friends) {
+      let friendMoney = 0;
+      friendMoney += Number(friend.usdt);
+      for (const cr of friend.crypto) {
+        for (const crypto of cryptos) {
+          if (cr.id == crypto.id) {
+            friendMoney += Number(cr.amount) * Number(crypto.usdtPrice);
+          }
         }
       }
+      friendsDiv.innerHTML += `
+        <div class="task-items">
+                <span style="font-size: 17px">${friend.fullname}</span>
+                <span class="friendMoney">$${numberWithCommas(parseFloat(Number(friendMoney).toFixed(2)))}</span>
+              </div>
+        `;
     }
-    friendsDiv.innerHTML += `
-      <div class="task-items">
-              <span style="font-size: 17px">${friend.fullname}</span>
-              <span>$${numberWithCommas(parseFloat(Number(friendMoney).toFixed(2)))}</span>
-            </div>
-      `;
+  } else {
+    friendsDiv.innerHTML = `<div class="task-items">You have no friends</div>`;
   }
+
 }
 function updateEverything() {
   performSync();

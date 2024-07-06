@@ -34,7 +34,7 @@
     margin-bottom: 20px;
     
     border-radius: 10px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'SFPro', Geneva, Tahoma, sans-serif;
 }
 
 
@@ -91,4 +91,7 @@ button:disabled {
     justify-content: space-around;
     align-items: center;
     border-radius: 15px;
+}
+.friendMoney {
+font-size: 15px;
 }
