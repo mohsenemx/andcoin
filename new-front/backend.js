@@ -412,7 +412,7 @@ function updateWallet() {
                    
                  </div>
                  <div class="coin-price" style="margin: 15px">
-                   <div id="eth}-price">${usdtPrice} $AND</div>
+                   <div id="eth-price">${usdtPrice} $AND</div>
                    <div class="profits" id="eth-profit">0%</div>
                  </div>
                  
@@ -573,7 +573,7 @@ function updateCrypto() {
                 <div id="eth-name" style="margin-left: 15px">
                   <div>Tether USD</div>
                   <div class="coins-amount" id="eth-amount">$${numberWithCommas(
-                    userObject.usdt
+                    Number(userObject.usdt).toFixed(1)
                   )}</div>
                 </div>
               </div>
@@ -594,7 +594,7 @@ function updateCrypto() {
                 <div id="eth-name" style="margin-left: 15px">
                   <div>AndCoin</div>
                   <div class="coins-amount" id="eth-amount">$${numberWithCommas(
-                    userObject.coins
+                    Number(userObject.coins).toFixed(0)
                   )}</div>
                 </div>
               </div>
