@@ -14,8 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-
-
+const server_version = '1.1b';
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -59,6 +58,7 @@ let transactionTemplate = fs.readFileSync(
   "utf8"
 );
 let usdtPrice = 1000;
+
 process.on('beforeExit', () => {
   exitApp();
 })
@@ -111,7 +111,7 @@ wss.on("connection", function connection(ws) {
         if (user.tgId == parsed.tgId) {
           checkIfUserDoneTask(parsed, true);
           ws.send(
-            `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
+            `{"action" : "getObject", "object": ${JSON.stringify(user)}, "sv":"${server_version}"}`
           );
           break;
         }

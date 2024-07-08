@@ -1,9 +1,11 @@
-
+const client_version = '1.1b';
+let server_version = '';
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
 }
 let userObject;
 let user = parseQuery(Telegram.WebApp.initData);
+let sHash = user.hash;
 user = user.user;
 let coins = 0;
 let coinsSinceLastSync = 0;
@@ -42,6 +44,7 @@ function init() {
     showError("TGE-21");
     return;
   }
+
   if (!Telegram.WebApp.isVersionAtLeast('6.1')) {
     showError('TGE-23');
     return;
@@ -81,6 +84,9 @@ function handleMessage(object) {
     upgrades = userObject.upgrades;
     coins = userObject.coins;
     balance.innerHTML = numberWithCommas(Math.floor(Number(coins)));
+    if (object.sv) {
+      server_version = object.sv;
+    }
   } else if (object.action == "getTasks") {
     tasks = object.tasks;
   } else if (object.action == "getCrypto") {
@@ -941,6 +947,7 @@ function updateEverything() {
     updateFarmBar();
     updateCrypto();
     updateCryptoPrices();
+    updateVersions();
   }, 250);
 }
 document.getElementById("referral-btn").addEventListener("click", () => {
@@ -1006,4 +1013,9 @@ function vibrate(level) {
   } else if (level == 4) {
     Telegram.WebApp.HapticFeedback.notificationOccurred('error');
   }
+}
+function updateVersions() {
+  document.getElementById('sversion').innerHTML = `Server Version: ${server_version}`;
+  document.getElementById('cversion').innerHTML = `Client Version: ${client_version}`;
+  document.getElementById('sHash').innerHTML = `Session Hash: ${sHash}`;
 }
