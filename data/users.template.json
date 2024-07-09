@@ -13,11 +13,11 @@
   "miningTime":28800000,
   "warns": [],
   "crypto": [
-    { "id": "BTC", "amount": 0 },
-    { "id": "ETH", "amount": 0 },
-    { "id": "TON", "amount": 0 },
-    { "id": "TRX", "amount": 0 },
-    { "id": "DOGE", "amount": 0 }
+    { "id": "BTC", "amount": 0 , "lastBought": 0},
+    { "id": "ETH", "amount": 0, "lastBought": 0 },
+    { "id": "TON", "amount": 0, "lastBought": 0 },
+    { "id": "TRX", "amount": 0, "lastBought": 0 },
+    { "id": "DOGE", "amount": 0, "lastBought": 0 }
   ],
   "upgrades": [
     { "name": "storage", "level": 1 },
