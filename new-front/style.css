@@ -1,9 +1,7 @@
 html {
    user-select: none; 
-   overflow: scroll;
 }
 * {
-  touch-action: none none;
 }
 @font-face {
   src: url("Fonts/Laro-Bold.ttf");

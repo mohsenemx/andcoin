@@ -1,4 +1,4 @@
-const client_version = '1.1b';
+const client_version = '1.1.1b';
 let server_version = '';
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -167,19 +167,19 @@ function checkForCheating() {
     if (click.x == firstClick.x && click.y == firstClick.y) {
       if (click.clickId >= 50) {
         shouldGetWarn = true;
-        giveWarn(x, y);
+        giveWarn(x, y, 'AutoClicker');
       }
     } else {
       return;
     }
   }
 }
-function giveWarn(x, y) {
+function giveWarn(x, y, r) {
   warns.push({
     x: x,
     y: y,
     time: new Date().toTimeString(),
-    reason: "Autoclicker",
+    reason: r,
   });
 }
 function upgradeBoost(name) {
