@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = '1.1b';
+const server_version = "1.2b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -59,16 +59,15 @@ let transactionTemplate = fs.readFileSync(
 );
 let usdtPrice = 1000;
 
-process.on('beforeExit', () => {
+process.on("beforeExit", () => {
   exitApp();
-})
+});
 function exitApp() {
   console.log("Caught interrupt signal");
-  performBackup('reload');
+  performBackup("reload");
   setTimeout(() => {
     process.exit();
-  }, 1000)
-    
+  }, 1000);
 }
 wss.on("connection", function connection(ws) {
   stats.online += 1;
@@ -111,7 +110,9 @@ wss.on("connection", function connection(ws) {
         if (user.tgId == parsed.tgId) {
           checkIfUserDoneTask(parsed, true);
           ws.send(
-            `{"action" : "getObject", "object": ${JSON.stringify(user)}, "sv":"${server_version}"}`
+            `{"action" : "getObject", "object": ${JSON.stringify(
+              user
+            )}, "sv":"${server_version}"}`
           );
           break;
         }
@@ -145,7 +146,7 @@ wss.on("connection", function connection(ws) {
           let cointopay = getCryptoObject(parsed.cointopay);
           let cointobuy = getCryptoObject(parsed.cointobuy);
           let amount = Number(parsed.amount);
-          
+
           if (parsed.cointobuy == "AND") {
             if (parsed.cointopay == "USDT") {
               let coinstoget = amount * usdtPrice;
@@ -181,6 +182,12 @@ wss.on("connection", function connection(ws) {
               for (const cr of obj.crypto) {
                 if (cr.id == cointobuy.id) {
                   cr.amount += mny;
+                  if (cr.lastBought != 0) {
+                    let prices = cr.lastBought + cointobuy.usdtPrice;
+                    cr.lastBought = (prices / 2).toFixed(1);
+                  } else {
+                    cr.lastBought = cointobuy.usdtPrice;
+                  }
                 }
               }
             } else if (parsed.cointopay == "USDT") {
@@ -189,6 +196,12 @@ wss.on("connection", function connection(ws) {
               for (const cr of obj.crypto) {
                 if (cr.id == cointobuy.id) {
                   cr.amount += mny;
+                  if (cr.lastBought != 0) {
+                    let prices = cr.lastBought + cointobuy.usdtPrice;
+                    cr.lastBought = (prices / 2).toFixed(1);
+                  } else {
+                    cr.lastBought = cointobuy.usdtPrice;
+                  }
                 }
               }
             } else {
@@ -197,6 +210,12 @@ wss.on("connection", function connection(ws) {
               for (const cr of obj.crypto) {
                 if (cr.id == cointobuy.id) {
                   cr.amount += mny;
+                  if (cr.lastBought != 0) {
+                    let prices = cr.lastBought + cointobuy.usdtPrice;
+                    cr.lastBought = (prices / 2).toFixed(1);
+                  } else {
+                    cr.lastBought = cointobuy.usdtPrice;
+                  }
                 }
                 if (cr.id == cointopay.id) {
                   cr.amount -= amount;
@@ -341,7 +360,9 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "getWarns") {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
-          ws.send(`{"action":"getWarns", "warns":${JSON.stringify(user.warns)}}`);
+          ws.send(
+            `{"action":"getWarns", "warns":${JSON.stringify(user.warns)}}`
+          );
           break;
         }
       }
@@ -394,7 +415,12 @@ function performBackup(isForced) {
   const currentUtcTime = new Date();
   const offsetHours = +3.5;
 
-  const type = typeof isForced == "undefined" ? "Automatic" : (isForced == 'reload') ? "Process Terminated" : "Forced";
+  const type =
+    typeof isForced == "undefined"
+      ? "Automatic"
+      : isForced == "reload"
+      ? "Process Terminated"
+      : "Forced";
   const localTime = new Date(
     currentUtcTime.setHours(currentUtcTime.getHours() + offsetHours)
   );
@@ -403,22 +429,37 @@ function performBackup(isForced) {
   fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
   const fileOptions = {
     // Explicitly specify the MIME type.
-    contentType: 'application/json',
+    contentType: "application/json",
   };
   let backupTime = localTime.toISOString();
-  const usersStream = fs.createReadStream('./data/users.json');
-  const statsStream = fs.createReadStream('./data/stats.json');
-  const cryptoStream = fs.createReadStream('./data/crypto.json');
-  bot.sendDocument(-1002205721312, usersStream, {
-    caption: `users.json @ ${backupTime} \n Backup Type: ${type}`,
-  }, fileOptions);
-  bot.sendDocument(-1002205721312, statsStream, {
-    caption: `stats.json @ ${backupTime} \n Backup Type: ${type}`,
-    parse_mode: "HTML"
-  }, fileOptions);
-  bot.sendDocument(-1002205721312, cryptoStream, {
-    caption: `crypto.json @ ${backupTime} \n Backup Type: ${type}`,
-  }, fileOptions);
+  const usersStream = fs.createReadStream("./data/users.json");
+  const statsStream = fs.createReadStream("./data/stats.json");
+  const cryptoStream = fs.createReadStream("./data/crypto.json");
+  bot.sendDocument(
+    -1002205721312,
+    usersStream,
+    {
+      caption: `users.json @ ${backupTime} \n Backup Type: ${type}`,
+    },
+    fileOptions
+  );
+  bot.sendDocument(
+    -1002205721312,
+    statsStream,
+    {
+      caption: `stats.json @ ${backupTime} \n Backup Type: ${type}`,
+      parse_mode: "HTML",
+    },
+    fileOptions
+  );
+  bot.sendDocument(
+    -1002205721312,
+    cryptoStream,
+    {
+      caption: `crypto.json @ ${backupTime} \n Backup Type: ${type}`,
+    },
+    fileOptions
+  );
 }
 bot.onText(/\/start (\w+)/, function (msg, match) {
   if (msg.chat.type == "group") {
@@ -455,14 +496,20 @@ Have friends? Invite them! The more, the merrier! 👯
       obj.friends.push(msg.chat.id);
       bot.sendMessage(
         msg.chat.id,
-        `You were invited by <a href="tg://user?id=${obj.tgId}"><b>${obj.fullname}</b></a>, and you both recieved 5000 coins.`, {
-          parse_mode: "HTML"
+        `You were invited by <a href="tg://user?id=${obj.tgId}"><b>${obj.fullname}</b></a>, and you both recieved 5000 coins.`,
+        {
+          parse_mode: "HTML",
         }
       );
       bot.sendMessage(
         obj.tgId,
-        `<a href="tg://user?id=${msg.chat.id}"><b>${(msg.chat.first_name == 'undefined') ? '' : msg.chat.first_name} ${(msg.chat.last_name == 'undefined') ? '' : msg.chat.last_name}</b></a> accepted your invite and you both recieved 5000 coins!`, {
-          parse_mode: "HTML"
+        `<a href="tg://user?id=${msg.chat.id}"><b>${
+          msg.chat.first_name == "undefined" ? "" : msg.chat.first_name
+        } ${
+          msg.chat.last_name == "undefined" ? "" : msg.chat.last_name
+        }</b></a> accepted your invite and you both recieved 5000 coins!`,
+        {
+          parse_mode: "HTML",
         }
       );
       break;
@@ -473,7 +520,9 @@ Have friends? Invite them! The more, the merrier! 👯
     stats.totalUsers += 1;
     newUser.name = msg.chat.username.toLowerCase();
     newUser.tgId = msg.chat.id;
-    newUser.fullname = `${(user.first_name == 'undefined') ? '' : user.first_name} ${(user.last_name == 'undefined') ? '' : user.last_name}`;
+    newUser.fullname = `${
+      user.first_name == "undefined" ? "" : user.first_name
+    } ${user.last_name == "undefined" ? "" : user.last_name}`;
     newUser.coins = 5000;
     newUser.joined = new Date().getTime();
     users.push(newUser);
@@ -495,8 +544,11 @@ bot.on("message", (msg) => {
     fs.writeFileSync("./data/users.json", JSON.stringify(users));
     fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
     fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
-    performBackup('force');
-    bot.sendMessage(msg.chat.id, 'Backed up the data locally and on telegram cloud!');
+    performBackup("force");
+    bot.sendMessage(
+      msg.chat.id,
+      "Backed up the data locally and on telegram cloud!"
+    );
   } else if (msg.text == "/logUsers" && msg.chat.title == "AndCoin DevChat") {
     bot.sendMessage(msg.chat.id, JSON.stringify(users));
   } else if (msg.text == "/start" || msg.text == "/start@AndCoin_bot") {
@@ -715,10 +767,8 @@ async function checkUserJoinedMainGC(userId) {
   }
   return doesUserExit;
 }
-function checkAdded50Friends() {
-  
-}
- function checkIfUserDoneTask(parsed) {
+function checkAdded50Friends() {}
+function checkIfUserDoneTask(parsed) {
   for (const user of users) {
     if (user.tgId == parsed.tgId) {
       tasks.forEach(async (task) => {
@@ -730,7 +780,6 @@ function checkAdded50Friends() {
               user.coins += task.reward;
               return true;
             }
-            
           }
         } else if (taskId == 1) {
           if (checkUserJoinedMainGC(user.tgId)) {
@@ -739,7 +788,6 @@ function checkAdded50Friends() {
               user.coins += task.reward;
               return true;
             }
-            
           }
         } else if (taskId == 2) {
           if (checkAdded50Friends(user.tgId)) {
@@ -748,7 +796,6 @@ function checkAdded50Friends() {
               user.coins += task.reward;
               return true;
             }
-            
           }
         }
       });

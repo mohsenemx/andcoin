@@ -1,5 +1,5 @@
-const client_version = '1.2b';
-let server_version = '';
+const client_version = "1.3b";
+let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
 }
@@ -28,7 +28,11 @@ const socket = new WebSocket(config.SERVER_ADDRESS);
 setTimeout(() => {
   if (typeof userObject == "undefined") {
     socket.send(
-      `{"action":"login", "name": "${user.username}", "tgId": "${user.id}", "fullname":"${(user.first_name == 'undefined') ? '' : user.first_name} ${(user.last_name == 'undefined') ? '' : user.last_name}"}`
+      `{"action":"login", "name": "${user.username}", "tgId": "${
+        user.id
+      }", "fullname":"${
+        user.first_name == "undefined" ? "" : user.first_name
+      } ${user.last_name == "undefined" ? "" : user.last_name}"}`
     );
     setTimeout(() => {
       if (typeof userObject == "undefined") {
@@ -45,8 +49,8 @@ function init() {
     return;
   }
 
-  if (!Telegram.WebApp.isVersionAtLeast('6.1')) {
-    showError('TGE-23');
+  if (!Telegram.WebApp.isVersionAtLeast("6.1")) {
+    showError("TGE-23");
     return;
   }
   socket.send(
@@ -167,7 +171,7 @@ function checkForCheating() {
     if (click.x == firstClick.x && click.y == firstClick.y) {
       if (click.clickId >= 50) {
         shouldGetWarn = true;
-        giveWarn(x, y, 'AutoClicker');
+        giveWarn(x, y, "AutoClicker");
       }
     } else {
       return;
@@ -195,7 +199,7 @@ function upgradeBoost(name) {
         return;
       } else {
         notif("Successfully Upgraded!", "info");
-        
+
         socket.send(
           `{"action":"upgrade","tgId":"${
             user.id
@@ -427,6 +431,11 @@ function updateWallet() {
   for (const coin of userObject.crypto) {
     for (const crypto of cryptos) {
       if (crypto.id == coin.id) {
+        let growthRate = calculateGrowth(
+          crypto.usdtPrice,
+          coin.lastBought,
+          coin.amount
+        );
         yourcoinsDiv.innerHTML += `
       <div class="coin-items">
                  <div class="coin-info">
@@ -445,9 +454,15 @@ function updateWallet() {
                  </div>
                  <div class="coin-price" style="margin: 15px">
                    <div id="eth}-price">$${crypto.usdtPrice}</div>
-                   <div class="profits" id="eth-profit">${
-                     crypto.growthRate
-                   }%</div>
+                   <div class="profits" id="eth-profit" ><div style="color: ${
+                     growthRate > 0
+                       ? "green"
+                       : growthRate == 0
+                       ? "black"
+                       : "red"
+                   };">${growthRate}% </div>  |  <div style="color: ${
+          crypto.growthRate >= 0 ? "green" : "red"
+        };">${crypto.growthRate}%</div></div>
                  </div>
                  
                </div>
@@ -479,10 +494,12 @@ function updateTasks() {
       } </button>
             </div>
       `;
-    } else if (task.task == "addFriend" ) {
+    } else if (task.task == "addFriend") {
       tasksDiv.innerHTML += `
       <div class="task-items">
-              <span style="font-size: 17px">${task.name} (${userObject.friends.length}/50)</span>
+              <span style="font-size: 17px">${task.name} (${
+        userObject.friends.length
+      }/50)</span>
               <button class="join-btn" onclick="doTasks(this)" data-id="${
                 task.id
               }" ${doneTask ? "disabled" : "notDone"}>${
@@ -491,7 +508,6 @@ function updateTasks() {
             </div>
       `;
     }
-
   }
 }
 function doTasks(taskDiv) {
@@ -501,7 +517,7 @@ function doTasks(taskDiv) {
       if (task.task == "joinChannel") {
         Telegram.WebApp.openTelegramLink(task.link);
       } else if (task.task == "addFriend") {
-        Telegram.WebApp.openLink(task.link);
+        getreferral();
       } else {
         Telegram.WebApp.openLink(task.link);
       }
@@ -615,6 +631,11 @@ function updateCrypto() {
   for (const crypto of cryptos) {
     for (const crr of userObject.crypto) {
       if (crr.id == crypto.id) {
+        let growthRate = calculateGrowth(
+          crypto.usdtPrice,
+          crr.lastBought,
+          crr.amount
+        );
         cryptoCoins.innerHTML += `
         <div class="coin-items" onclick="tradeCrypto(this)" data-id="${
           crypto.id
@@ -635,9 +656,20 @@ function updateCrypto() {
                   </div>
                   <div class="coin-price" style="margin: 15px">
                     <div id="eth-price">$${crypto.usdtPrice}</div>
-                    <div class="profits" id="eth-profit" style="color: ${
-                      crypto.growthRate >= 0 ? "lightgreen" : "red"
-                    }">${crypto.growthRate}%</div>
+                    <div class="profits" id="eth-profit" ><div style="color: ${
+                      growthRate > 0
+                        ? "green"
+                        : growthRate == 0
+                        ? "black"
+                        : "red"
+                    };">${growthRate}% </div> | <div style="color: ${
+          crypto.growthRate > 0
+            ? "green"
+            : crypto.growthRate == 0
+            ? "black"
+            : "red"
+        };">${crypto.growthRate}%</div></div>
+        
                   </div>
                 </div>`;
       }
@@ -657,17 +689,17 @@ function updateTextsandBalance() {
       )} $${coin.id}`;
       document.getElementById("youpaycoinname").innerHTML = coinToGive;
     } else {
-      if (id == "USDT") {
+      if (coinToGive == "USDT") {
         document.getElementById(
           "USDT-balance2"
         ).innerHTML = `$${numberWithCommas(
           parseFloat(userObject.usdt.toFixed(2))
         )}`;
         document.getElementById("youpaycoinname").innerHTML = coinToGive;
-      } else if (id == "AND") {
+      } else if (coinToGive == "AND") {
         document.getElementById(
           "USDT-balance2"
-        ).innerHTML = `${numberWithCommas(userObject.coins)} $AND`;
+        ).innerHTML = `${numberWithCommas(Number(userObject.coins).toFixed(0))} $AND`;
         document.getElementById("youpaycoinname").innerHTML = coinToGive;
       }
     }
@@ -726,20 +758,19 @@ function tradeCrypto(cryptoDiv) {
     waitingFor2ndSelection = false;
     coinToGet = id;
     document.getElementById("yougetcoinname").innerHTML = id;
-      if (id == 'AND') {
-        document
+    if (id == "AND") {
+      document
         .getElementById("youGetCoinId")
         .setAttribute("src", `./CoinIcons/and.png`);
-      } else if (id == 'USDT') {
-        document
+    } else if (id == "USDT") {
+      document
         .getElementById("youGetCoinId")
         .setAttribute("src", `./CoinIcons/usdt.png`);
-      } else {
-        document
+    } else {
+      document
         .getElementById("youGetCoinId")
         .setAttribute("src", `./CoinIcons/${id.toLowerCase()}.png`);
-      }
-    
+    }
   }
   updateCryptoPrices();
   document.getElementById("TradePage1").style.display = "block";
@@ -772,8 +803,11 @@ function updateCryptoPrices() {
   } else {
     if (coinToGive == "AND") {
       hmny = buyInput.value / usdtPrice / targetCoin.usdtPrice;
-    } else {
+    } else if (coinToGive == "USDT") {
       hmny = buyInput.value / targetCoin.usdtPrice;
+    } else {
+      let hmnyInUsdt = startCoin.usdtPrice * buyInput.value;
+      hmny = hmnyInUsdt / targetCoin.usdtPrice;
     }
     hmnyc = hmny * targetCoin.usdtPrice;
   }
@@ -910,9 +944,10 @@ function changePayments() {
       ? numberWithCommas(userObject.coins)
       : numberWithCommas(parseFloat(bal.toFixed(5)))
   }`;
+  updateCryptoPrices();
 }
 function updateFriends() {
-  let friendsDiv = document.getElementById('friends');
+  let friendsDiv = document.getElementById("friends");
   friendsDiv.innerHTML = ``;
   if (friends.length != 0) {
     for (const friend of friends) {
@@ -928,14 +963,15 @@ function updateFriends() {
       friendsDiv.innerHTML += `
         <div class="task-items">
                 <span style="font-size: 17px">${friend.fullname}</span>
-                <span class="friendMoney">$${numberWithCommas(parseFloat(Number(friendMoney).toFixed(2)))}</span>
+                <span class="friendMoney">$${numberWithCommas(
+                  parseFloat(Number(friendMoney).toFixed(2))
+                )}</span>
               </div>
         `;
     }
   } else {
     friendsDiv.innerHTML = `<div class="task-items">You have no friends</div>`;
   }
-
 }
 function updateEverything() {
   performSync();
@@ -951,8 +987,12 @@ function updateEverything() {
   }, 250);
 }
 document.getElementById("referral-btn").addEventListener("click", () => {
-  socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"}`);
+  getreferral();
 });
+function getreferral() {
+  notif('Sent you your referral code', 'info')
+  socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"}`);
+}
 function parseQuery(queryString) {
   const params = new URLSearchParams(queryString);
   const result = {};
@@ -1005,17 +1045,37 @@ function notif(message, type) {
 }
 function vibrate(level) {
   if (level == 1) {
-    Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    Telegram.WebApp.HapticFeedback.impactOccurred("light");
   } else if (level == 2) {
-    Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+    Telegram.WebApp.HapticFeedback.notificationOccurred("success");
   } else if (level == 3) {
-    Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+    Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
   } else if (level == 4) {
-    Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+    Telegram.WebApp.HapticFeedback.notificationOccurred("error");
   }
 }
 function updateVersions() {
-  document.getElementById('sversion').innerHTML = `Server Version: ${server_version}`;
-  document.getElementById('cversion').innerHTML = `Client Version: ${client_version}`;
-  document.getElementById('sHash').innerHTML = `Session Hash: ${sHash}`;
+  document.getElementById(
+    "sversion"
+  ).innerHTML = `Server Version: ${server_version}`;
+  document.getElementById(
+    "cversion"
+  ).innerHTML = `Client Version: ${client_version}`;
+  document.getElementById("sHash").innerHTML = `Session Hash: ${sHash}`;
+}
+function calculateGrowth(currentPrice, buyingPrice, initialQuantity) {
+  // Set default values for buyingPrice and initialQuantity if they are not provided
+  buyingPrice = buyingPrice || currentPrice;
+  initialQuantity = initialQuantity || 0;
+
+  // Calculate average buying price
+  const averageBuyingPrice = (initialQuantity * buyingPrice) / initialQuantity;
+  // Calculate growth percentage
+  const growthPercentage =
+    ((currentPrice - averageBuyingPrice) / averageBuyingPrice) * 100;
+  if (isNaN(Number(growthPercentage))) {
+    return 0;
+  } else {
+    return growthPercentage;
+  }
 }
