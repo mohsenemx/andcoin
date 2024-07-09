@@ -1,4 +1,4 @@
-const client_version = "1.3b";
+const client_version = "1.3.1b";
 let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -460,7 +460,7 @@ function updateWallet() {
                        : growthRate == 0
                        ? "black"
                        : "red"
-                   };">${growthRate}% </div>  |  <div style="color: ${
+                   };">${growthRate.toFixed(1)}% </div>  |  <div style="color: ${
           crypto.growthRate >= 0 ? "green" : "red"
         };">${crypto.growthRate}%</div></div>
                  </div>
@@ -662,7 +662,7 @@ function updateCrypto() {
                         : growthRate == 0
                         ? "black"
                         : "red"
-                    };">${growthRate}% </div> | <div style="color: ${
+                    };">${growthRate.toFixed(1)}% </div> | <div style="color: ${
           crypto.growthRate > 0
             ? "green"
             : crypto.growthRate == 0

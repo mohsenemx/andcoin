@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.2b";
+const server_version = "1.2.1b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -896,6 +896,39 @@ function getCryptoObject(id) {
   for (const crypto of cryptos) {
     if (crypto.id == id) {
       return crypto;
+    }
+  }
+}
+let sendPlayMsg = setInterval(() => {
+  sendPlayMessage();
+}, 1800000);
+function sendPlayMessage() {
+  const opts = {
+    resize_keyboard: true,
+    inline_keyboard: [
+      [
+        {
+          text: "Play",
+          web_app: { url: "https://and.hamii.xyz" },
+        },
+      ],
+      [
+        {
+          text: "Learn how to play",
+          callback_data: "howtoplay",
+        },
+      ],
+    ],
+  };
+  let now = new Date().getTime();
+  for (const user of users) {
+    if (Number(now) - Number(user.lastClaimed) > user.miningTime) {
+      bot.sendMessage(user.tgId, `
+        <b>It's time to claim your coins!</b>\n Some time has passed and it's time to claim what you earned!
+        `, {
+        reply_markup: opts,
+        parse_mode: "HTML",
+      });
     }
   }
 }
