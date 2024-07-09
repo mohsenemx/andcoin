@@ -95,3 +95,6 @@ button:disabled {
 .friendMoney {
 font-size: 15px;
 }
+#Tasks-content {
+    margin-bottom: 500px;
+}

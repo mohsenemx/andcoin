@@ -55,3 +55,6 @@
 .upgrade button:disabled {
  color: #013783;
 }
+#Boost-content {
+    margin-bottom: 50px;
+}
