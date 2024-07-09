@@ -125,4 +125,5 @@
 }
 #sHash {
     font-size: 8px;
+    user-select: text;
 }

@@ -2,6 +2,7 @@ html {
    user-select: none; 
 }
 * {
+  touch-action: pan-x pan-y;
 }
 @font-face {
   src: url("Fonts/Laro-Bold.ttf");
