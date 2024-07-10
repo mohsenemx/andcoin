@@ -13,6 +13,7 @@
     "lastClaimed": 1719064667000,
     "warns": [],
     "miningTime": 28800000,
+    "additionalParams": "",
     "crypto": [
       { "id": "BTC", "amount": 0, "lastBought": 0 },
       { "id": "ETH", "amount": 0, "lastBought": 0 },

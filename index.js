@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.2.2b";
+const server_version = "1.2.3b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -899,6 +899,9 @@ function getCryptoObject(id) {
     }
   }
 }
+let resetUsers = setInterval(() => {
+  readyToClaimUsers = [];
+}, 28800000);
 let sendPlayMsg = setInterval(() => {
   sendPlayMessage();
 }, 1800000);
@@ -922,7 +925,7 @@ function sendPlayMessage() {
   };
   let now = new Date().getTime();
   for (const user of users) {
-    if (Number(now) - Number(user.lastClaimed) > user.miningTime) {
+    if (Number(now) - Number(user.lastClaimed) >= user.miningTime && !readyToClaimUsers.includes(user.tgId)) {
       readyToClaimUsers.push(user.tgId);
       bot.sendMessage(user.tgId, `
         <b>It's time to claim your coins!</b>\n Some time has passed and it's time to claim what you earned!
@@ -930,10 +933,6 @@ function sendPlayMessage() {
         reply_markup: opts,
         parse_mode: "HTML",
       });
-    } else {
-      if (readyToClaimUsers.includes(user.tgId)) {
-       readyToClaimUsers[readyToClaimUsers.indexOf(user.tgId)] = undefined;
-      }
     }
   }
 }
