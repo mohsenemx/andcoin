@@ -47,7 +47,7 @@ setTimeout(() => {
 }, 1000);
 
 console.log("API server running...");
-
+let readyToClaimUsers = [];
 let users = JSON.parse(fs.readFileSync("./data/users.json", "utf8"));
 let usersTemplate = fs.readFileSync("./data/users.template.json", "utf8");
 let cryptos = JSON.parse(fs.readFileSync("./data/crypto.json", "utf8"));
@@ -923,12 +923,17 @@ function sendPlayMessage() {
   let now = new Date().getTime();
   for (const user of users) {
     if (Number(now) - Number(user.lastClaimed) > user.miningTime) {
+      readyToClaimUsers.push(user.tgId);
       bot.sendMessage(user.tgId, `
         <b>It's time to claim your coins!</b>\n Some time has passed and it's time to claim what you earned!
         `, {
         reply_markup: opts,
         parse_mode: "HTML",
       });
+    } else {
+      if (readyToClaimUsers.includes(user.tgId)) {
+       readyToClaimUsers[readyToClaimUsers.indexOf(user.tgId)] = undefined;
+      }
     }
   }
 }

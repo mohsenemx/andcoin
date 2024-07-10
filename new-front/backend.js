@@ -1,4 +1,4 @@
-const client_version = "1.3.1b";
+const client_version = "1.3.2b";
 let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
