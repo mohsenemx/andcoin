@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.2.1b";
+const server_version = "1.2.2b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
