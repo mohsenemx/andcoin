@@ -431,6 +431,9 @@ function updateWallet() {
   for (const coin of userObject.crypto) {
     for (const crypto of cryptos) {
       if (crypto.id == coin.id) {
+        if (coin.amount == 0) {
+          continue;
+        }
         let growthRate = calculateGrowth(
           crypto.usdtPrice,
           coin.lastBought,
@@ -445,7 +448,7 @@ function updateWallet() {
                    <div id="eth-name" style="margin-left: 15px">
                      <div>${crypto.name}</div>
                      <div class="coins-amount" id="eth-amount">${parseFloat(
-                       Number(coin.amount).toFixed(7)
+                       Number(coin.amount).toFixed(6)
                      )} ${coin.id}</div>
                    </div>
                  </div>
@@ -460,9 +463,7 @@ function updateWallet() {
                        : growthRate == 0
                        ? "black"
                        : "red"
-                   };">${growthRate.toFixed(1)}% </div>  |  <div style="color: ${
-          crypto.growthRate >= 0 ? "green" : "red"
-        };">${crypto.growthRate}%</div></div>
+                   };">${growthRate.toFixed(1)}% </div></div>
                  </div>
                  
                </div>
@@ -647,7 +648,7 @@ function updateCrypto() {
                     <div id="eth-name" style="margin-left: 15px">
                       <div>${crypto.name}</div>
                       <div class="coins-amount" id="eth-amount">${parseFloat(
-                        Number(crr.amount).toFixed(7)
+                        Number(crr.amount).toFixed(6)
                       )} $${crypto.id}</div>
                     </div>
                   </div>
@@ -655,7 +656,7 @@ function updateCrypto() {
                     
                   </div>
                   <div class="coin-price" style="margin: 15px">
-                    <div id="eth-price">$${crypto.usdtPrice}</div>
+                    <div id="eth-price">$${Number(crypto.usdtPrice).toFixed(1)}</div>
                     <div class="profits" id="eth-profit" ><div style="color: ${
                       growthRate > 0
                         ? "green"
