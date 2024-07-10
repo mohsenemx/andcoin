@@ -1,4 +1,4 @@
-const client_version = "1.3.2b";
+const client_version = "1.4b";
 let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -656,7 +656,9 @@ function updateCrypto() {
                     
                   </div>
                   <div class="coin-price" style="margin: 15px">
-                    <div id="eth-price">$${Number(crypto.usdtPrice).toFixed(1)}</div>
+                    <div id="eth-price">$${Number(crypto.usdtPrice).toFixed(
+                      1
+                    )}</div>
                     <div class="profits" id="eth-profit" ><div style="color: ${
                       growthRate > 0
                         ? "green"
@@ -700,7 +702,9 @@ function updateTextsandBalance() {
       } else if (coinToGive == "AND") {
         document.getElementById(
           "USDT-balance2"
-        ).innerHTML = `${numberWithCommas(Number(userObject.coins).toFixed(0))} $AND`;
+        ).innerHTML = `${numberWithCommas(
+          Number(userObject.coins).toFixed(0)
+        )} $AND`;
         document.getElementById("youpaycoinname").innerHTML = coinToGive;
       }
     }
@@ -795,7 +799,7 @@ function updateCryptoPrices() {
   } else if (coinToGet == "USDT") {
     if (coinToGive == "AND") {
       hmny = buyInput.value / usdtPrice;
-    } else if (coinToGet == "USDT") {
+    } else if (coinToGive == "USDT") {
       hmny = Number(buyInput.value);
     } else {
       hmny = buyInput.value * startCoin.usdtPrice;
@@ -812,11 +816,10 @@ function updateCryptoPrices() {
     }
     hmnyc = hmny * targetCoin.usdtPrice;
   }
-  //hmnyc = hmny;
-  document.getElementById("yougetcoin1").innerHTML = `$ ${numberWithCommas(
+  document.getElementById("coin-get").innerHTML = `$ ${numberWithCommas(
     parseFloat(hmnyc.toFixed(6))
   )}`;
-  document.getElementById("coin-get").innerHTML = ` ${numberWithCommas(
+  document.getElementById("yougetcoin1").innerHTML = ` ${numberWithCommas(
     parseFloat(hmny.toFixed(6))
   )} $${coinToGet}`;
 }
@@ -991,7 +994,7 @@ document.getElementById("referral-btn").addEventListener("click", () => {
   getreferral();
 });
 function getreferral() {
-  notif('Sent you your referral code', 'info')
+  notif("Sent you your referral code", "info");
   socket.send(`{"action":"getReferalCode", "tgId":"${user.id}"}`);
 }
 function parseQuery(queryString) {

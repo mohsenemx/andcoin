@@ -102,11 +102,18 @@
   font-size: 20px;
   border: 1px solid white;
   background-color: #5da1ff00;
-  font-family: "SFPro";
+  font-family: "laro";
   outline: none;
   padding: 5px;
   border-radius: 20px;
 }
 #Trade2-content {
   margin-bottom: 100px;
+}
+#yougetcoin1 {
+  font-family: 'laro';
+  font-size: 18px;
+  max-width: 170px;
+  max-height: 44px;
+  text-align: center;
 }
