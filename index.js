@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.3.1b";
+const server_version = "1.3.2b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -711,18 +711,17 @@ bot.on("callback_query", (callbackQuery) => {
     console.log(msg);
     bot.editMessageText(
       `
-      You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.from.id}">Invite Link</a>
+      You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.chat.id}">Invite Link</a>
       `,
       {
-        chat_id: msg.chat.id,
+        chat_id: msg.from.id,
         message_id: msg.message_id,
         parse_mode: "HTML",
-        
       }
     );
   } else if (action == "howtoplay") {
     bot.editMessageText(howtoplayText, {
-      chat_id: msg.chat.id,
+      chat_id: msg.from.id,
       message_id: msg.message_id,
       parse_mode: "html",
     });
