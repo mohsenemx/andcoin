@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.2.3b";
+const server_version = "1.3db";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -94,6 +94,7 @@ wss.on("connection", function connection(ws) {
         newUser.fullname = parsed.fullname;
         stats.totalUsers += 1;
         newUser.joined = new Date().getTime();
+        newUser.coins = 1000;
         newUser.lastOnline = new Date().getTime();
         users.push(newUser);
         ws.send('{ "action" : "createAccount", "result" : "success" }');
@@ -396,21 +397,15 @@ wss.on("close", function close() {
   clearInterval(interval);
   console.log("Closing server");
 });
-/* let cryptoSave = setInterval(() => {
-  fs.writeFileSync("./data/crypto.json", JSON.stringify(cryptos));
-}, 900000);
-let saveInterval = setInterval(() => {
-  fs.writeFileSync("./data/users.json", JSON.stringify(users));
-}, 900000);
-let statsSave = setInterval(() => {
-  fs.writeFileSync("./data/stats.json", JSON.stringify(stats));
-}, 400000);*/
 let updateCrypto = setInterval(() => {
   updateCryptoPrice();
 }, 900000);
 let hourlyBackup = setInterval(() => {
   performBackup();
 }, 3600000);
+let resetLastHourStat = setInterval(() => {
+  stats.minedPastHour = 0;
+});
 function performBackup(isForced) {
   const currentUtcTime = new Date();
   const offsetHours = +3.5;
@@ -461,6 +456,17 @@ function performBackup(isForced) {
     fileOptions
   );
 }
+function userFullName(msg) {
+  return `${
+    msg.chat.first_name == undefined || msg.chat.first_name == "undefined"
+      ? ""
+      : msg.chat.first_name
+  } ${
+    msg.chat.last_name == undefined || msg.chat.last_name == "undefined"
+      ? ""
+      : msg.chat.last_name
+  }`;
+}
 bot.onText(/\/start (\w+)/, function (msg, match) {
   if (msg.chat.type == "group") {
     bot.sendMessage(
@@ -492,27 +498,30 @@ Have friends? Invite them! The more, the merrier! 👯
   }
   for (const obj of users) {
     if (obj.tgId == match[1]) {
-      obj.coins += 5000;
-      obj.friends.push(msg.chat.id);
-      bot.sendMessage(
-        msg.chat.id,
-        `You were invited by <a href="tg://user?id=${obj.tgId}"><b>${obj.fullname}</b></a>, and you both recieved 5000 coins.`,
-        {
-          parse_mode: "HTML",
-        }
-      );
-      bot.sendMessage(
-        obj.tgId,
-        `<a href="tg://user?id=${msg.chat.id}"><b>${
-          msg.chat.first_name == "undefined" ? "" : msg.chat.first_name
-        } ${
-          msg.chat.last_name == "undefined" ? "" : msg.chat.last_name
-        }</b></a> accepted your invite and you both recieved 5000 coins!`,
-        {
-          parse_mode: "HTML",
-        }
-      );
-      break;
+      if (match[1] == msg.chat.id) {
+        return;
+      }
+      if (!obj.friends.includes(msg.chat.id)) {
+        obj.coins += 5000;
+        obj.friends.push(msg.chat.id);
+        bot.sendMessage(
+          msg.chat.id,
+          `You were invited by <a href="tg://user?id=${obj.tgId}"><b>${obj.fullname}</b></a>, and you both recieved 5000 coins.`,
+          {
+            parse_mode: "HTML",
+          }
+        );
+        bot.sendMessage(
+          obj.tgId,
+          `<a href="tg://user?id=${msg.chat.id}"><b>${userFullName(
+            msg
+          )}</b></a> accepted your invite and you both recieved 5000 coins!`,
+          {
+            parse_mode: "HTML",
+          }
+        );
+        break;
+      }
     }
   }
   if (!isPresent) {
@@ -520,10 +529,8 @@ Have friends? Invite them! The more, the merrier! 👯
     stats.totalUsers += 1;
     newUser.name = msg.chat.username.toLowerCase();
     newUser.tgId = msg.chat.id;
-    newUser.fullname = `${
-      user.first_name == "undefined" ? "" : user.first_name
-    } ${user.last_name == "undefined" ? "" : user.last_name}`;
-    newUser.coins = 5000;
+    newUser.fullname = userFullName(msg);
+    newUser.coins = 1000;
     newUser.joined = new Date().getTime();
     users.push(newUser);
   }
@@ -925,14 +932,21 @@ function sendPlayMessage() {
   };
   let now = new Date().getTime();
   for (const user of users) {
-    if (Number(now) - Number(user.lastClaimed) >= user.miningTime && !readyToClaimUsers.includes(user.tgId)) {
+    if (
+      Number(now) - Number(user.lastClaimed) >= user.miningTime &&
+      !readyToClaimUsers.includes(user.tgId)
+    ) {
       readyToClaimUsers.push(user.tgId);
-      bot.sendMessage(user.tgId, `
+      bot.sendMessage(
+        user.tgId,
+        `
         <b>It's time to claim your coins!</b>\n Some time has passed and it's time to claim what you earned!
-        `, {
-        reply_markup: opts,
-        parse_mode: "HTML",
-      });
+        `,
+        {
+          reply_markup: opts,
+          parse_mode: "HTML",
+        }
+      );
     }
   }
 }

@@ -1,4 +1,4 @@
-if (!Telegram.WebApp.isExpanded) Telegram.WebApp.expand();
+
 function Home(){
     document.querySelector("#HomePage").style.display = "block";
     document.querySelector("#TasksPage").style.display = "none";
@@ -59,6 +59,3 @@ function TradeETH(){
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   }
-Telegram.WebApp.setHeaderColor('#cbdef0');
-Telegram.WebApp.setBackgroundColor('#cbdef0');
-Telegram.WebApp.ready();

@@ -1,4 +1,4 @@
-const client_version = "1.4b";
+const client_version = "1.4.5b";
 let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -53,6 +53,10 @@ function init() {
     showError("TGE-23");
     return;
   }
+  Telegram.WebApp.expand();
+  Telegram.WebApp.setHeaderColor("#cbdef0");
+  Telegram.WebApp.setBackgroundColor("#cbdef0");
+  
   socket.send(
     `{"action":"login", "name": "${user.username}", "tgId": "${user.id}", "fullname":"${user.first_name} ${user.last_name}"}`
   );
@@ -62,6 +66,10 @@ function init() {
   socket.send(`{"action":"getUsdtPrice"}`);
   socket.send(`{"action":"getWarns", "tgId":"${user.id}"}`);
   socket.send(`{"action":"getFriends","tgId":"${user.id}"}`);
+  setTimeout(() => {
+    updateEverything();
+    Telegram.WebApp.ready();
+  }, 300);
 }
 socket.onopen = function () {
   init();
@@ -1015,6 +1023,8 @@ function parseQuery(queryString) {
 function showError(ecode) {
   document.getElementById("mainError").style.display = "flex";
   document.getElementById("errorCode").innerHTML = `Error Code: ${ecode}`;
+  Telegram.WebApp.setHeaderColor("#37393a");
+  Telegram.WebApp.setBackgroundColor("#37393a");
   clearInterval(sync);
 }
 function getCryptoObject(id) {
