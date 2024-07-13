@@ -714,7 +714,7 @@ bot.on("callback_query", (callbackQuery) => {
         [
           {
             text: "Invite",
-            url: "tg://msg?text=\"Join our gro\"",
+            url: "tg://msg?text=Join our gro",
           },
         ],
       ],
