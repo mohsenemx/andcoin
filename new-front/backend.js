@@ -1003,6 +1003,7 @@ document.getElementById("referral-btn").addEventListener("click", () => {
   getreferral();
 });
 function getreferral() {
+  window.open('tg://msg?text=hi', '_blank');
   let url = `https://t.me/share?text=You have been invited to play AndCoin by ${userObject.fullname}&url=https://t.me/andcoin_bot?start=${user.id}`;
   Telegram.WebApp.openTelegramLink(url);
 }
