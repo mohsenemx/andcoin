@@ -1003,9 +1003,8 @@ document.getElementById("referral-btn").addEventListener("click", () => {
   getreferral();
 });
 function getreferral() {
-  let url = `t.me/share?text=You have been invited to play AndCoin by ${userObject.fullname}&url=https://t.me/andcoin_bot?start=${user.id}`;
+  let url = `https://t.me/share?text=You have been invited to play AndCoin by ${userObject.fullname}&url=https://t.me/andcoin_bot?start=${user.id}`;
   Telegram.WebApp.openTelegramLink(url);
-  
 }
 function parseQuery(queryString) {
   const params = new URLSearchParams(queryString);
