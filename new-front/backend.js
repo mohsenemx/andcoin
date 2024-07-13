@@ -49,7 +49,7 @@ function init() {
     return;
   }
 
-  if (!Telegram.WebApp.isVersionAtLeast("7.7")) {
+  if (!Telegram.WebApp.isVersionAtLeast("7.0")) {
     showError("TGE-23");
     return;
   }
