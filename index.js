@@ -4,6 +4,7 @@ import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 import "dotenv/config";
+import { url } from "inspector";
 const server = createServer({
   cert: fs.readFileSync(process.env.PATH_TO_CERT),
   key: fs.readFileSync(process.env.PATH_TO_KEY),
@@ -712,8 +713,8 @@ bot.on("callback_query", (callbackQuery) => {
       inline_keyboard: [
         [
           {
-            text: "Play",
-            web_app: { url: "https://and.hamii.xyz" },
+            text: "Invite",
+            url: "tg://msg?text=text",
           },
         ],
       ],
@@ -726,6 +727,7 @@ bot.on("callback_query", (callbackQuery) => {
       {
         chat_id: msg.chat.id,
         message_id: msg.message_id,
+        reply_markup: opts,
       }
     );
   } else if (action == "howtoplay") {
