@@ -4,7 +4,6 @@ import * as fs from "fs";
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 import "dotenv/config";
-import { url } from "inspector";
 const server = createServer({
   cert: fs.readFileSync(process.env.PATH_TO_CERT),
   key: fs.readFileSync(process.env.PATH_TO_KEY),
@@ -15,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.3.2b";
+const server_version = "1.3.5b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -708,18 +707,18 @@ bot.on("callback_query", (callbackQuery) => {
   const action = callbackQuery.data;
   const msg = callbackQuery.message;
   if (action == "invitefriends") {
+
     const opts = {
       resize_keyboard: true,
       inline_keyboard: [
         [
           {
             text: "Invite",
-            url: "tg://msg?text=Join our gro",
+            url: `tg://msg?text=You have been invited to play AndCoin by ${userFullName(msg)}\nhttps://t.me/andcoin_bot?start=${msg.chat.id}`,
           },
         ],
       ],
     };
-    console.log(msg);
     bot.editMessageCaption(
       `
       You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.chat.id}">Invite Link</a>
