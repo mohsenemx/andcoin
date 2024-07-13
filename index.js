@@ -707,21 +707,30 @@ bot.on("callback_query", (callbackQuery) => {
   const action = callbackQuery.data;
   const msg = callbackQuery.message;
   if (action == "invitefriends") {
-    console.log("1");
+    const opts = {
+      resize_keyboard: true,
+      inline_keyboard: [
+        [
+          {
+            text: "Play",
+            web_app: { url: "https://and.hamii.xyz" },
+          },
+        ],
+      ],
+    };
     console.log(msg);
-    bot.editMessageText(
+    bot.editMessageCaption(
       `
       You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.chat.id}">Invite Link</a>
       `,
       {
-        chat_id: msg.from.id,
+        chat_id: msg.chat.id,
         message_id: msg.message_id,
-        parse_mode: "HTML",
       }
     );
   } else if (action == "howtoplay") {
     bot.editMessageText(howtoplayText, {
-      chat_id: msg.from.id,
+      chat_id: msg.chat.id,
       message_id: msg.message_id,
       parse_mode: "html",
     });
@@ -734,8 +743,7 @@ async function checkUserJoinedMainTG(userId) {
     if (
       chat.status === "member" ||
       chat.status === "administrator" ||
-      chat.status === "creator" ||
-      chat.status === "restricted"
+      chat.status === "creator"
     ) {
       doesUserExit = true;
     }
@@ -751,8 +759,7 @@ async function checkUserJoinedMainGC(userId) {
     if (
       chat.status === "member" ||
       chat.status === "administrator" ||
-      chat.status === "creator" ||
-      chat.status === "restricted"
+      chat.status === "creator"
     ) {
       doesUserExit = true;
     }
