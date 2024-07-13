@@ -49,14 +49,15 @@ function init() {
     return;
   }
 
-  if (!Telegram.WebApp.isVersionAtLeast("6.1")) {
+  if (!Telegram.WebApp.isVersionAtLeast("7.7")) {
     showError("TGE-23");
     return;
   }
   Telegram.WebApp.expand();
   Telegram.WebApp.setHeaderColor("#cbdef0");
   Telegram.WebApp.setBackgroundColor("#cbdef0");
-  
+  Telegram.WebApp.disableVerticalSwipes();
+  Telegram.WebApp.requestWriteAccess();
   socket.send(
     `{"action":"login", "name": "${user.username}", "tgId": "${user.id}", "fullname":"${user.first_name} ${user.last_name}"}`
   );
@@ -1002,8 +1003,8 @@ document.getElementById("referral-btn").addEventListener("click", () => {
   getreferral();
 });
 function getreferral() {
-  let url = `tg://msg?text=You have been invited to play AndCoin by ${userObject.fullname}\nhttps://t.me/andcoin_bot?start=${user.id}`;
-  Telegram.WebApp.openLink(url);
+  let url = `t.me/share?text=You have been invited to play AndCoin by ${userObject.fullname}&url=https://t.me/andcoin_bot?start=${user.id}`;
+  Telegram.WebApp.openTelegramLink(url);
   
 }
 function parseQuery(queryString) {
