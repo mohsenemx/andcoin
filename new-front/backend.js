@@ -1,4 +1,4 @@
-const client_version = "1.4.6b";
+const client_version = "1.4.7b";
 let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -1003,9 +1003,7 @@ document.getElementById("referral-btn").addEventListener("click", () => {
   getreferral();
 });
 function getreferral() {
-  window.open('tg://msg?text=hi', '_blank');
-  let url = `https://t.me/share?text=You have been invited to play AndCoin by ${userObject.fullname}&url=https://t.me/andcoin_bot?start=${user.id}`;
-  Telegram.WebApp.openTelegramLink(url);
+  window.open(`tg://msg?text=You have been invited to play AndCoin by ${userObject.fullname}\nhttps://t.me/andcoin_bot?start=${user.id}`, '_blank');
 }
 function parseQuery(queryString) {
   const params = new URLSearchParams(queryString);
