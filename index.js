@@ -714,21 +714,21 @@ bot.on("callback_query", (callbackQuery) => {
         [
           {
             text: "Invite",
-            url: "tg://msg?text=\"Join our group!\"",
+            url: "tg://msg?text=\"Join our gro\"",
           },
         ],
       ],
     };
     console.log(msg);
-    bot.editMessageMedia(''
+    bot.editMessageCaption(
+      `
+      You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.chat.id}">Invite Link</a>
+      `
       ,
       {
         chat_id: msg.chat.id,
         message_id: msg.message_id,
         reply_markup: opts,
-        caption: `
-      You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.chat.id}">Invite Link</a>
-      `,
         parse_mode: "HTML"
       }
     );
