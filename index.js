@@ -707,32 +707,19 @@ bot.on("callback_query", (callbackQuery) => {
   const action = callbackQuery.data;
   const msg = callbackQuery.message;
   if (action == "invitefriends") {
-    if (msg.chat.type == "supergroup" || msg.chat.type == "group") {
-      console.log('1');
-      console.log(msg);
-      bot.editMessageText(
-        `
-      You can send this link to your friends to invite them to this bot: \nhttps://t.me/andcoin_bot?start=${msg.sender_chat.id}
+    console.log("1");
+    console.log(msg);
+    bot.editMessageText(
+      `
+      You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.from.id}">Invite Link</a>
       `,
-        {
-          chat_id: msg.chat.id,
-          message_id: msg.message_id,
-        }
-      );
-    } else {
-      console.log('2');
-      console.log(msg);
-      bot.editMessageText(
-        `
-      You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.chat.id}">Invite Link</a>
-      `,
-        {
-          chat_id: msg.chat.id,
-          message_id: msg.message_id,
-          parse_mode: "HTML"
-        }
-      );
-    }
+      {
+        chat_id: msg.chat.id,
+        message_id: msg.message_id,
+        parse_mode: "HTML",
+        
+      }
+    );
   } else if (action == "howtoplay") {
     bot.editMessageText(howtoplayText, {
       chat_id: msg.chat.id,
