@@ -1,4 +1,4 @@
-const client_version = "1.4.7b";
+const client_version = "1.5b";
 let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -116,8 +116,8 @@ let sync = setInterval(() => {
   performSync();
   setTimeout(() => {
     updateEverything();
-  }, 200);
-}, 3000);
+  }, 300);
+}, 2000);
 function performSync() {
   checkForCheating();
   socket.send(
@@ -149,6 +149,7 @@ function startFarming() {
     } else if (readyToFarm) {
       farming = true;
       readyToFarm = false;
+      updateFarmBar();
     }
   }
 }
@@ -163,7 +164,6 @@ function coinClicked(params) {
   if (recentClicks.length > 50) {
     recentClicks = [];
   } else {
-    console.log(params);
     recentClicks.push({
       clickId: recentClicks.length + 1,
       x: params.x,
@@ -833,6 +833,9 @@ function updateCryptoPrices() {
   )} $${coinToGet}`;
 }
 buyInput.oninput = function () {
+  if (Number(buyInput.value) < 0) {
+    buyInput.value = 0;
+  }
   updateCryptoPrices();
 };
 function youGetClicked() {

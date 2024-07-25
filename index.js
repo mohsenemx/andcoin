@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.3.5b";
+const server_version = "1.4b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -78,9 +78,7 @@ wss.on("connection", function connection(ws) {
       if (userExists) {
         for (const user of users) {
           if (user.tgId == parsed.tgId) {
-            console.log(`User @${user.name} (${user.tgId}) logged in`);
             user.lastOnline = new Date().getTime();
-            checkIfUserDoneTask(parsed);
             ws.send(
               `{"action" : "getObject", "object": ${JSON.stringify(user)}}`
             );
@@ -109,7 +107,6 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "getObject") {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
-          checkIfUserDoneTask(parsed, true);
           ws.send(
             `{"action" : "getObject", "object": ${JSON.stringify(
               user
@@ -771,7 +768,18 @@ async function checkUserJoinedMainGC(userId) {
   }
   return doesUserExit;
 }
-function checkAdded50Friends() {}
+function checkAdded50Friends(userId) {
+  for (const user of users) {
+    if (user.tgId == userId) {
+      if (user.friends.length >= 50) {
+        return true;
+      }
+      break;
+    }
+  }
+  return false;
+}
+
 function checkIfUserDoneTask(parsed) {
   for (const user of users) {
     if (user.tgId == parsed.tgId) {
@@ -908,7 +916,7 @@ let resetUsers = setInterval(() => {
 }, 28800000);
 let sendPlayMsg = setInterval(() => {
   sendPlayMessage();
-}, 1800000);
+}, 3000000);
 function sendPlayMessage() {
   const opts = {
     resize_keyboard: true,
