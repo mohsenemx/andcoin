@@ -14,7 +14,7 @@ if (process.env.USE_SSL == "true") {
 } else {
   wssConf = { port: 8081 };
 }
-const server_version = "1.4b";
+const server_version = "1.4.1b";
 const wss = new WebSocketServer(wssConf);
 const token = process.env.BOT_TOKEN;
 let proxy;
@@ -91,6 +91,7 @@ wss.on("connection", function connection(ws) {
         newUser.tgId = parsed.tgId;
         newUser.fullname = parsed.fullname;
         stats.totalUsers += 1;
+
         newUser.joined = new Date().getTime();
         newUser.coins = 1000;
         newUser.lastOnline = new Date().getTime();
@@ -231,7 +232,10 @@ wss.on("connection", function connection(ws) {
     } else if (parsed.action == "getTasks") {
       ws.send(`{"action":"getTasks", "tasks": ${JSON.stringify(tasks)}}`);
     } else if (parsed.action == "getTaskStatus") {
-      checkIfUserDoneTask(parsed);
+      let res = checkIfUserDoneTask(parsed);
+      ws.send(
+        `{"action":"getTaskStatus", "taskId":"${res.taskId}", "result":"${res.result}"}`
+      );
     } else if (parsed.action == "upgrade") {
       for (const user of users) {
         if (user.tgId == parsed.tgId) {
@@ -541,7 +545,7 @@ bot.on("message", (msg) => {
     const uptime = `${hours}hr, ${minutes}m, ${seconds}s`;
     bot.sendMessage(
       msg.chat.id,
-      `Bot online since: ${start}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coins: ${stats.allCoinsClicked}\nUptime: ${uptime}`
+      `Bot online since: ${start}\nBot Backend Version: ${server_version}\nOnline users: ${stats.online}\nMined Past Hour: ${stats.minedPastHour}\nTotal Users: ${stats.totalUsers}\nTotal Coins: ${stats.allCoinsClicked}\nUptime: ${uptime}`
     );
   } else if (msg.text == "/saveInfo" && msg.chat.title == "AndCoin DevChat") {
     updateCryptoPrice();
@@ -704,14 +708,15 @@ bot.on("callback_query", (callbackQuery) => {
   const action = callbackQuery.data;
   const msg = callbackQuery.message;
   if (action == "invitefriends") {
-
     const opts = {
       resize_keyboard: true,
       inline_keyboard: [
         [
           {
             text: "Invite",
-            url: `tg://msg?text=You have been invited to play AndCoin by ${userFullName(msg)}\nhttps://t.me/andcoin_bot?start=${msg.chat.id}`,
+            url: `tg://msg?text=You have been invited to play AndCoin by ${userFullName(
+              msg
+            )}\nhttps://t.me/andcoin_bot?start=${msg.chat.id}`,
           },
         ],
       ],
@@ -719,13 +724,12 @@ bot.on("callback_query", (callbackQuery) => {
     bot.editMessageCaption(
       `
       You can send this link to your friends to invite them to this bot: \n<a href="https://t.me/andcoin_bot?start=${msg.chat.id}">Invite Link</a>
-      `
-      ,
+      `,
       {
         chat_id: msg.chat.id,
         message_id: msg.message_id,
         reply_markup: opts,
-        parse_mode: "HTML"
+        parse_mode: "HTML",
       }
     );
   } else if (action == "howtoplay") {
@@ -781,40 +785,47 @@ function checkAdded50Friends(userId) {
 }
 
 function checkIfUserDoneTask(parsed) {
+  let taskId = parsed.taskId;
+  let resp = {
+    taskId: taskId,
+    result: false,
+  };
   for (const user of users) {
     if (user.tgId == parsed.tgId) {
-      tasks.forEach(async (task) => {
-        let taskId = task.id;
-        if (taskId == 0) {
-          if (checkUserJoinedMainTG(user.tgId)) {
-            if (!user.completedTasks.includes(taskId)) {
-              user.completedTasks.push(Number(taskId));
-              user.coins += task.reward;
-              return true;
+      for (const task of tasks) {
+        if (task.id == taskId) {
+          if (taskId == 0) {
+            if (checkUserJoinedMainTG(user.tgId)) {
+              if (!user.completedTasks.includes(taskId)) {
+                user.completedTasks.push(Number(taskId));
+                user.coins += task.reward;
+                resp.result = true;
+              }
             }
-          }
-        } else if (taskId == 1) {
-          if (checkUserJoinedMainGC(user.tgId)) {
-            if (!user.completedTasks.includes(taskId)) {
-              user.completedTasks.push(Number(taskId));
-              user.coins += task.reward;
-              return true;
+          } else if (taskId == 1) {
+            if (checkUserJoinedMainGC(user.tgId)) {
+              if (!user.completedTasks.includes(taskId)) {
+                user.completedTasks.push(Number(taskId));
+                user.coins += task.reward;
+                resp.result = true;
+              }
             }
-          }
-        } else if (taskId == 2) {
-          if (checkAdded50Friends(user.tgId)) {
-            if (!user.completedTasks.includes(taskId)) {
-              user.completedTasks.push(Number(taskId));
-              user.coins += task.reward;
-              return true;
+          } else if (taskId == 2) {
+            if (checkAdded50Friends(user.tgId)) {
+              if (!user.completedTasks.includes(taskId)) {
+                user.completedTasks.push(Number(taskId));
+                user.coins += task.reward;
+                resp.result = true;
+              }
             }
           }
         }
-      });
+      }
+
       break;
     }
   }
-  return false;
+  return resp;
 }
 async function updateCryptoPrice() {
   let config = {
@@ -942,16 +953,21 @@ function sendPlayMessage() {
       !readyToClaimUsers.includes(user.tgId)
     ) {
       readyToClaimUsers.push(user.tgId);
-      bot.sendMessage(
-        user.tgId,
-        `
-        <b>It's time to claim your coins!</b>\n Some time has passed and it's time to claim what you earned!
-        `,
-        {
-          reply_markup: opts,
-          parse_mode: "HTML",
-        }
-      );
+      let targetMessage =
+        miningDoneMessages[random(0, miningDoneMessages.length - 1)];
+      bot.sendMessage(user.tgId, targetMessage, {
+        reply_markup: opts,
+        parse_mode: "HTML",
+      });
     }
   }
+}
+let miningDoneMessages = [
+  "<b>It's time to claim your coins!</b>\n Some time has passed and it's time to claim what you earned!",
+  "<b>Your mining is over!</b>\nCome and collect what you earned!",
+  "<b>Mining Done</b>\nCome and collect what you earned to earn even more!",
+  "<b>Your $ANDs are ready</b>\nCome and claim them to earn even more $AND",
+];
+function random(min, max) {
+  return Math.random() * (max - min) + min;
 }

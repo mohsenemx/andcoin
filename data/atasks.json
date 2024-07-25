@@ -23,7 +23,7 @@
     "name": "Invite Your Friends",
     "description": "Invite 50 of your friends and win a big reward",
     "task": "addFriend",
-    "link": null,
+    "link": "50",
     "reward": 150000
   }
 ]

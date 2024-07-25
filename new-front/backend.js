@@ -1,4 +1,4 @@
-const client_version = "1.5b";
+const client_version = "1.5.1b";
 let server_version = "";
 if (typeof Telegram == "undefined") {
   showError("TGE-22");
@@ -110,6 +110,15 @@ function handleMessage(object) {
     friends = object.friends;
   } else if (object.action == "getWarns") {
     warns = object.warns;
+  } else if (object.action == 'getTaskStatus') {
+    let tTask = object.taskId;
+    if (object.result == 'true') {
+      for (let i = 0; i < clickedTasks.length; i++) {
+        if (clickedTasks[i] == tTask) {
+          clickedTasks[0] = null;
+        }
+      }
+    }
   }
 }
 let sync = setInterval(() => {
@@ -481,6 +490,7 @@ function updateWallet() {
     }
   }
 }
+let clickedTasks = [];
 function updateTasks() {
   let tasksDiv = document.getElementById("tasks");
   tasksDiv.innerHTML = "";
@@ -500,7 +510,7 @@ function updateTasks() {
               <button class="join-btn" onclick="doTasks(this)" data-id="${
                 task.id
               }" ${doneTask ? "disabled" : "notDone"}>${
-        doneTask ? "Done" : "Join"
+                (clickedTasks.includes(task.id)) ? "Check" : doneTask ? "✓" : "Join"
       } </button>
             </div>
       `;
@@ -513,7 +523,7 @@ function updateTasks() {
               <button class="join-btn" onclick="doTasks(this)" data-id="${
                 task.id
               }" ${doneTask ? "disabled" : "notDone"}>${
-        doneTask ? "Done" : "Invite"
+        (clickedTasks.includes(task.id)) ? "Check" : doneTask ? "✓" : "Invite"
       } </button>
             </div>
       `;
@@ -522,6 +532,7 @@ function updateTasks() {
 }
 function doTasks(taskDiv) {
   let taskId = taskDiv.getAttribute("data-id");
+  clickedTasks.push(taskId);
   for (const task of tasks) {
     if (taskId == task.id) {
       if (task.task == "joinChannel") {
